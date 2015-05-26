@@ -49,7 +49,7 @@ p24
 tp25
 a(S'build_dir'
 p26
-S'.build/nano328'
+S'.build/uno'
 p27
 tp28
 a(S'avrdude'
