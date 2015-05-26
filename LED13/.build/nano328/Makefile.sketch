@@ -1,0 +1,14 @@
+
+
+
+
+
+.build/nano328/src/LED13.cpp : src/LED13.ino
+	@mkdir -p .build/nano328/src
+	@echo [93msrc/LED13.ino[0m
+	@/usr/local/bin/ino preproc  -o $@ $^
+
+
+all : .build/nano328/src/LED13.cpp
+	@true
+
