@@ -7,17 +7,20 @@
 #include <RS485_non_blocking.h>
 #include <SoftwareSerial.h>
 
+#include "my485.h"                      //  pin definitions
+
 // void printHex(const byte *data, const byte len, char * endStr);
 
-#define START_PIN       5
-#define ENABLE_PIN      3
-#define RX_PIN         10
-#define TX_PIN         11
-#define LED_PIN        13
+#define START_PIN           5   // D5
+
+// #define RS485_TX_PIN        2   // D2
+// #define RS485_RX_PIN        3   // D3
+// #define RS485_ENABLE_PIN    4   // D4
+// #define LED_PIN             13
 
 
 
-SoftwareSerial RS485 (RX_PIN, TX_PIN);  // receive pin, transmit pin
+SoftwareSerial RS485 (RS485_RX_PIN, RS485_TX_PIN);  // receive pin, transmit pin
 
 // callback routines
 void fWrite(const byte what) {
@@ -36,7 +39,7 @@ void setup() {
     Serial.begin(9600);
     RS485.begin (9600);
     pinMode (START_PIN, INPUT);
-    pinMode (ENABLE_PIN, OUTPUT);  // driver output enable
+    pinMode (RS485_ENABLE_PIN, OUTPUT);  // driver output enable
     pinMode (LED_PIN, OUTPUT);  // built-in LED
 }  // end of setup
 
@@ -85,9 +88,9 @@ void LnSendMessage(const byte data) {
 
         // send to slave
     char msgLen = sizeof(msg);
-    digitalWrite(ENABLE_PIN, HIGH);  // enable sending
+    digitalWrite(RS485_ENABLE_PIN, HIGH);  // enable sending
     sendMsg(fWrite, msg, sizeof(msg), DEBUG_TxRxMsg);
-    digitalWrite(ENABLE_PIN, LOW);  // disable sending
+    digitalWrite(RS485_ENABLE_PIN, LOW);  // disable sending
 
     if (fDEBUG) {
         // char DEBUG_SentMsgLen = *DEBUG_sentMsg;           // byte 0

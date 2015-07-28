@@ -10,8 +10,9 @@
  /usr/share/arduino/hardware/arduino/cores/arduino/new.h \
  /usr/share/arduino/hardware/arduino/variants/eightanaloginputs/pins_arduino.h \
  /usr/share/arduino/hardware/arduino/variants/eightanaloginputs/../standard/pins_arduino.h \
- src/my485Slave.h /usr/share/arduino/libraries/LnFunctions/LnFunctions.h \
+ /usr/share/arduino/libraries/LnFunctions/LnFunctions.h \
  /usr/share/arduino/libraries/RS485_protocol/RS485_protocol.h \
  /usr/share/arduino/libraries/RS485_protocol/RS485_non_blocking.h \
  /usr/share/arduino/libraries/SoftwareSerial/SoftwareSerial.h \
- /usr/share/arduino/hardware/arduino/cores/arduino/Stream.h
+ /usr/share/arduino/hardware/arduino/cores/arduino/Stream.h src/my485.h \
+ src/my485SlaveAddress.h

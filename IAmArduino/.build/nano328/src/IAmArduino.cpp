@@ -1,11 +1,11 @@
 #include <Arduino.h>
-#include "dummy.h"
+
 void setup();
 void loop();
 #line 1 "src/IAmArduino.ino"
-//#include "dummy.h"
+// #include "dummy.h"
 
-// const int ledPin = 12;
+const int ledPin = 12;
 
 
 void setup(){

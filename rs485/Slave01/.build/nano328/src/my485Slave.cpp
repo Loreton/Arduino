@@ -1,5 +1,10 @@
 #include <Arduino.h>
-#include "my485Slave.h"
+#include <LnFunctions.h>                //  D2X(dest, val, 2)
+#include <RS485_protocol.h>
+#include <RS485_non_blocking.h>
+#include <SoftwareSerial.h>
+#include "my485.h"              // PIN defiitions
+#include "my485SlaveAddress.h"
 void fWrite(const byte what);
 int  fAvailable ();
 int  fRead ();
@@ -9,9 +14,36 @@ void loop();
 /*
     http://www.gammon.com.au/forum/?id=11428
 */
-//#include "my485Slave.h"
 
-SoftwareSerial RS485 (RX_PIN, TX_PIN);  // receive pin, transmit pin
+//#include <LnFunctions.h>                //  D2X(dest, val, 2)
+//#include <RS485_protocol.h>
+//#include <RS485_non_blocking.h>
+//#include <SoftwareSerial.h>
+
+//#include "my485.h"              // PIN defiitions
+//#include "my485SlaveAddress.h"
+
+// const byte RS485_ENABLE_PIN   =  4;
+// #define RS485_ENABLE_PIN      4 // D4
+#define LED_PIN        13
+// #define RS485_RX_PIN         10
+// #define RS485_TX_PIN         11
+
+int nLoops              = 0;
+
+unsigned long timeOUT   = 10000;
+
+// --------------------
+//     mi serve per verificare i dati e l'ordine con cui sono
+//     stati inviati inclusi STX, CRC, ETX
+//     DEBUG_sentMsg[0] contiene lunghezza dei dati
+// --------------------
+byte DEBUG_TxRxMsg [200] = "                                                                ";   // gli faccio scrivere il messaggio inviato con relativo CRC
+
+
+
+
+SoftwareSerial RS485 (RS485_RX_PIN, RS485_TX_PIN);  // receive pin, transmit pin
 
 // callback routines
 void fWrite(const byte what) {
@@ -28,7 +60,7 @@ int  fRead () {
 void setup() {
     RS485.begin (9600);
     Serial.begin(9600);
-    pinMode (ENABLE_PIN, OUTPUT);  // driver output enable
+    pinMode (RS485_ENABLE_PIN, OUTPUT);  // driver output enable
     pinMode (LED_PIN,    OUTPUT);  // built-in LED
 }
 
@@ -53,7 +85,6 @@ void loop() {
     byte rcvLen = recvMsg(fAvailable, fRead, buf, sizeof buf, timeOUT, DEBUG_TxRxMsg);
 
         // - Controllo di eventuali ERRORI oppure come DEBUG per visualizzare dati ricevuti errati
-    Serial.print("rcvLen:");Serial.println(rcvLen);
     if ( (rcvLen == RCV_ERROR) || (rcvLen == RCV_BADCRC) || (rcvLen == RCV_BADCHAR) || (fDEBUG == true) ) {
         char DEBUG_TxRxLen = *DEBUG_TxRxMsg;           // byte 0
         if (DEBUG_TxRxLen != 0) {
@@ -66,23 +97,29 @@ void loop() {
             // Serial.print("\n\r");
         }
     }
+    else {
+        Serial.print(devName);Serial.print("    rcvLen:");Serial.print(rcvLen);
+    }
+
 
     if (rcvLen) {
         nLoops=0;
-        Serial.print(devName); Serial.print(" - Comando ricevuto       : ");printHex(buf, rcvLen, "\n\r");
         destADDR = buf[0];
+
 
         if (destADDR == 0) {
             fromADDR = buf[1];
-            Serial.print("            Packet from Slave device: ");Serial.print(fromADDR); Serial.println("    -  to Master device: 0");
+            Serial.print("  - from: [");Serial.print(fromADDR); Serial.print("] to: [0] - ");printHex(buf, rcvLen, "\n\r");
             return;  // not my device
         }
 
         if (destADDR != myADDR) {
-            Serial.print("            Packet from Master device: 0"); Serial.print("   -  to Slave device: ");Serial.println(destADDR);
+            Serial.print("  - from: [");Serial.print(fromADDR); Serial.print("] to: [");Serial.print(destADDR);Serial.print("] - ");printHex(buf, rcvLen, "\n\r");
+            // Serial.print("            Packet from Master device: 0"); Serial.print("   -  to Slave device: ");Serial.println(destADDR);
             return;  // not my device
         }
 
+        Serial.print("  - Comando ricevuto       : ");printHex(buf, rcvLen, "\n\r");
         rcvdCMD  = buf[1];
         byte msg [] = {
            0,           // device 0 (master)
@@ -94,21 +131,20 @@ void loop() {
         };
         // byte msgSENT_DEBUG [100] = "                                                                ";   // gli faccio scrivere il messaggio inviato con relativo CRC
         delay (1000);  // give the master a moment to prepare to receive
-        digitalWrite (ENABLE_PIN, HIGH);  // enable sending
+        digitalWrite (RS485_ENABLE_PIN, HIGH);  // enable sending
         sendMsg (fWrite, msg, sizeof msg, DEBUG_TxRxMsg);
-        Serial.print(devName); Serial.print(" - Risposta inviata       : ");printHex(msg, sizeof(msg), "\n\r");
-        digitalWrite (ENABLE_PIN, LOW);  // disable sending
-
+        Serial.print(devName); Serial.print("              - Risposta inviata       : ");printHex(msg, sizeof(msg), "\n\r");
+        digitalWrite (RS485_ENABLE_PIN, LOW);  // disable sending
 
         if (fDEBUG) {
             char DEBUG_TxRxLen = *DEBUG_TxRxMsg;           // byte 0
             // Serial.print("\n\r");
-            Serial.print(devName);Serial.print(" - DEBUG Risposta inviata : ");printHex(&DEBUG_TxRxMsg[1], DEBUG_TxRxLen, " - [STX ...data... CRC ETX]\n\r"); // contiene LEN STX ...data... ETX
+            Serial.print(devName);Serial.print("              - DEBUG Risposta inviata : ");printHex(&DEBUG_TxRxMsg[1], DEBUG_TxRxLen, " - [STX ...data... CRC ETX]\n\r"); // contiene LEN STX ...data... ETX
         }
 
-        Serial.print("\n\r");
         // analogWrite (11, buf [2]);  // set light level
     }  // end if something received
+    Serial.print("\n\r");
 
 }  // end of loop
 

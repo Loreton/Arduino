@@ -1,5 +1,10 @@
 #include <Arduino.h>
-#include "my485Slave.h"
+#include <LnFunctions.h>                //  D2X(dest, val, 2)
+#include <RS485_protocol.h>
+#include <RS485_non_blocking.h>
+#include <SoftwareSerial.h>
+#include "my485.h"              // PIN defiitions
+#include "my485SlaveAddress.h"
 void fWrite(const byte what);
 int  fAvailable ();
 int  fRead ();
@@ -9,9 +14,36 @@ void loop();
 /*
     http://www.gammon.com.au/forum/?id=11428
 */
-//#include "my485Slave.h"
 
-SoftwareSerial RS485 (RX_PIN, TX_PIN);  // receive pin, transmit pin
+//#include <LnFunctions.h>                //  D2X(dest, val, 2)
+//#include <RS485_protocol.h>
+//#include <RS485_non_blocking.h>
+//#include <SoftwareSerial.h>
+
+//#include "my485.h"              // PIN defiitions
+//#include "my485SlaveAddress.h"
+
+// const byte RS485_ENABLE_PIN   =  4;
+// #define RS485_ENABLE_PIN      4 // D4
+#define LED_PIN        13
+// #define RS485_RX_PIN         10
+// #define RS485_TX_PIN         11
+
+int nLoops              = 0;
+
+unsigned long timeOUT   = 10000;
+
+// --------------------
+//     mi serve per verificare i dati e l'ordine con cui sono
+//     stati inviati inclusi STX, CRC, ETX
+//     DEBUG_sentMsg[0] contiene lunghezza dei dati
+// --------------------
+byte DEBUG_TxRxMsg [200] = "                                                                ";   // gli faccio scrivere il messaggio inviato con relativo CRC
+
+
+
+
+SoftwareSerial RS485 (RS485_RX_PIN, RS485_TX_PIN);  // receive pin, transmit pin
 
 // callback routines
 void fWrite(const byte what) {
@@ -28,7 +60,7 @@ int  fRead () {
 void setup() {
     RS485.begin (9600);
     Serial.begin(9600);
-    pinMode (ENABLE_PIN, OUTPUT);  // driver output enable
+    pinMode (RS485_ENABLE_PIN, OUTPUT);  // driver output enable
     pinMode (LED_PIN,    OUTPUT);  // built-in LED
 }
 
@@ -99,15 +131,15 @@ void loop() {
         };
         // byte msgSENT_DEBUG [100] = "                                                                ";   // gli faccio scrivere il messaggio inviato con relativo CRC
         delay (1000);  // give the master a moment to prepare to receive
-        digitalWrite (ENABLE_PIN, HIGH);  // enable sending
+        digitalWrite (RS485_ENABLE_PIN, HIGH);  // enable sending
         sendMsg (fWrite, msg, sizeof msg, DEBUG_TxRxMsg);
-        Serial.print(devName); Serial.print("               - Risposta inviata       : ");printHex(msg, sizeof(msg), "\n\r");
-        digitalWrite (ENABLE_PIN, LOW);  // disable sending
+        Serial.print(devName); Serial.print("              - Risposta inviata       : ");printHex(msg, sizeof(msg), "\n\r");
+        digitalWrite (RS485_ENABLE_PIN, LOW);  // disable sending
 
         if (fDEBUG) {
             char DEBUG_TxRxLen = *DEBUG_TxRxMsg;           // byte 0
             // Serial.print("\n\r");
-            Serial.print(devName);Serial.print("               - DEBUG Risposta inviata : ");printHex(&DEBUG_TxRxMsg[1], DEBUG_TxRxLen, " - [STX ...data... CRC ETX]\n\r"); // contiene LEN STX ...data... ETX
+            Serial.print(devName);Serial.print("              - DEBUG Risposta inviata : ");printHex(&DEBUG_TxRxMsg[1], DEBUG_TxRxLen, " - [STX ...data... CRC ETX]\n\r"); // contiene LEN STX ...data... ETX
         }
 
         // analogWrite (11, buf [2]);  // set light level

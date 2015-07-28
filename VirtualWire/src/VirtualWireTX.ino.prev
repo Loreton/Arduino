@@ -1,0 +1,155 @@
+/* FILE:    MXFS03V_433MHZ_MODULE_HCMODU0007_TRANSMIT_EXAMPLE.pde
+   DATE:    03/03/13
+   VERSION: 0.1
+   AUTHOR:  Andrew Davies
+
+FROM:   http://forum.hobbycomponents.com/viewtopic.php?f=25&t=1324
+
+This is an example of how to use the 433MHz wireless transmitter module
+(HCMODU0007) which is the Tx part of the tranmitter and receiver module pair.
+This example makes use of the VirtualWire library written by Mike McCauley.
+The sketch will read a value from the analogue input A0 and transmit it as
+2 bytes to the receiver module once every second.
+
+Tx MODULE CONNECTIONS:
+
+PIN  DESCRIPTION      ARDUINO PIN
+1    GND              GND
+2    VCC (3.5-12V)    VCC
+3    TX DATA          D2
+
+
+You may copy, alter and reuse this code in any way you like, but please leave
+reference to HobbyComponents.com in your comments if you redistribute this code.
+
+THIS SOFTWARE IS PROVIDED "AS IS". HOBBY COMPONENTS LTD MAKES NO WARRANTIES, WHETHER
+EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ACCURACY OR LACK OF NEGLIGENCE.
+HOBBY COMPONENTS SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR ANY DAMAGES,
+INCLUDING, BUT NOT LIMITED TO, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY
+REASON WHATSOEVER.
+*/
+
+
+//Include the VirtualWire library
+#include <VirtualWire.h>
+
+// Digital IO pin that will be used for sending data to the transmitter
+const int TX_Pin            = 2;   // D2
+const int RX_Pin            = 3;   // D3
+const int LED               = 13;  // D13
+const int TX_RX_FLAG        = 9;   // D9
+bool I_AM_TX_MODULE         = false;
+
+
+void setup() {
+    Serial.begin(9600);   // Debugging only
+    Serial.println("setup");
+
+
+    pinMode(LED, OUTPUT);
+    pinMode(TX_RX_FLAG, INPUT);
+
+    if (digitalRead(TX_RX_FLAG) == 1) {
+        I_AM_TX_MODULE = true;
+        vw_set_tx_pin(TX_RX_Pin);           // Initialises the TX pin used to send data to the Tx module
+        Serial.println("I am TX module");
+    }
+    else {
+        I_AM_TX_MODULE = false;
+        Serial.println("I am RX module");
+        vw_set_rx_pin(TX_RX_Pin);           // Initialises the RX pin used to send data to the Tx module
+        vw_rx_start();                      // Start the receiver PLL running
+
+    }
+
+    vw_set_ptt_inverted(true);          // Required for DR3100 - Set the transmit logic level (LOW = transmit for this version of module)
+    vw_setup(2000);    // Bits per sec
+
+}
+
+// Main program
+void loop() {
+    if (I_AM_TX_MODULE == true)
+        TXprocess();
+    else
+        RXprocess();
+}
+
+
+//#####################################################
+//# RXprocess
+//#####################################################
+void RXprocess() {
+    uint8_t buffSize = VW_MAX_MESSAGE_LEN;
+    uint8_t RxBuffer[buffSize];
+
+
+    // Non-blocking
+    if (vw_get_message(RxBuffer, &buffSize)) {
+        int i;
+
+        digitalWrite(LED, true); // Flash a light to show received good message
+            // Message with a good checksum received, dump it.
+        Serial.print("Got: ");
+
+        for (i = 0; i < buffSize; i++) {
+            Serial.print(RxBuffer[i], HEX);
+            Serial.print(" ");
+        }
+
+        Serial.println("");
+        digitalWrite(LED, false);
+    }
+    // Serial.println("I am RX module");
+}
+
+//#####################################################
+//# TXprocess
+//#####################################################
+void TXprocess() {
+    // uint8_t buffSize = VW_MAX_MESSAGE_LEN;
+    // uint8_t TxBuffer[buffSize];
+
+    const char *TxBuffer = "hello";
+
+
+        // Turn on the LED on pin LED to indicate that we are about to transmit data
+    digitalWrite(LED, HIGH);
+
+    vw_send((uint8_t *)TxBuffer, strlen(TxBuffer));
+
+        // Wait until the data has been sent
+    vw_wait_tx();
+
+        // Turn off the LED on pin LED to indicate that we have now sent the data
+    digitalWrite(LED, LOW);
+    Serial.print("String '"); Serial.print(TxBuffer); Serial.println("' has been sent.");
+
+        // Do nothing for a second. Lower this delay to send data quicker
+    delay(1000);
+}
+
+
+#if 0
+void setup()
+{
+    Serial.begin(9600);   // Debugging only
+    Serial.println("setup");
+
+    // Initialise the IO and ISR
+    vw_set_ptt_inverted(true); // Required for DR3100
+    vw_setup(2000);  // Bits per sec
+}
+
+void loop()
+{
+    const char *msg = "hello";
+
+    digitalWrite(LED, true); // Flash a light to show transmitting
+    vw_send((uint8_t *)msg, strlen(msg));
+    vw_wait_tx(); // Wait until the whole message is gone
+    digitalWrite(LED, false);
+    delay(200);
+}
+#endif

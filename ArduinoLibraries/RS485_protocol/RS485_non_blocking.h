@@ -8,7 +8,9 @@
  Licence: Released for public use.
 
 */
+#if not defined I_AM_RS485_NON_BLOCKING_H
 
+#define I_AM_RS485_NON_BLOCKING_H
 #include "Arduino.h"
 
 
@@ -105,3 +107,4 @@ class RS485 {
 
   }; // end of class RS485
 
+#endif

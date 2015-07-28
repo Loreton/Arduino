@@ -14,4 +14,4 @@
  /usr/share/arduino/libraries/RS485_protocol/RS485_protocol.h \
  /usr/share/arduino/libraries/RS485_protocol/RS485_non_blocking.h \
  /usr/share/arduino/libraries/SoftwareSerial/SoftwareSerial.h \
- /usr/share/arduino/hardware/arduino/cores/arduino/Stream.h
+ /usr/share/arduino/hardware/arduino/cores/arduino/Stream.h src/my485.h

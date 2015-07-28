@@ -10,12 +10,9 @@
 #endif
 
 
-#if defined(I_AM_LN_FUNCTIONS)
-
-    // SET_CRC_BEFORE_ETX = true;    // by Loreto
-
-#else
+#if not defined(I_AM_LN_FUNCTIONS)
     #define I_AM_LN_FUNCTIONS
+
     #define uchar unsigned char
 
     #define RCV_ERROR      1
