@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <LnFunctions.h>                //  D2X(dest, val, 2), printHex()
 #include <VirtualWire.h>
 void setup();
 void loop();
@@ -39,8 +40,11 @@ REASON WHATSOEVER.
 
 
 //Include the VirtualWire library
+//#include <LnFunctions.h>                //  D2X(dest, val, 2), printHex()
 //#include <VirtualWire.h>
 #define DR3100x
+
+#define        MAX_BufferSize 200
 
 const int   LED               = 13;  // D13
 uint8_t     RECEIVED_FLAG     = 0;
@@ -54,10 +58,10 @@ bool        I_AM_MASTER       = true;
 // const int   TX_Pin            = 12;   // D2 - Default D12
 // const int   RX_Pin            = 11;   // D3 - Default D11
 // const int   TX_Enable_pin     = 10;   // D9 - Default D10
-// const int   TX_433MHz_Pin            = 12;   // D2 - Default D12
-// const int   RX_433MHz_Pin            = 11;   // D3 - Default D11
-#define     RX_433MHz_Pin              11    // D3 - Default D11
-#define     TX_433MHz_Pin              12    // D2 - Default D12
+const int   TX_433MHz_Pin            = 5;   // D2 - Default D12
+const int   RX_433MHz_Pin            = 6;   // D3 - Default D11
+// #define     TX_433MHz_Pin              12    // D2 - Default D12
+// #define     RX_433MHz_Pin              11    // D3 - Default D11
 
 void setup() {
     Serial.begin(9600);   // Debugging only
@@ -67,13 +71,13 @@ void setup() {
     vw_set_tx_pin(TX_433MHz_Pin);
     vw_set_rx_pin(RX_433MHz_Pin);
 
-    // #if defined DR3100
+    #if defined DR3100
         const int   TX_433MHz_Enable_pin     = 10;   // D9 - Default D10
         // Required for DR3100 - Set the transmit logic level (LOW = transmit for this version of module)
         // Loreto: I miei moduli non hanno il pin di ENA
         vw_set_ptt_inverted(true);
         vw_set_ptt_pin(TX_433MHz_Enable_pin);
-    // #endif
+    #endif
 
     // vw_setup(10000);                // Bits per sec
     vw_setup(2000);                // Bits per sec
@@ -99,10 +103,10 @@ void loop() {
 
     else {
         RXprocess();
-        // if (RECEIVED_FLAG == true) {
-            // delay(1000);
+        if (RECEIVED_FLAG == true) {
+            delay(1000);
             // TXprocess();
-        // }
+        }
     }
 }
 
@@ -111,55 +115,76 @@ void loop() {
 //# RXprocess
 //#####################################################
 void RXprocess() {
-    uint8_t buffSize = VW_MAX_MESSAGE_LEN;
-    uint8_t RxBuffer[buffSize];
-    uint8_t RECEIVED_FLAG;
+    // uint8_t buffSize = VW_MAX_MESSAGE_LEN;
+    // uint8_t RxBuffer[buffSize];
+
+    byte RxMsg[MAX_BufferSize];
+    byte RxBufferSize=MAX_BufferSize;
 
 
     // Non-blocking
-    RECEIVED_FLAG = vw_get_message(RxBuffer, &buffSize);
+    uint8_t RECEIVED_FLAG = vw_get_message(RxMsg, &RxBufferSize);
     if (RECEIVED_FLAG) {
-        int i;
+        byte i;
 
         digitalWrite(LED, true); // Flash a light to show received good message
-            // Message with a good checksum received, dump it.
-        Serial.print("Got: ");
 
-        for (i = 0; i < buffSize; i++) {
-            Serial.print(RxBuffer[i], HEX);
-            Serial.print(" ");
-        }
+        // -----------------------------------------------------
+        // - Message with a good checksum received, dump it.
+        // -----------------------------------------------------
+        Serial.print("GOT: "); printHex(RxMsg, RxBufferSize, "\r\n");
 
-        Serial.println("");
         digitalWrite(LED, false);
     }
-    // Serial.println("I am RX module");
+    // else
+    //     Serial.println("Nothing received");
     // return RECEIVED_FLAG;
 }
-
+byte counter=0;
 //#####################################################
 //# TXprocess
 //#####################################################
 void TXprocess() {
-    uint8_t buffSize = VW_MAX_MESSAGE_LEN;
+    byte TxMsg[MAX_BufferSize];
+    // uint8_t buffSize = VW_MAX_MESSAGE_LEN;
     // uint8_t TxBuffer[buffSize];
+    byte i;
 
-    const char *TxBuffer = "hello";
+    const char *dataToSend = "hello";
+    byte dataLen = 0;
+    TxMsg [dataLen++] = ++counter;
+    TxMsg [dataLen++] = 0x02;
+    for (i=0; i<strlen(dataToSend); i++) {
+        TxMsg[dataLen++] = dataToSend[i];
+    }
+    TxMsg [dataLen] = 0x00;
 
 
         // Turn on the LED on pin LED to indicate that we are about to transmit data
     digitalWrite(LED, HIGH);
 
-    vw_send((uint8_t *)TxBuffer, strlen(TxBuffer));
+    // vw_send((byte *)TxMsg, &dataLen);
+    vw_send(TxMsg, dataLen);
 
         // Wait until the data has been sent
     vw_wait_tx();
 
         // Turn off the LED on pin LED to indicate that we have now sent the data
     digitalWrite(LED, LOW);
-    Serial.print("String '"); Serial.print(TxBuffer); Serial.println("' has been sent.");
+
+    // --------------------------
+    // - PRINT MESSAGE
+    // --------------------------
+    // Serial.print("["); Serial.print(counter); Serial.print("] - "); Serial.print(dataToSend); Serial.println("' has been sent.");
+    Serial.print("SENT: "); printHex(TxMsg, dataLen, "\r\n");
+
+    // for (i=0; i < dataLen; i++) {
+    //     Serial.print(TxMsg[i], HEX);
+    //     Serial.print(" ");
+    // }
+    // Serial.println();
 
         // Do nothing for a second. Lower this delay to send data quicker
-    // delay(1000);
+    // delay(5000);
 }
 

@@ -10,4 +10,5 @@
  /usr/share/arduino/hardware/arduino/cores/arduino/new.h \
  /usr/share/arduino/hardware/arduino/variants/eightanaloginputs/pins_arduino.h \
  /usr/share/arduino/hardware/arduino/variants/eightanaloginputs/../standard/pins_arduino.h \
+ /usr/share/arduino/libraries/LnFunctions/LnFunctions.h \
  /usr/share/arduino/libraries/VirtualWire115/VirtualWire.h
