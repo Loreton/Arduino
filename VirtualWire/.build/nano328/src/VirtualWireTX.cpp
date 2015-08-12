@@ -49,8 +49,8 @@ REASON WHATSOEVER.
 const int   LED               = 13;  // D13
 uint8_t     RECEIVED_FLAG     = 0;
 
-bool        I_AM_MASTER       = true;
-// bool        I_AM_MASTER       = false;
+// bool        I_AM_MASTER       = true;
+bool        I_AM_MASTER       = false;
 
 
 // Digital IO pin that will be used for sending data to the transmitter
