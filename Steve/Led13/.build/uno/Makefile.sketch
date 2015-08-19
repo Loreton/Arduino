@@ -1,0 +1,14 @@
+
+
+
+
+
+.build/uno/src/Steve_LED.cpp : src/Steve_LED.ino
+	@mkdir -p .build/uno/src
+	@echo [93msrc/Steve_LED.ino[0m
+	@/usr/local/bin/ino preproc  -o $@ $^
+
+
+all : .build/uno/src/Steve_LED.cpp
+	@true
+
