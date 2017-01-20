@@ -4,3 +4,9 @@ https://opentinkers.com/projects/python_programming_for_arduino/
 
 http://playground.arduino.cc/interfacing/python
 http://playground.arduino.cc/Main/DevelopmentTools
+
+# VisualStudio
+http://www.visualmicro.com/
+
+# Python
+http://www.giuseppecaccavale.it/arduino/comandare-arduino-con-python/
