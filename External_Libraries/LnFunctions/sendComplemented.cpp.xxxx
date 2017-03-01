@@ -1,0 +1,51 @@
+// Facciamo uso di CallBack Function
+// dove si desidera utilizzare tale funzione bisogna definire la funzione che si desidera utilizzare come callBack
+// Esempio:
+// void fWrite (const byte what) {
+//    Serial.write (what);
+// }
+
+
+typedef void    (*sendComplemented_CB)  (const byte what);        // read a byte from serial port
+
+sendComplemented_XX (const byte what, sendComplemented_CB writeByte) {
+byte c;
+
+    // first nibble
+    c = what >> 4;
+    writeByte ((c << 4) | (c ^ 0x0F));
+
+    // second nibble
+    c = what & 0x0F;
+    writeByte ((c << 4) | (c ^ 0x0F));
+
+}  // end of RS485::sendComplemented
+
+
+sendComplemented (const byte *msg, int dataLen, sendByte_CB writeByte) {
+byte c, what;
+int i;
+
+    for (i=0; i<dataLen; i++) {
+        what = msg[i];
+
+        // first nibble
+        c = what >> 4;
+        writeByte ((c << 4) | (c ^ 0x0F));
+
+        // second nibble
+        c = what & 0x0F;
+        writeByte ((c << 4) | (c ^ 0x0F));
+
+    }
+
+}  // end of RS485::sendComplemented
+
+sendMsg (const byte *msg, int dataLen, sendByte_CB writeByte) {
+byte i;
+
+    for (i=0; i<dataLen; i++) {
+        writeByte (msg[i]);
+    }
+
+}  // end of RS485::sendComplemented

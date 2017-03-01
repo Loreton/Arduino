@@ -545,6 +545,35 @@ uint8_t vw_get_message(uint8_t* buf, uint8_t* len) {
     return (vw_crc(vw_rx_buf, vw_rx_len) == 0xf0b8); // FCS OK?
 }
 
+// -- by Loreto
+// Get the last message received (without byte count or FCS)
+// Eliminata la modifica della lenCopy at most *len bytes, set *len to the actual number copied
+// Return true if there is a message and the FCS is OK
+uint8_t vw_get_messageLN(uint8_t* buf, const uint8_t len) {
+    uint8_t rxlen, isFCSValid;
+
+    // Message available?
+    if (!vw_rx_done)
+        return 0;
+
+    // Wait until vw_rx_done is set before reading vw_rx_len
+    // then remove bytecount and FCS
+    rxlen = vw_rx_len - 3;
+
+    // Copy message (good or bad)
+    memcpy(buf, vw_rx_buf + 1, rxlen);
+
+    vw_rx_done = false; // OK, got that message thanks
+
+    // Check the FCS, return goodness
+    isFCSValid = vw_crc(vw_rx_buf, vw_rx_len) == 0xf0b8;        // FCS OK?
+    if (isFCSValid)
+        return rxlen;
+    else
+        return 0;
+
+}
+
 // This is the interrupt service routine called when timer1 overflows
 // Its job is to output the next bit from the transmitter (every 8 calls)
 // and to call the PLL code if the receiver is enabled

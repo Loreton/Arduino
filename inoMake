@@ -1,0 +1,83 @@
+#!/bin/bash
+
+device=/dev/ttyUSBx
+device=$2
+action=$1
+
+
+module='uno'
+module='nano328'
+
+if [[ ! "$action" =~ [bus] ]]; then
+    echo "immettere uno o più dei seguenti parametri:"
+    echo "    b = build"
+    echo "    u = upload"
+    echo "    s = serial read"
+    exit
+fi
+
+# ########################################################################
+# # Creazione dei LINK logici per inserire le directory con le librerie.
+# ########################################################################
+function createLibraryLink {
+    clearLibraryLink
+    # ARDUINO_LIB_DIR='/usr/share/arduino/libraries'
+    # PROJECT_LIB_DIR='/home/pi/gitREPO/ArduinoTestProjects/ArduinoLibraries'
+    savedDir=$PWD
+    cd $ARDUINO_LIB_DIR
+        sudo ln -s ${PROJECT_LIB_DIR}/RCSwitch                  RCSwitch
+        sudo ln -s ${PROJECT_LIB_DIR}/LnFunctions               LnFunctions
+        sudo ln -s ${PROJECT_LIB_DIR}/RS485_protocol            RS485_protocol
+        sudo ln -s ${PROJECT_LIB_DIR}/VirtualWire115            VirtualWire115
+        sudo ln -s ${PROJECT_LIB_DIR}/MAX7219                   MAX7219
+        sudo ln -s ${PROJECT_LIB_DIR}/Adafruit-ST7735-Library   TFT18
+        sudo ln -s ${PROJECT_LIB_DIR}/Adafruit_GFX              Adafruit_GFX
+}
+
+function clearLibraryLink {
+    savedDir=$PWD
+    cd $ARDUINO_LIB_DIR
+        [[ -L  "RCSwitch" ]]                    && sudo rm -f RCSwitch
+        [[ -L  "LnFunctions" ]]                 && sudo rm -f LnFunctions
+        [[ -L  "RS485_protocol" ]]              && sudo rm -f RS485_protocol
+        [[ -L  "VirtualWire115" ]]              && sudo rm -f VirtualWire115
+        [[ -L  "MAX7219" ]]                     && sudo rm -f MAX7219
+        [[ -L  "TFT18" ]]                       && sudo rm -f TFT18
+        [[ -L  "Adafruit_GFX" ]]                && sudo rm -f Adafruit_GFX
+    cd $savedDir
+}
+
+# ########################################################################
+# # M A I N
+# ########################################################################
+
+    ARDUINO_LIB_DIR='/usr/share/arduino/libraries'
+    PROJECT_LIB_DIR='/home/pi/gitREPO/ArduinoProjects/ArduinoLibraries'
+
+    if [[ "$action" =~ "b" ]]; then
+        createLibraryLink
+        echo "Building ...."
+        CMD="ino build -v -m $module"; echo $CMD; eval $CMD;rCode=$?
+        # clearLibraryLink
+        [[ "$rCode" != "0" ]] && echo $rCode && exit
+    fi
+
+    if [[ "$action" =~ "u" ]]; then
+        [[ "$device" == "" ]] && echo "Enter USB port: ttyUSB0, ttyUSB1, ...." && exit
+        [[ ! -c "$device" ]] && echo "$device is NOT a character device" && exit
+        echo "UpLoading ...."
+        CMD="ino upload -p $device -m $module"; echo $CMD; eval $CMD;rCode=$?
+        [[ "$rCode" != "0" ]] && echo $rCode && exit
+    fi
+
+
+    if [[ "$action" =~ "s" ]]; then
+        [[ "$device" == "" ]] && echo "Enter USB port: ttyUSB0, ttyUSB1, ...." && exit
+        [[ ! -c "$device" ]] && echo "$device is NOT a character device" && exit
+	echo
+        echo "Reading serial .... Press Ctrl+a Ctrl+x to exit."
+        # echo "Press Ctrl+a Ctrl+x to exit."
+	echo
+        CMD="ino serial -p $device"; echo $CMD; eval $CMD;rCode=$?
+        [[ "$rCode" != "0" ]] && echo $rCode && exit
+    fi

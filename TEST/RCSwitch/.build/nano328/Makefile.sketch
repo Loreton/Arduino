@@ -1,0 +1,14 @@
+
+
+
+
+
+.build/nano328/src/RECV-simple.cpp : src/RECV-simple.ino
+	@mkdir -p .build/nano328/src
+	@echo [93msrc/RECV-simple.ino[0m
+	@/usr/local/bin/ino preproc  -o $@ $^
+
+
+all : .build/nano328/src/RECV-simple.cpp
+	@true
+

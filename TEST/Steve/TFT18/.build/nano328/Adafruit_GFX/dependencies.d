@@ -1,0 +1,18 @@
+.build/nano328/Adafruit_GFX/Adafruit_GFX.d .build/nano328/Adafruit_GFX/Adafruit_GFX.o: \
+ /usr/share/arduino/libraries/Adafruit_GFX/Adafruit_GFX.cpp \
+ /usr/share/arduino/libraries/Adafruit_GFX/Adafruit_GFX.h \
+ /usr/share/arduino/hardware/arduino/cores/arduino/Arduino.h \
+ /usr/share/arduino/hardware/arduino/cores/arduino/binary.h \
+ /usr/share/arduino/hardware/arduino/cores/arduino/WCharacter.h \
+ /usr/share/arduino/hardware/arduino/cores/arduino/WString.h \
+ /usr/share/arduino/hardware/arduino/cores/arduino/HardwareSerial.h \
+ /usr/share/arduino/hardware/arduino/cores/arduino/Stream.h \
+ /usr/share/arduino/hardware/arduino/cores/arduino/Print.h \
+ /usr/share/arduino/hardware/arduino/cores/arduino/Printable.h \
+ /usr/share/arduino/hardware/arduino/cores/arduino/new.h \
+ /usr/share/arduino/hardware/arduino/variants/eightanaloginputs/pins_arduino.h \
+ /usr/share/arduino/hardware/arduino/variants/eightanaloginputs/../standard/pins_arduino.h \
+ /usr/share/arduino/hardware/arduino/cores/arduino/Print.h \
+ /usr/share/arduino/libraries/Adafruit_GFX/gfxfont.h \
+ /usr/share/arduino/libraries/Adafruit_GFX/glcdfont.c
+.build/nano328/Adafruit_GFX/glcdfont.d .build/nano328/Adafruit_GFX/glcdfont.o: /usr/share/arduino/libraries/Adafruit_GFX/glcdfont.c

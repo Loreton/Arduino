@@ -1,0 +1,14 @@
+
+
+
+
+
+.build/nano328/src/graphicstest.cpp : src/graphicstest.ino
+	@mkdir -p .build/nano328/src
+	@echo [93msrc/graphicstest.ino[0m
+	/usr/local/bin/ino preproc  -o $@ $^
+
+
+all : .build/nano328/src/graphicstest.cpp
+	@true
+

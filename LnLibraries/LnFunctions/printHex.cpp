@@ -14,13 +14,19 @@ void printHex(const byte *data, const byte len, const char * suffixLine) {
 
 
 char *strBuff = "00...";      // notare il BLANK come ultimo carattere. Separa i vari bytes
-void printHex(byte data, const char * suffixLine) {
+void printHex(const byte data) {
+    D2X(strBuff, data, 2);
+    Serial.print(strBuff);
+}
+
+void printHex(const byte data, const char * suffixLine) {
     D2X(strBuff, data, 2);
     Serial.print(strBuff);
     Serial.print(suffixLine);
     // if (newLine)
         // Serial.println();
 }
+
 
 
 #if 0

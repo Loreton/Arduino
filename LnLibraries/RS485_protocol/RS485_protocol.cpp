@@ -47,6 +47,7 @@ Modifiche di Loreto:
 #include <LnFunctions.h>                    // for SET_CRC_BEFORE_ETX definition
 #include "RS485_protocol.h"
 
+#define I_AM_RS485_PROTOCOL_CPP
 // const byte STX = '\02';
 // const byte ETX = '\03';
 const byte STX = 0x02;
@@ -180,7 +181,7 @@ byte recvMsg (AvailableCallback fAvailable,   // return available count
 
                         DEBUG_RxMsg[0] = RxCount;                 // by Loreto (dovrebbe contenere: LEN(escluso byt0) STX ...data... CRC ETX)
                         if (CRC8calc != CRC8rcvd)
-                            return RCV_BADCRC;  // bad crc
+                            return LN_RCV_BADCRC;  // bad crc
                         return input_pos-1;  // return received length escludendo il byte di CRC
 
                     } else {
@@ -211,7 +212,7 @@ byte recvMsg (AvailableCallback fAvailable,   // return available count
 
                     // check byte is in valid form (4 bits followed by 4 bits complemented)
                     if ((inByte >> 4) != ((inByte & 0x0F) ^ 0x0F) )
-                        return RCV_BADCHAR;  // bad character
+                        return LN_RCV_BADCHAR;  // bad character
 
                       // convert back
                     inByte >>= 4;
@@ -232,7 +233,7 @@ byte recvMsg (AvailableCallback fAvailable,   // return available count
                     if (have_etx) {
                         DEBUG_RxMsg[0] = RxCount;                 // by Loreto (dovrebbe contenere: LEN(escluso byt0) STX ...data... CRC ETX)
                         if (crc8 (data, input_pos) != current_byte)
-                            return RCV_BADCRC;  // bad crc
+                            return LN_RCV_BADCRC;  // bad crc
                         return input_pos;  // return received length
                     }  // end if have ETX already
 
@@ -240,7 +241,7 @@ byte recvMsg (AvailableCallback fAvailable,   // return available count
                     if (input_pos < length)
                         data [input_pos++] = current_byte;
                     else
-                        return RCV_ERROR;  // overflow
+                        return LN_RCV_ERROR;  // overflow
                     break;
 
                 default:
@@ -251,6 +252,6 @@ byte recvMsg (AvailableCallback fAvailable,   // return available count
         }  // end of incoming data
     } // end of while not timed out
 
-    return RCV_TIMEOUT;  // timeout
+    return LN_RCV_TIMEOUT;  // timeout
 } // end of recvMsg
 
