@@ -1,46 +1,52 @@
+/*
+per compilare c++ online:
+    https://www.codechef.com/ide
+    https://www.tutorialspoint.com/compile_cpp_online.php   -- anche python
+
+version : LnVer_2017-08-16_11.59.01
+
+*/
+
 
 #include <LnFunctions.h>                //  D2X(dest, val, 2)
-// char * rvcvdByte = "0";
-// void printChar(byte data, cha);
-void printHex(const byte *data, const byte len, const char * suffixLine) {
+
+// print di ogni carattere di una stringa
+// convertito in HEX e con il separatore indicato
+// void printHex(const byte *data, const byte len=0, const char *suffixData="", const char *sep=" ");
+void printHex(const char *data, byte len, const char *suffixData, const char *sep) {
+    byte i;
+
+    if (len==0) len = stringLen(data);
+
+    for (i=0; i<len; i++) {
+        Serial.print(D2X(data[i], 2));
+        Serial.print(sep);
+    }
+    Serial.print(suffixData);
+}
+
+// print di ogni carattere di una stringa
+// convertito in HEX e con il separatore indicato
+void printDataToHex(const char *data, byte len, const char *sep) {
     byte i;
     for (i=0; i<len; i++) {
-        printHex(data[i], " ");
+        Serial.print(D2X(data[i], 2));
+        if ( (len-i) > 1 )
+            Serial.print(sep);
     }
-    Serial.print(suffixLine);
-    // if (newLine)
-        // Serial.println();
+
 }
 
 
-char *strBuff = "00...";      // notare il BLANK come ultimo carattere. Separa i vari bytes
 void printHex(const byte data) {
-    D2X(strBuff, data, 2);
-    Serial.print(strBuff);
-}
-
-void printHex(const byte data, const char * suffixLine) {
-    D2X(strBuff, data, 2);
-    Serial.print(strBuff);
-    Serial.print(suffixLine);
-    // if (newLine)
-        // Serial.println();
+    Serial.print(D2X(data, 2));
 }
 
 
 
-#if 0
-void serialHex_OK(const byte *data, const byte len, char * suffixLine) {
-    byte i;
-    Serial.print("len:");
-    Serial.print(len, DEC);
-    Serial.print("  -  ");
-    char *strBuff = "0000000000";
-    for (i=0; i<len; i++) {
-        D2X(strBuff, data[i], 2);
-        Serial.print(strBuff);
-        Serial.print(" ");
-    }
-    Serial.println(suffixLine);
+void printHexPDS(const char *prefixStr, const byte data, const char *suffixStr) {
+    Serial.print(prefixStr);
+    Serial.print(D2X(data, 2));
+    Serial.print(suffixStr);
 }
-#endif
+
