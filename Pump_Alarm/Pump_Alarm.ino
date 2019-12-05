@@ -31,13 +31,16 @@
 // https://www.youtube.com/watch?v=ptig62mLN84
 #define ON HIGH
 #define OFF LOW
-#define LED_INTERVAL 2000
+#define LED_INTERVAL_DEFAULT 2000
+#define HORN_TIME 4000
 int led_interval; // ms
 
-int pumpPin   = 4;
-int buzzerPin = 5;
-int relePin   = 6;
-int ledPin    = 13;
+int Buzzer       =  2;
+int pumpPin      =  3;
+int pumpOnOff    =  4; // comanda il sonoff che spegne la pompa.
+int HornRele     =  5;
+int AuxRele      =  6;
+int ledPin       = 13;
 
 byte ledState = 0;
 unsigned long time_for_LED;
@@ -47,91 +50,120 @@ int DELAY, FREQ, DURATION, VOLUME ;
 
 void lnprint(char *msg, unsigned long value, const char *s2="");
 
-int BEEP[] = {
-                 5, 2000, 500,  1,  // delaySec, frequency, duration, volume(only with tone_AC)
-                60, 2000, 1000, 2,  // delaySec, frequency, duration, volume(only with tone_AC)
-                60, 2000, 1000, 3,  // delaySec, frequency, duration, volume(only with tone_AC)
-                60, 2000, 1000, 4,  // delaySec, frequency, duration, volume(only with tone_AC)
-                60, 2000, 1000, 5,  // delaySec, frequency, duration, volume(only with tone_AC)
-                60, 2000, 1000, 6,  // delaySec, frequency, duration, volume(only with tone_AC)
-                60, 2000, 1000, 7,  // delaySec, frequency, duration, volume(only with tone_AC)
-                60, 2000, 1000, 8,  // delaySec, frequency, duration, volume(only with tone_AC)
-                60, 2000, 1000, 9,  // delaySec, frequency, duration, volume(only with tone_AC)
-                60, 2000, 1000, 9,  // delaySec, frequency, duration, volume(only with tone_AC)
-                10, 2000, 1000, 9   // delaySec, frequency, duration, volume(only with tone_AC)
+int BEEP[] = { // delaySec, frequency, duration, volume(only with tone_AC)
+                     5,         2000,    500,       1,
+                    10,         2000,    1000,      2,
+                    10,         2000,    1000,      3,
+                    10,         2000,    1000,      4,
+                    10,         2000,    1000,      5,
+                    10,         2000,    1000,      6,
+                    10,         2000,    1000,      7,
+                    10,         2000,    1000,      8,
+                    10,         2000,    1000,      9,
+                    10,         2000,    1000,      9,
+                    10,         2000,    1000,      9,
             };
-
 
 
 #define nCounters  (sizeof(BEEP)/sizeof(int)/4) - 1
 
 void setup() {
     Serial.begin(9600);
-    pinMode(ledPin, OUTPUT);
     pinMode(pumpPin, INPUT_PULLUP);
-    pinMode(buzzerPin, OUTPUT);
-    pinMode(relePin, OUTPUT);
+    pinMode(ledPin, OUTPUT);
+    pinMode(Buzzer   , OUTPUT);
+    pinMode(pumpOnOff, OUTPUT);
+    pinMode(HornRele, OUTPUT);
+    pinMode(AuxRele, OUTPUT);
     Serial.println("Starting...");
     lnprint("numero di counters...: ", nCounters , "\n");
     setValues(counter);
-    led_interval = LED_INTERVAL;
+    led_interval = LED_INTERVAL_DEFAULT;
 }
 
 
-void loop_test() {
+void tone_test() {
     for (int freq=2000; freq<=3000; freq+=100) {
         lnprint("freq: ", freq, "\n");
-        tone(buzzerPin, freq, 1000);
+        tone(Buzzer   , freq, 1000);
         delay(1000*1.3); // mandatory in quanto la funzione tone non è bloccante.
-        noTone(buzzerPin);
+        noTone(Buzzer   );
     }
 }
 
+
 void loop() {
     unsigned long now = millis();
-    if (millis() > time_for_LED) {
-        time_for_LED = millis() + (unsigned long) led_interval;
+
+    // LED on/off
+    if (now > time_for_LED) {
+        time_for_LED = now + (unsigned long) led_interval;
         ledState = !ledState;
     }
     digitalWrite(ledPin, ledState); // blinking LED
 
+    // check pump state
+    byte pumpState = !digitalRead(pumpPin); // logica inversa.
 
-    if (now > time_for_BEEP) {
-        byte pumpState = !digitalRead(pumpPin); // logica inversa.
+    switch(pumpState) {
+        case ON:
+            if (now>time_for_BEEP || counter==0){
+                led_interval = LED_INTERVAL_DEFAULT/6; // velocizza lampeggio per indicare pompa accesa
 
-        if (pumpState==ON) {
-            led_interval = LED_INTERVAL/6; // velocizza lampeggio per indicare pompa accesa
+                lnprint("pump Status: ", pumpState, " - BEEPing - ");
+                lnprint("counter: ", counter, " - ");
+                lnprint("frequency: ", FREQ, " - ");
 
-            lnprint("pump Status: ", pumpState, " - BEEPing - ");
-            lnprint("counter: ", counter, " - ");
-            lnprint("frequency: ", FREQ, " - ");
+                // emissione BEEP
+                tone(Buzzer   , FREQ, DURATION);
 
-            // emissione BEEP
-            digitalWrite(relePin, ON); // Activate Rele
-            #if defined(toneAC_h)
-                toneAC(FREQ, VOLUME, DURATION, true); // Play thisNote at full volume for noteDuration in the background.
-                delay(DURATION*1.3); // mandatory in quanto la funzione tone non è bloccante.
-                noToneAC();
-                lnprint("duration: ", DURATION, " - ");
-                lnprint("volume: ", VOLUME, "\n");
-            #else
-                tone(buzzerPin, FREQ, DURATION);
-                delay(DURATION*1.3); // mandatory in quanto la funzione tone non è bloccante.
-                noTone(buzzerPin);
+                // Siccome devo far suonare anche la sirena, ed il tone non blocca il programma,
+                // posso utilizzare il tempo della sirena come delay per il tono
+                digitalWrite(HornRele, ON); // Pigia il pulsante del sonoff
+                delay(HORN_TIME);
+                digitalWrite(HornRele, OFF); // Rilascia il pulsante del sonoff
+
+                // delay(DURATION*1.3); // mandatory in quanto la funzione tone non è bloccante.
+                noTone(Buzzer   );
                 lnprint("duration: ", DURATION, "\n");
-            #endif
-            digitalWrite(relePin, OFF); // Activate Rele
-            // increment counter
-            if (counter<nCounters) counter++;
-            setValues(counter);
 
+
+
+
+                digitalWrite(AuxRele, ON); // Pigia il pulsante del sonoff
+                delay(2000);
+                digitalWrite(AuxRele, OFF); // Rilascia il pulsante del sonoff
+
+                // increment counter
+                if (counter<nCounters)  {
+                    counter++;
+                }
+                else {
+                    digitalWrite(pumpOnOff, OFF); // Rilascia il pulsante del sonoff
+                    delay(2000);
+                    digitalWrite(pumpOnOff, ON); // Pigia il pulsante del sonoff
+                }
+                setValues(counter);
+            }
+            break;
+
+        default:
+            // tone to advice the pump is off only it it was ON
+            if (counter > 0) {
+                Serial.println("pump has been turned off.");
+                int _duration=300;
+                for (int i=0; i<=2; i++) {
+                    tone(Buzzer   , FREQ, _duration);
+                    delay(_duration*1.3); // mandatory in quanto la funzione tone non è bloccante.
+                    noTone(Buzzer   );
+                }
+                counter=0; // reset
+                led_interval = LED_INTERVAL_DEFAULT; // reset LED interval
+                setValues(counter); // reset Buzzer data
+            }
+            break;
         }
-        else {
-            counter=0; // reset
-            led_interval = LED_INTERVAL;
-            setValues(counter);
-        }
-    }
+
 } // end loop()
 
 
@@ -142,7 +174,7 @@ void setValues(int count) {
     DURATION = BEEP[index+2];
     VOLUME   = BEEP[index+3];
     time_for_BEEP = millis() + (unsigned long) DELAY*1000;
-    lnprint("next check for pump status in: ", DELAY, " Sec\n");
+    lnprint("next BEEP, if pump still ON, in: ", DELAY, " Sec\n");
 }
 
 
