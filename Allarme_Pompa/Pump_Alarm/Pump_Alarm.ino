@@ -8,16 +8,16 @@ byte fDEBUG=0;
 byte fALARM=OFF;
 byte fPUMPSTATUS;
 
-int pumpState          = 2;
-int presscontrolPower  = 3; // comanda il sonoff che spegne il pressControl.
-int Horn               = 4;
-int ElettroValvola     = 5; // chiusura acqua a caduta.... da implementare
-int pressControlState  = 6; // stato del PressControl
+int pumpState          = 2; // input +5Volt se Pompa accesa
+int presscontrolPower  = 3; // output comanda il sonoff che spegne/accendere il pressControl.
+int Horn               = 4; // output comanda una sirena
+int ElettroValvola     = 5; // output chiusura acqua a caduta.... da implementare
+int pressControlState  = 6; // input +5Volt se PressControl acceso.
 
-int inp_DEBUG          = 10; // Scrive sulla seriale
+// int inp_DEBUG          = 9; // Scrive sulla seriale
 int pressControlButton = 11; // pulsante per accendere manualmente il pressControl
 int Buzzer             = 12;
-int ledPin             = 13;
+int blinkingLED        = 13;
 
 byte ledState = 0;
 int phase=0;
@@ -33,19 +33,22 @@ void lnprint(char *msg, unsigned long value, const char *s2="");
 
 int BEEP[] = { // delaySec, frequency, duration, volume(only with tone_AC)     phase,
                      5,         2000,    1500,      1,                          //  0
+
                     30,         2000,    1000,      2,                          //  1
                     30,         2000,    1000,      3,                          //  2
                     30,         2000,    1000,      4,                          //  3
                     30,         2000,    1000,      5,                          //  4
+
                     15,         2000,    1000,      6,                          //  5
                     15,         2000,    1000,      7,                          //  6
                     15,         2000,    1000,      8,                          //  7
                     15,         2000,    1000,      9,                          //  8
+
                     10,         2000,    1000,      9,                          //  9
                     10,         2000,    1000,      9,                          // 10
                     10,         2000,    1000,      9,                          // 10
                     10,         2000,    1000,      9,                          // 10
-            };
+            }
 
 
 #define nPhases  (sizeof(BEEP)/sizeof(int)/4) - 1
@@ -53,14 +56,14 @@ int BEEP[] = { // delaySec, frequency, duration, volume(only with tone_AC)     p
 
 void setup() {
     Serial.begin(9600);
-    pinMode(pressControlState  , INPUT); // NO PULLUP perché c'è il LED verso il +
     pinMode(pumpState          , INPUT_PULLUP);
+    pinMode(pressControlState  , INPUT_PULLUP);
     pinMode(pressControlButton , INPUT_PULLUP);
-    pinMode(inp_DEBUG          , INPUT_PULLUP);
+
     pinMode(Buzzer             , OUTPUT);
     pinMode(presscontrolPower  , OUTPUT);
     pinMode(Horn               , OUTPUT);
-    pinMode(ledPin             , OUTPUT);
+    pinMode(blinkingLED        , OUTPUT);
 
     // attachInterrupt(digitalPinToInterrupt(pumpState), pumpState_ISR, CHANGE);
     // attachInterrupt(digitalPinToInterrupt(pumpState), pumpState_ISR, FALLING);
@@ -130,7 +133,7 @@ unsigned long isLedTime;
             lnprint("LED Status: ", ledState, "" );
             lnprint(" - period: ", led_period, "\n" );
         }
-        digitalWrite(ledPin, ledState);
+        digitalWrite(blinkingLED, ledState);
     }
 }
 
@@ -141,7 +144,7 @@ void checkPumpState() {
 unsigned long isBeepTime;
 
     isBeepTime = now>=next_beep_time;
-    fPUMPSTATUS = !digitalRead(pumpState); // logica inversa.
+    fPUMPSTATUS = digitalRead(pumpState);
     switch(fPUMPSTATUS) {
         case ON:
             if (buzzer_ON!=0) {
@@ -197,7 +200,7 @@ unsigned long isBeepTime;
 // - Attendiamo il debounce e leggiamo di nuovo
 // ==================================
 void TurnOnOffPressControl() {
-    // byte button = !digitalRead(pressControlButton); // logica inversa.
+    // if after 100mS is still pressed get it
     delay(100);
     byte button = !digitalRead(pressControlButton); // logica inversa.
 
@@ -206,17 +209,45 @@ void TurnOnOffPressControl() {
         setPhase(0); // ripristiniamo
     }
     if (button) {
-        if (!digitalRead(pressControlState)==LOW) {
-            digitalWrite(presscontrolPower, LOW); // Turn-ON PressControl
-        }
-        else {
-            digitalWrite(presscontrolPower, HIGH); // Turn-ON PressControl
-        }
+        digitalWrite(presscontrolPower, LOW); // Press PressControl sOnOff button
+        delay(500);
+        digitalWrite(presscontrolPower, HIGH); // Release PressControl sOnOff button
     }
-    lnprint("PressControl status: ", !digitalRead(pressControlState), "\n");
+    lnprint("PressControl status: ", digitalRead(pressControlState), "\n");
 }
 
+#if 0
+void readButton() {
+    // read the state of the switch into a local variable:
+    int reading = digitalRead(pressControlButton);
 
+    // check to see if you just pressed the button
+    // (i.e. the input went from LOW to HIGH), and you've waited long enough
+    // since the last press to ignore any noise:
+
+    // If the switch changed, due to noise or pressing:
+    if (reading != lastButtonState) {
+    // reset the debouncing timer
+        lastDebounceTime = millis();
+    }
+
+    if ((millis() - lastDebounceTime) > debounceDelay) {
+    // whatever the reading is at, it's been there for longer than the debounce
+    // delay, so take it as the actual current state:
+
+    // if the button state has changed:
+    if (reading != buttonState) {
+      buttonState = reading;
+
+      // only toggle the LED if the new button state is HIGH
+      if (buttonState == HIGH) {
+        ledState = !ledState;
+      }
+    }
+    }
+
+}
+#endif
 // ==================================
 // -
 // ==================================

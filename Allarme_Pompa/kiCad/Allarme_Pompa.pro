@@ -1,4 +1,4 @@
-update=10/12/2019 22:14:38
+update=11/12/2019 16:04:16
 version=1
 last_client=kicad
 [pcbnew]
@@ -31,7 +31,7 @@ LibDir=
 [schematic_editor]
 version=1
 PageLayoutDescrFile=
-PlotDirectoryName=k:/Filu/LnDisk/GIT-REPO/HW-Projects/Controllo_Pompa
+PlotDirectoryName=../Pump_Alarm/
 SubpartIdSeparator=0
 SubpartFirstId=65
 NetFmtName=
