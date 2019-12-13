@@ -92,7 +92,7 @@ Wire Notes Line
 Text Notes 10250 4600 0    50   ~ 0
 Pump
 Wire Wire Line
-	9650 5400 9650 5150
+	10450 5400 10450 5150
 Wire Wire Line
 	1900 4200 1900 4400
 Wire Wire Line
@@ -196,27 +196,27 @@ Wire Wire Line
 $Comp
 L power:GNDA #PWR?
 U 1 1 5DF0F3FB
-P 9200 5750
-F 0 "#PWR?" H 9200 5500 50  0001 C CNN
-F 1 "GNDA" H 9205 5577 50  0000 C CNN
-F 2 "" H 9200 5750 50  0001 C CNN
-F 3 "" H 9200 5750 50  0001 C CNN
-	1    9200 5750
+P 10000 5750
+F 0 "#PWR?" H 10000 5500 50  0001 C CNN
+F 1 "GNDA" H 10005 5577 50  0000 C CNN
+F 2 "" H 10000 5750 50  0001 C CNN
+F 3 "" H 10000 5750 50  0001 C CNN
+	1    10000 5750
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GNDA #PWR?
 U 1 1 5DF0F410
-P 9850 5450
-F 0 "#PWR?" H 9850 5200 50  0001 C CNN
-F 1 "GNDA" H 9855 5277 50  0000 C CNN
-F 2 "" H 9850 5450 50  0001 C CNN
-F 3 "" H 9850 5450 50  0001 C CNN
-	1    9850 5450
+P 10650 5450
+F 0 "#PWR?" H 10650 5200 50  0001 C CNN
+F 1 "GNDA" H 10655 5277 50  0000 C CNN
+F 2 "" H 10650 5450 50  0001 C CNN
+F 3 "" H 10650 5450 50  0001 C CNN
+	1    10650 5450
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	9200 5700 9200 5750
+	10000 5700 10000 5750
 $Comp
 L LnDevice:sOnOff_Basic K?
 U 1 1 5DEED482
@@ -242,12 +242,12 @@ $EndComp
 $Comp
 L LnDevice:Relay_5V_LL RL?
 U 1 1 5DF237EE
-P 9200 5400
-F 0 "RL?" H 9200 5878 50  0001 C CNN
-F 1 "Relay_5V_LL" H 9200 5100 50  0000 C CNN
-F 2 "" H 9200 5400 50  0001 C CNN
-F 3 "" H 9200 5400 50  0001 C CNN
-	1    9200 5400
+P 10000 5400
+F 0 "RL?" H 10000 5878 50  0001 C CNN
+F 1 "Relay_5V_LL" H 10000 5100 50  0000 C CNN
+F 2 "" H 10000 5400 50  0001 C CNN
+F 3 "" H 10000 5400 50  0001 C CNN
+	1    10000 5400
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -286,12 +286,12 @@ $EndComp
 $Comp
 L Device:Speaker LS?
 U 1 1 5DF4E72D
-P 9850 5050
-F 0 "LS?" H 10019 5046 50  0001 L CNN
-F 1 "Horn" H 10019 5000 50  0000 L CNN
-F 2 "" H 9850 4850 50  0001 C CNN
-F 3 "~" H 9840 5000 50  0001 C CNN
-	1    9850 5050
+P 10650 5050
+F 0 "LS?" H 10819 5046 50  0001 L CNN
+F 1 "Horn" H 10819 5000 50  0000 L CNN
+F 2 "" H 10650 4850 50  0001 C CNN
+F 3 "~" H 10640 5000 50  0001 C CNN
+	1    10650 5050
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -690,13 +690,6 @@ F 3 "~" V 1825 6000 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	1950 6000 2050 6000
-Wire Wire Line
-	2050 6000 2050 6600
-Wire Wire Line
-	1400 6600 2050 6600
-Connection ~ 2050 6600
-Wire Wire Line
 	10700 3600 10700 4100
 Wire Wire Line
 	10500 3600 10500 3900
@@ -727,17 +720,13 @@ Connection ~ 9700 4100
 Wire Wire Line
 	9700 4100 9700 4300
 Wire Wire Line
-	9800 3900 9550 3900
+	10350 5050 10450 5050
 Wire Wire Line
-	9550 3900 9550 4850
+	10350 5400 10450 5400
 Wire Wire Line
-	9550 5050 9650 5050
+	10350 5300 10650 5300
 Wire Wire Line
-	9550 5400 9650 5400
-Wire Wire Line
-	9550 5300 9850 5300
-Wire Wire Line
-	9850 5300 9850 5450
+	10650 5300 10650 5450
 $Comp
 L LnDevice:Alimentatore Al_5Vcc?
 U 1 1 5E20E831
@@ -752,27 +741,11 @@ $EndComp
 Wire Wire Line
 	3100 6200 2600 6200
 Wire Wire Line
-	1400 5600 3100 5600
-Wire Wire Line
-	1950 5800 3100 5800
+	1400 5600 1950 5600
 Text Notes 1000 7300 0    50   ~ 0
 Active Buzzer è messo come emergenza nel caso si dovesse rimuovere Arduino.\nCome pumpState deve arrivare un +5V. \nSuonerebbe in modo continuo ad ogni attacco di pompa.
-Connection ~ 3100 5800
-Wire Wire Line
-	2050 6600 2600 6600
 Wire Wire Line
 	2800 6300 2800 6750
-$Comp
-L Isolator:PC817 U?
-U 1 1 5E27EA00
-P 9150 4200
-F 0 "U?" H 9150 4525 50  0001 C CNN
-F 1 "PC817" H 9150 4300 43  0000 C CNN
-F 2 "Package_DIP:DIP-4_W7.62mm" H 8950 4000 50  0001 L CIN
-F 3 "http://www.soselectronic.cz/a_info/resource/d/pc817.pdf" H 9150 4200 50  0001 L CNN
-	1    9150 4200
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	5100 1900 4650 1900
 Wire Wire Line
@@ -793,35 +766,24 @@ Wire Wire Line
 	7500 3600 8150 3600
 Connection ~ 7500 3700
 Wire Wire Line
-	9650 3300 7500 3300
+	8700 3300 7500 3300
 Wire Wire Line
 	7500 3100 9700 3100
 Wire Wire Line
 	7500 3000 9500 3000
 Wire Wire Line
 	7500 3700 8900 3700
-Wire Wire Line
-	9550 3700 9550 3900
-Connection ~ 9550 3900
 $Comp
 L Device:R R?
 U 1 1 5E2AF1D8
-P 9050 3900
-F 0 "R?" V 9150 3900 50  0001 C CNN
-F 1 "1K" V 9050 3900 50  0000 C CNN
-F 2 "" V 8980 3900 50  0001 C CNN
-F 3 "~" H 9050 3900 50  0001 C CNN
-	1    9050 3900
-	0    -1   -1   0   
+P 9450 3850
+F 0 "R?" V 9550 3850 50  0001 C CNN
+F 1 "1K" V 9450 3850 50  0000 C CNN
+F 2 "" V 9380 3850 50  0001 C CNN
+F 3 "~" H 9450 3850 50  0001 C CNN
+	1    9450 3850
+	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	9200 3900 9550 3900
-Wire Wire Line
-	8900 3900 8750 3900
-Wire Wire Line
-	8750 3900 8750 4100
-Wire Wire Line
-	8750 4100 8850 4100
 Wire Wire Line
 	8850 4300 8750 4300
 Wire Wire Line
@@ -850,25 +812,6 @@ F 3 "" H 9450 4400 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	9450 4300 9450 4400
-Wire Wire Line
-	9450 4100 9450 3500
-Wire Wire Line
-	9450 3500 9550 3500
-$Comp
-L LnDevice:Jumper3_B SW?
-U 1 1 5E2DB7B9
-P 9550 3600
-F 0 "SW?" V 9504 3776 50  0001 L CNN
-F 1 "Ard/NoArd" H 9450 3450 50  0000 L CNN
-F 2 "" H 9500 3720 60  0000 C CNN
-F 3 "" H 9500 3720 60  0000 C CNN
-	1    9550 3600
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	9650 3300 9650 3600
-Wire Wire Line
-	9650 3600 9600 3600
 Text Notes 6850 6250 0    50   ~ 0
 Ard/NoArd indica se è presente o meno Arduino. Se è presente mandiamo un LowLevel\nSe non è presente inviamo i +5V che andranno sul buzzer attivo
 $Comp
@@ -915,8 +858,6 @@ F 3 "" H 9150 1700 60  0000 C CNN
 	1    9150 1700
 	1    0    0    -1  
 $EndComp
-Text Label 1700 5600 0    50   ~ 0
-pressControlState
 Text Label 7700 3000 0    50   ~ 0
 GNDA
 Wire Wire Line
@@ -930,7 +871,7 @@ Wire Wire Line
 Wire Wire Line
 	8150 3600 8150 5550
 Wire Wire Line
-	8150 5550 8850 5550
+	8150 5550 9650 5550
 $Comp
 L Connector:Conn_01x03_Female J?
 U 1 1 5E36902E
@@ -976,16 +917,54 @@ F 3 "~" H 4850 2500 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	9550 4850 9200 4850
+	10350 4850 10000 4850
 Wire Wire Line
-	9200 4850 9200 5100
+	10000 4850 10000 5100
+Wire Wire Line
+	10350 4850 10350 5050
+$Comp
+L Isolator:PC817 U?
+U 1 1 5E27EA00
+P 9150 4200
+F 0 "U?" H 9150 4525 50  0001 C CNN
+F 1 "PC817" H 9150 4300 43  0000 C CNN
+F 2 "Package_DIP:DIP-4_W7.62mm" H 8950 4000 50  0001 L CIN
+F 3 "http://www.soselectronic.cz/a_info/resource/d/pc817.pdf" H 9150 4200 50  0001 L CNN
+	1    9150 4200
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	9800 3900 9800 3600
+Wire Wire Line
+	9800 3600 9450 3600
+Wire Wire Line
+	9450 3600 9450 3700
+Wire Wire Line
+	9450 4000 9450 4100
+Wire Wire Line
+	8700 3300 8700 4100
+Wire Wire Line
+	8700 4100 8850 4100
+Wire Wire Line
+	1400 6600 2600 6600
+Wire Wire Line
+	2400 6000 2400 5800
+Wire Wire Line
+	2400 5800 3100 5800
+Wire Wire Line
+	1950 6000 2400 6000
+Connection ~ 3100 5800
+Wire Wire Line
+	1950 5800 1950 5600
 Wire Bus Line
 	3400 2400 3400 4500
 Wire Bus Line
 	6600 2850 6600 4100
 Wire Bus Line
 	4150 5350 4150 6600
-Connection ~ 9550 4850
+Connection ~ 1950 5600
 Wire Wire Line
-	9550 4850 9550 5050
+	1950 5600 3100 5600
+Text Notes 2050 5600 0    50   ~ 0
++5Vcc
 $EndSCHEMATC

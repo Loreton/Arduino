@@ -729,7 +729,7 @@ Wire Wire Line
 Wire Wire Line
 	9800 3900 9550 3900
 Wire Wire Line
-	9550 3900 9550 5050
+	9550 3900 9550 4850
 Wire Wire Line
 	9550 5050 9650 5050
 Wire Wire Line
@@ -975,10 +975,17 @@ F 3 "~" H 4850 2500 50  0001 C CNN
 	1    4850 2500
 	-1   0    0    -1  
 $EndComp
+Wire Wire Line
+	9550 4850 9200 4850
+Wire Wire Line
+	9200 4850 9200 5100
 Wire Bus Line
 	3400 2400 3400 4500
 Wire Bus Line
 	6600 2850 6600 4100
 Wire Bus Line
 	4150 5350 4150 6600
+Connection ~ 9550 4850
+Wire Wire Line
+	9550 4850 9550 5050
 $EndSCHEMATC

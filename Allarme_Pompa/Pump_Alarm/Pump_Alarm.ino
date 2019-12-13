@@ -1,10 +1,24 @@
 // https://www.youtube.com/watch?v=ptig62mLN84
 #define ON  1
 #define OFF 0
-#define HORN_TIME 4000
+#define HORN_PERIOD_ON     4000
+#define HORN_PERIOD_OFF    2000
+#define HORN_ALARM_PERIOD_ON    6000
+#define HORN_ALARM_PERIOD_OFF   1000
+
 #define LED_PERIOD_DEFAULT 2000
-// #define HORN_TIME 4000
-byte fDEBUG=0;
+#define LED_PERIOD_PUMP_ON 500
+#define LED_PERIOD_ALARM   300
+#define SKIP_PRINT_VALUE 9999111
+
+bool fPrint_BEEP = true;
+bool fPrint_HORN = true;
+bool fPrint_TONE = false;
+bool fPrint_LED = false;
+bool fPrint_VERBOSE = false;
+
+// byte fDEBUG=0;
+byte fHORN=OFF;
 byte fALARM=OFF;
 byte fPUMPSTATUS;
 
@@ -12,10 +26,8 @@ int pumpState          = 2; // input +5Volt se Pompa accesa
 int presscontrolPower  = 3; // output comanda il sonoff che spegne/accendere il pressControl.
 int Horn               = 4; // output comanda una sirena
 int ElettroValvola     = 5; // output chiusura acqua a caduta.... da implementare
-int pressControlState  = 6; // input +5Volt se PressControl acceso.
 
 // int inp_DEBUG          = 9; // Scrive sulla seriale
-int pressControlButton = 11; // pulsante per accendere manualmente il pressControl
 int Buzzer             = 12;
 int blinkingLED        = 13;
 
@@ -23,32 +35,34 @@ byte ledState = 0;
 int phase=0;
 int DELAY, FREQ, DURATION, VOLUME ;
 int led_period; // ms
-long buzzer_ON, horn_ON;
-unsigned long now, previousLedTime, previous_beep_time, next_beep_time;
+long buzzer_OFF_time, horn_OFF_time, horn_ON_time;
+unsigned long now, previousLedTime, previous_beep_time, buzzer_ON_time;
 
-int buttonDebounce = 20; //ms
-// volatile byte buttonFlag=0;
 
-void lnprint(char *msg, unsigned long value, const char *s2="");
+void lnprint(bool fDEBUG, char *msg, unsigned long value=SKIP_PRINT_VALUE, const char *s2="\n");
+void checkLed(void);
+void checkPumpState(void);
+void setPhase(int);
+void checkHorn(void);
 
 int BEEP[] = { // delaySec, frequency, duration, volume(only with tone_AC)     phase,
                      5,         2000,    1500,      1,                          //  0
 
-                    30,         2000,    1000,      2,                          //  1
-                    30,         2000,    1000,      3,                          //  2
-                    30,         2000,    1000,      4,                          //  3
-                    30,         2000,    1000,      5,                          //  4
+                    // 30,         2000,    1000,      2,                          //  1
+                    // 30,         2000,    1000,      3,                          //  2
+                    // 30,         2000,    1000,      4,                          //  3
+                    // 30,         2000,    1000,      5,                          //  4
 
-                    15,         2000,    1000,      6,                          //  5
-                    15,         2000,    1000,      7,                          //  6
-                    15,         2000,    1000,      8,                          //  7
-                    15,         2000,    1000,      9,                          //  8
+                    // 15,         2000,    1000,      6,                          //  5
+                    // 15,         2000,    1000,      7,                          //  6
+                    // 15,         2000,    1000,      8,                          //  7
+                    // 15,         2000,    1000,      9,                          //  8
 
-                    10,         2000,    1000,      9,                          //  9
+                    // 10,         2000,    1000,      9,                          //  9
+                    // 10,         2000,    1000,      9,                          // 10
+                    // 10,         2000,    1000,      9,                          // 10
                     10,         2000,    1000,      9,                          // 10
-                    10,         2000,    1000,      9,                          // 10
-                    10,         2000,    1000,      9,                          // 10
-            }
+            };
 
 
 #define nPhases  (sizeof(BEEP)/sizeof(int)/4) - 1
@@ -57,19 +71,18 @@ int BEEP[] = { // delaySec, frequency, duration, volume(only with tone_AC)     p
 void setup() {
     Serial.begin(9600);
     pinMode(pumpState          , INPUT_PULLUP);
-    pinMode(pressControlState  , INPUT_PULLUP);
-    pinMode(pressControlButton , INPUT_PULLUP);
 
-    pinMode(Buzzer             , OUTPUT);
     pinMode(presscontrolPower  , OUTPUT);
     pinMode(Horn               , OUTPUT);
+    pinMode(Buzzer             , OUTPUT);
     pinMode(blinkingLED        , OUTPUT);
+    // pinMode(ElettroValvola     , OUTPUT); // ...coming
 
     // attachInterrupt(digitalPinToInterrupt(pumpState), pumpState_ISR, CHANGE);
     // attachInterrupt(digitalPinToInterrupt(pumpState), pumpState_ISR, FALLING);
 
-    Serial.println("Starting...");
-    lnprint("numero di phases...: ", nPhases , "\n");
+    lnprint(true, "Starting...");
+    lnprint(true, "numero di phases...: ", nPhases);
     setPhase(0);
     led_period = LED_PERIOD_DEFAULT;
 }
@@ -77,7 +90,7 @@ void setup() {
 
 void tone_test() {
     for (int freq=2000; freq<=3000; freq+=100) {
-        lnprint("freq: ", freq, "\n");
+        lnprint(fPrint_TONE, "freq: ", freq);
         tone(Buzzer   , freq, 1000);
         delay(1000*1.3); // mandatory in quanto la funzione tone non è bloccante.
         noTone(Buzzer   );
@@ -89,33 +102,23 @@ void tone_test() {
 // -
 // ==================================
 void loop() {
-    // fDEBUG = !digitalRead(inp_DEBUG); // logica inversa.
     now = millis();
 
     checkLed();
     checkPumpState();
+    checkHorn();
 
-    // verifica il taso per accendere la Pompa e cioè il PressControl
-    if (!digitalRead(pressControlButton)) TurnOnOffPressControl();
 
-    if (buzzer_ON!=0 && buzzer_ON<now) { // se stiamo suonando, portiamolo a termine
-        lnprint("now: ", now, " - ");
-        // Serial.println("Beep completato.");
+    if (buzzer_OFF_time!=0 && buzzer_OFF_time<now) { // se stiamo suonando ed è scaduto il time... chiudiamo il buzzer
+        lnprint(fPrint_BEEP, "now: ", now, " - ");
+        lnprint(fPrint_BEEP, "Beep completato.");
         noTone(Buzzer);
-        buzzer_ON=0;
+        buzzer_OFF_time=0;
+        // Serial.println();
     }
 
-    if (horn_ON!=0 && horn_ON<now) { // se stiamo suonando, portiamolo a termine
-        lnprint("now: ", now, " - ");
-        Serial.println("Horn completato.");
-        digitalWrite(Horn, OFF); // Rilascia il pulsante del sonoff
-        horn_ON=0;
-    }
 
-    // if (phase>=nPhases) { // abbiamo esaurito le fasi
-    //     TurnOnOffPressControl();
-    //     setPhase(0); // reset all
-    // }
+
 } // end loop()
 
 
@@ -129,10 +132,8 @@ unsigned long isLedTime;
     if (isLedTime) {
         previousLedTime = now;
         ledState = !ledState;
-        if (fDEBUG) {
-            lnprint("LED Status: ", ledState, "" );
-            lnprint(" - period: ", led_period, "\n" );
-        }
+        lnprint(fPrint_LED, "LED Status: ", ledState);
+        lnprint(fPrint_LED, " - period: ", led_period);
         digitalWrite(blinkingLED, ledState);
     }
 }
@@ -140,40 +141,70 @@ unsigned long isLedTime;
 // ==================================
 // -
 // ==================================
-void checkPumpState() {
-unsigned long isBeepTime;
+void checkHorn() {
+// static bool horn_prev_state;
 
-    isBeepTime = now>=next_beep_time;
-    fPUMPSTATUS = digitalRead(pumpState);
+    if (fHORN) {
+        byte fHornStatus = digitalRead(Horn);
+        switch(fHornStatus) {
+            case ON:
+                if (horn_ON_time<millis()) {
+                    digitalWrite(Horn, OFF);
+                    lnprint(fPrint_HORN, "now: ", now, " - ");
+                    lnprint(fPrint_HORN, "Horn OFF.\n");
+                    horn_OFF_time=millis()+HORN_PERIOD_OFF;
+                }
+                break;
+            case OFF:
+                if (horn_OFF_time<millis()) {
+                    digitalWrite(Horn, ON);
+                    lnprint(fPrint_HORN, "now: ", now, " - ");
+                    lnprint(fPrint_HORN, "Horn ON.\n");
+                    horn_ON_time=millis()+HORN_PERIOD_ON;
+                }
+                break;
+        } // ens switch
+    } // endif
+    else {
+        digitalWrite(Horn, ON);
+        horn_ON_time=0;
+        horn_OFF_time=0;
+    } // end else
+
+    // horn_OFF_time = now + HORN_PERIOD_ON;
+    // digitalWrite(Horn, OFF); // Rilascia il pulsante del sonoff
+}
+
+// ==================================
+// -
+// ==================================
+void checkPumpState() {
+unsigned long isBeepTime, isHornTime;
+
+    isBeepTime  = now>=buzzer_ON_time;       // millis() a cui dovrà suonare il buzzer
+    // isHornTime  = now>=HORN_PERIOD_ALARM_ON;       // millis() a cui dovrà suonare la sirena
+    fPUMPSTATUS = !digitalRead(pumpState);  // logica inversa. PumpON->LowLevel
     switch(fPUMPSTATUS) {
         case ON:
-            if (buzzer_ON!=0) {
+            fHORN=ON;
+            if (buzzer_OFF_time!=0) { // vuol dire che il Buzzer è attivo
                 break;
             }
-            if (isBeepTime || phase==0 ) { // phase=0 vogliamo un beep appena acesa la pompa
+            if (isBeepTime || phase==0 ) { // phase=0 vogliamo un beep appena accesa la pompa
                 previous_beep_time = now;
-                led_period = LED_PERIOD_DEFAULT/6;
+                led_period = LED_PERIOD_PUMP_ON;
 
                 // emissione BEEP
                 tone(Buzzer, FREQ, DURATION);
-                buzzer_ON=now + DURATION; // tempo (millsis()) a cui il buzzer si dovrà spegnere
-                lnprint("now: ", now, " - ");
-                lnprint("pump Status: ", fPUMPSTATUS, " - BEEPing - ");
-                lnprint("phase: ", phase, " - ");
-                lnprint("frequency: ", FREQ, " - ");
-                lnprint("duration: ", DURATION, "\n");
+                buzzer_OFF_time = now+DURATION; // tempo (millsis()) a cui il buzzer si dovrà spegnere
+                lnprint(fPrint_VERBOSE, "now: ", now, " - ");
+                lnprint(fPrint_VERBOSE, "pump Status: ", fPUMPSTATUS, " - BEEPing - ");
+                lnprint(fPrint_VERBOSE, "phase: ", phase, " - ");
+                lnprint(fPrint_VERBOSE, "frequency: ", FREQ, " - ");
+                lnprint(fPrint_VERBOSE, "duration: ", DURATION);
                 setPhase(++phase);
-
-                /*
-                   Siccome devo far suonare anche la sirena, ed il tone non blocca il programma,
-                   posso utilizzare il tempo della sirena come delay per il tono
-                */
-                digitalWrite(Horn, ON); // Pigia il pulsante del sonoff
-                horn_ON = now + HORN_TIME;
-                // digitalWrite(Horn, OFF); // Rilascia il pulsante del sonoff
-
-                // delay(DURATION*1.3); // mandatory in quanto la funzione tone non è bloccante.
             }
+            checkHorn();
             break;
 
         default:   // tone to advice the pump is off (only if it was ON)
@@ -190,85 +221,36 @@ unsigned long isBeepTime;
                 setPhase(0); // reset Buzzer data
                 Serial.println(" - power-off beep completed.");
             }
+            fALARM=OFF;
+            fHORN=OFF;
             break;
     }
 
 }
 
-// ==================================
-// - E' stato spinto  pulsante per accendere la pompa
-// - Attendiamo il debounce e leggiamo di nuovo
-// ==================================
-void TurnOnOffPressControl() {
-    // if after 100mS is still pressed get it
-    delay(100);
-    byte button = !digitalRead(pressControlButton); // logica inversa.
 
-    if (fALARM) {
-        fALARM=OFF; // vuol dire che c'è la presenza di qualcuno.
-        setPhase(0); // ripristiniamo
-    }
-    if (button) {
-        digitalWrite(presscontrolPower, LOW); // Press PressControl sOnOff button
-        delay(500);
-        digitalWrite(presscontrolPower, HIGH); // Release PressControl sOnOff button
-    }
-    lnprint("PressControl status: ", digitalRead(pressControlState), "\n");
-}
 
-#if 0
-void readButton() {
-    // read the state of the switch into a local variable:
-    int reading = digitalRead(pressControlButton);
-
-    // check to see if you just pressed the button
-    // (i.e. the input went from LOW to HIGH), and you've waited long enough
-    // since the last press to ignore any noise:
-
-    // If the switch changed, due to noise or pressing:
-    if (reading != lastButtonState) {
-    // reset the debouncing timer
-        lastDebounceTime = millis();
-    }
-
-    if ((millis() - lastDebounceTime) > debounceDelay) {
-    // whatever the reading is at, it's been there for longer than the debounce
-    // delay, so take it as the actual current state:
-
-    // if the button state has changed:
-    if (reading != buttonState) {
-      buttonState = reading;
-
-      // only toggle the LED if the new button state is HIGH
-      if (buttonState == HIGH) {
-        ledState = !ledState;
-      }
-    }
-    }
-
-}
-#endif
 // ==================================
 // -
 // ==================================
 void setPhase(int count) {
-    if (fALARM) {
-        DELAY    = 10;  // secondi
-        FREQ     = 2000;    //mS
-        DURATION = 4000;    //ms
-        VOLUME   = 9;
-        led_period = 300;
-        Serial.println("Siamo in ALLARME!!!!");
-        return;
+    phase=count;
+    if (phase>nPhases)  {
+        phase=nPhases;
+        fALARM=ON; // si spegnerà solo quando la pompa verrà spenta da qualcuno... oppure la spegnamo noi
     }
 
+    if (fALARM) {
+        DELAY    = 1;  // secondi
+        FREQ     = 2000;    //mS
+        DURATION = 500;    //ms
+        VOLUME   = 9;
+        led_period = LED_PERIOD_ALARM;
+        Serial.println("Siamo in ALLARME!!!!");
+        // lnprint(fPrint_HORN, "horn_ON_time: ", horn_ON_time);
+        // lnprint(fPrint_HORN, "horn_OFF_time: ", horn_OFF_time);
+    }
     else {
-        phase=count;
-        if (phase>nPhases)  {
-            phase=nPhases;
-            fALARM=ON;
-        }
-
         int index=phase*4;
 
         DELAY    = BEEP[index];
@@ -279,25 +261,26 @@ void setPhase(int count) {
         if (phase==0) {
             led_period = LED_PERIOD_DEFAULT; // reset LED interval
             noTone(Buzzer);
-            buzzer_ON=0;
+            buzzer_OFF_time=0;
         }
     }
 
 
-    next_beep_time = now + (unsigned long) DELAY*1000;
-    // lnprint("DELAY: ", DELAY, " - ");
+    buzzer_ON_time = now + (unsigned long) DELAY*1000;
     if (fPUMPSTATUS) {
-        lnprint("next BEEP, if pump still ON, in: ", DELAY, " Sec - ");
-        lnprint("(at: ", next_beep_time, " mS)\n");
+        lnprint(fPrint_VERBOSE, "next BEEP, if pump still ON, in: ", DELAY, " Sec - ");
+        lnprint(fPrint_VERBOSE, "(at: ", buzzer_ON_time, " mS)\n");
     }
 }
 
 
 
-void lnprint(char *msg, unsigned long value, const char *s2) {
-    Serial.print(msg);
-    Serial.print(value);
-    Serial.print(s2);
+void lnprint(bool fPrint, char *msg, unsigned long value, const char *s2) {
+    if (fPrint) {
+        Serial.print(msg);
+        if (value!=SKIP_PRINT_VALUE) Serial.print(value);
+        Serial.print(s2);
+    }
 }
 
 
