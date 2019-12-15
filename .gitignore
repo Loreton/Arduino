@@ -3,7 +3,8 @@
 *.ko
 
 # Libraries
-*.lib
+# *.lib
+*-cache.lib
 *.a
 
 # Shared objects (inc. Windows DLLs)
@@ -20,10 +21,11 @@
 
 # Ln Varie
 */build/*
+*/.build/*
 */debug/*
 */cache/*
 .mplab_ide/*
-*.pdf
+# *.pdf
 *.sublime-workspace
 out/*
 DOC/*

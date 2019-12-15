@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name LnDevice)(type Legacy)(uri K:/Filu/LnDisk/GIT-REPO/HW-Projects/KiCAD/LnLibrary/LnDevice.lib)(options "")(descr ""))
+  (lib (name LnConnectors)(type Legacy)(uri K:/Filu/LnDisk/GIT-REPO/HW-Projects/KiCAD/LnLibrary/LnConnectors.lib)(options "")(descr ""))
+)
