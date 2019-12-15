@@ -61,8 +61,7 @@ void lnprint(bool fDEBUG, char *msg, unsigned long value=SKIP_PRINT_VALUE, const
 void setPhase(int);
 
 
-enum {INTERVAL, FREQ, DURATION};
-int BEEP[] = { // interval, frequency, duration, volume(only with tone_AC)     phase,
+int BEEP[] = { // delaySec, frequency, duration, volume(only with tone_AC)     phase,
                      5,         2000,    1500,      1,                          //  0
 
                     // 30,         2000,    1000,      2,                          //  1
@@ -172,17 +171,18 @@ unsigned long isLedTime;
 // -
 // ==================================
 void checkActiveBuzzer() {
-    if (fBUZZER) {
-        isBuzzerTime = (now-previousBuzzerTime)>=buzzer_duration;
-        if (isBuzzerTime) {
-            previousBuzzerTime += buzzer_duration;
-            // NOTE: The previous line could alternatively be
-            //              previousBuzzerTime = now
-            //        which is the style used in the BlinkWithoutDelay example sketch
-            //        Adding on the interval is a better way to ensure that succesive periods are identical
-            buzzerState = OFF;
-        }
-        break;
+    switch(fPUMP) {
+        case ON:
+            isBuzzerTime = (now-previousBuzzerTime)>=buzzer_duration;
+            if (isBuzzerTime) {
+                previousBuzzerTime += buzzer_duration;
+                // NOTE: The previous line could alternatively be
+                //              previousBuzzerTime = now
+                //        which is the style used in the BlinkWithoutDelay example sketch
+                //        Adding on the interval is a better way to ensure that succesive periods are identical
+                buzzerState = OFF;
+            }
+            break;
 
         case OFF:
             isBuzzerTime = (now-previousBuzzerTime)>=buzzer_interval;
@@ -244,6 +244,60 @@ unsigned long isHornTime;
 
 }
 
+// ==================================
+// -
+// ==================================
+void checkPumpState_() {
+unsigned long isBeepTime, isHornTime;
+
+    isBeepTime  = now>=buzzer_ON_time;       // millis() a cui dovrà suonare il buzzer
+    // isHornTime  = now>=HORN_PERIOD_ALARM_ON;       // millis() a cui dovrà suonare la sirena
+    fPUMP = !digitalRead(pumpState);  // logica inversa. PumpON->LowLevel
+    switch(fPUMP) {
+        case ON:
+            fHORN=ON;
+            if (buzzer_OFF_time!=0) { // vuol dire che il Buzzer è attivo
+                break;
+            }
+            if (isBeepTime || phase==0 ) { // phase=0 vogliamo un beep appena accesa la pompa
+                previous_beep_time = now;
+                led_duration = LED_PUMP_DURATION;
+                led_interval = LED_PUMP_DURATION;
+
+                // emissione BEEP
+                tone(Buzzer, buzzerFREQ, DURATION);
+                buzzer_OFF_time = now+DURATION; // tempo (millsis()) a cui il buzzer si dovrà spegnere
+                lnprint(fPrint_VERBOSE, "now: ", now, " - ");
+                lnprint(fPrint_VERBOSE, "pump Status: ", fPUMP, " - BEEPing - ");
+                lnprint(fPrint_VERBOSE, "phase: ", phase, " - ");
+                lnprint(fPrint_VERBOSE, "frequency: ", buzzerFREQ, " - ");
+                lnprint(fPrint_VERBOSE, "duration: ", DURATION);
+                setPhase(++phase);
+            }
+            checkHorn();
+            break;
+
+        default:   // tone to advice the pump is off (only if it was ON)
+            if (phase>0) {
+                Serial.print("pump has been turned off.");
+                int _duration=300;
+
+                // in questo caso blocco il programma con il delay()
+                for (int i=0; i<=3; i++) {
+                    tone(Buzzer, buzzerFREQ, _duration);
+                    delay(_duration*1.3); // mandatory in quanto la funzione tone non è bloccante.
+                }
+                // led_period = LED_DEFAULT_DURATION; // reset LED interval
+                setPhase(0); // reset Buzzer data
+                Serial.println(" - power-off beep completed.");
+            }
+            fALARM=OFF;
+            fHORN=OFF;
+            break;
+    }
+
+}
+
 
 
 // ==================================
@@ -254,18 +308,15 @@ void checkPumpState() {
 
     switch(fPUMP) {
         case ON:
-            if (fBUZZER) break;
             fHORN=true;
-            fBUZZER=true;
             if (phase>nPhases)  {
                 Serial.println("Siamo in ALLARME!!!!");
                 phase=nPhases;
                 fALARM=ON; // si spegnerà solo quando la pompa verrà spenta da qualcuno... oppure la spegnamo noi
 
-                // mettiamo il buzzer con un suono più pressante
-                buzzer_duration  = 500;    //ms
-                buzzer_interval  = 1000;   // secondi
-                buzzer_Frequency = 2000;   //Hz
+                buzzer_duration = 500;    //ms
+                buzzer_interval = 1;  // secondi
+                buzzer_Frequency = 2000;    //mS
 
                 led_duration = LED_ALARM_DURATION;
                 led_interval = LED_ALARM_DURATION;
@@ -274,16 +325,12 @@ void checkPumpState() {
                 horn_interval = HORN_ALARM_INTERVAL;
             }
             else {
+                fHORN=true;
                 led_duration = LED_PUMP_DURATION;
                 led_interval = LED_PUMP_DURATION;
 
                 horn_duration = HORN_DURATION;
                 horn_interval = HORN_INTERVAL;
-
-                byte index=phase*4;
-                buzzer_interval  = BEEP[index+INTERVAL]*1000;
-                buzzer_duration  = BEEP[index+DURATION];   //ms
-                buzzer_Frequency = BEEP[index+FREQ];   //Hz
             }
             break;
 
@@ -294,50 +341,7 @@ void checkPumpState() {
     }
 
 }
-// ==================================
-// -
-// ==================================
-void checkPassiveBuzzer() {
-    if (buzzer_OFF_time!=0 && buzzer_OFF_time<now) { // se stiamo suonando ed è scaduto il time... chiudiamo il buzzer
-        lnprint(fPrint_BEEP, "now: ", now, " - ");
-        lnprint(fPrint_BEEP, "Beep completato after: ", buzzer_OFF_time/1000, " sec. \n" );
-        noTone(Buzzer);
-        buzzer_OFF_time=0;
-    }
-}
-// ==================================
-// -
-// ==================================
-void checkPassiveBuzzer_New() {
-    if (fBUZZER) {
-        isBuzzerTime = (now-previousBuzzerTime)>=buzzer_duration;
-        if (isBuzzerTime) {
-            previousBuzzerTime += buzzer_duration;
-            // NOTE: The previous line could alternatively be
-            //              previousBuzzerTime = now
-            //        which is the style used in the BlinkWithoutDelay example sketch
-            //        Adding on the interval is a better way to ensure that succesive periods are identical
-            buzzerState = OFF;
-        }
-        break;
 
-        case OFF:
-            isBuzzerTime = (now-previousBuzzerTime)>=buzzer_interval;
-            if (isBuzzerTime) {
-                previousBuzzerTime += buzzer_interval;
-                buzzerState = ON;
-            }
-            break;
-    } // end switch
-
-    if (isBuzzerTime) {
-        lnprint(fPrint_BEEP, "BUZZER Status: ", buzzerState, " - ");
-        lnprint(fPrint_BEEP, "duration: ", buzzer_duration, " - ");
-        lnprint(fPrint_BEEP, "interval: ", buzzer_interval);
-        digitalWrite(Buzzer, buzzerState);
-    }
-
-}
 // ==================================
 // -
 // ==================================
