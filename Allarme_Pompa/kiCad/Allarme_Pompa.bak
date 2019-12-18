@@ -39,23 +39,23 @@ $EndComp
 $Comp
 L Device:LED_ALT D?
 U 1 1 5DEB73CD
-P 2200 4100
-F 0 "D?" V 2238 3982 50  0001 R CNN
-F 1 "LED" V 2147 3982 50  0000 R CNN
-F 2 "" H 2200 4100 50  0001 C CNN
-F 3 "~" H 2200 4100 50  0001 C CNN
-	1    2200 4100
+P 2200 4050
+F 0 "D?" V 2238 3932 50  0001 R CNN
+F 1 "LED" V 2147 3932 50  0000 R CNN
+F 2 "" H 2200 4050 50  0001 C CNN
+F 3 "~" H 2200 4050 50  0001 C CNN
+	1    2200 4050
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Device:Buzzer BZ?
 U 1 1 5DEBAA3F
-P 1800 4100
-F 0 "BZ?" H 1850 4100 50  0001 C CNN
-F 1 "Passive Buzzer" H 2050 4300 50  0000 C CNN
-F 2 "" V 1775 4200 50  0001 C CNN
-F 3 "~" V 1775 4200 50  0001 C CNN
-	1    1800 4100
+P 1800 3700
+F 0 "BZ?" H 1850 3700 50  0001 C CNN
+F 1 "Passive Buzzer" H 2050 3900 50  0000 C CNN
+F 2 "" V 1775 3800 50  0001 C CNN
+F 3 "~" V 1775 3800 50  0001 C CNN
+	1    1800 3700
 	-1   0    0    -1  
 $EndComp
 $Comp
@@ -70,7 +70,7 @@ F 3 "" H 9500 1300 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2200 3850 2200 3950
+	2200 3850 2200 3900
 Wire Notes Line
 	10050 3300 10050 3600
 Wire Notes Line
@@ -94,15 +94,15 @@ Pump
 Wire Wire Line
 	10450 5400 10450 5150
 Wire Wire Line
-	1900 4200 1900 4400
+	1900 3800 1900 4250
 Wire Wire Line
-	2200 4250 2200 4400
+	2200 4200 2200 4250
 Text Label 3950 3400 0    50   ~ 0
 Buzzer
 Text Label 3950 3500 0    50   ~ 0
 BlinkingLED
 Wire Wire Line
-	1900 4000 1900 3400
+	1900 3600 1900 3400
 $Comp
 L power:GND #PWR0101
 U 1 1 5DF1F5E5
@@ -266,10 +266,6 @@ Wire Wire Line
 Wire Wire Line
 	4250 2700 5250 2700
 Wire Wire Line
-	3100 3500 5250 3500
-Wire Wire Line
-	3100 3400 5250 3400
-Wire Wire Line
 	5950 850  5950 1000
 Wire Wire Line
 	2700 1000 5950 1000
@@ -277,33 +273,18 @@ Connection ~ 5950 1000
 $Comp
 L power:GND #PWR0108
 U 1 1 5DFBEF66
-P 3200 3700
-F 0 "#PWR0108" H 3200 3450 50  0001 C CNN
-F 1 "GND" H 3205 3527 50  0000 C CNN
-F 2 "" H 3200 3700 50  0001 C CNN
-F 3 "" H 3200 3700 50  0001 C CNN
-	1    3200 3700
+P 2200 4300
+F 0 "#PWR0108" H 2200 4050 50  0001 C CNN
+F 1 "GND" H 2205 4127 50  0000 C CNN
+F 2 "" H 2200 4300 50  0001 C CNN
+F 3 "" H 2200 4300 50  0001 C CNN
+	1    2200 4300
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1900 4400 2200 4400
+	1900 4250 2200 4250
 Wire Wire Line
 	2200 3550 2200 3500
-Wire Wire Line
-	2200 3500 2650 3500
-Wire Wire Line
-	2200 4400 2550 4400
-Wire Wire Line
-	2550 4400 2550 3600
-Wire Wire Line
-	2550 3600 2650 3600
-Connection ~ 2200 4400
-Wire Wire Line
-	1900 3400 2650 3400
-Wire Wire Line
-	3100 3600 3200 3600
-Wire Wire Line
-	3200 3600 3200 3700
 $Comp
 L power:GND #PWR0109
 U 1 1 5E04EFD1
@@ -677,28 +658,6 @@ Wire Wire Line
 	8150 3600 8150 5550
 Wire Wire Line
 	8150 5550 9650 5550
-$Comp
-L Connector:Conn_01x03_Female J?
-U 1 1 5E36902E
-P 2900 3500
-F 0 "J?" H 2928 3480 50  0001 L CNN
-F 1 "Conn_01x03_Female" H 2927 3435 50  0001 L CNN
-F 2 "" H 2900 3500 50  0001 C CNN
-F 3 "~" H 2900 3500 50  0001 C CNN
-	1    2900 3500
-	-1   0    0    -1  
-$EndComp
-$Comp
-L Connector:Conn_01x03_Male J?
-U 1 1 5E3690AB
-P 2850 3500
-F 0 "J?" H 2822 3477 50  0001 R CNN
-F 1 "Conn_01x03_Male" H 2823 3432 50  0001 R CNN
-F 2 "" H 2850 3500 50  0001 C CNN
-F 3 "~" H 2850 3500 50  0001 C CNN
-	1    2850 3500
-	-1   0    0    -1  
-$EndComp
 $Comp
 L Connector:Conn_01x05_Female J?
 U 1 1 5E36919D
@@ -1089,8 +1048,15 @@ Wire Notes Line
 	2900 6500 1400 6500
 Wire Notes Line
 	1400 6500 1400 5100
-Wire Bus Line
-	6600 2850 6600 5750
 Text Notes 1450 6450 0    50   ~ 0
 Frutto del PressControl \nnel Quadro elettrico \ndel Salone
+Wire Wire Line
+	1900 3400 5250 3400
+Wire Wire Line
+	2200 3500 5250 3500
+Wire Wire Line
+	2200 4250 2200 4300
+Connection ~ 2200 4250
+Wire Bus Line
+	6600 2850 6600 5750
 $EndSCHEMATC

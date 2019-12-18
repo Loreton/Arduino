@@ -1,0 +1,62 @@
+
+// ==================================
+// -
+// ==================================
+void setPhase(int count) {
+
+    if (fALARM==ON) {
+        buzzerDELAY    = 1;  // secondi
+        buzzerFREQ     = 2000;    //mS
+        DURATION = 500;    //ms
+        VOLUME   = 9;
+
+
+        fHORN=true;
+        led_duration = LED_ALARM_DURATION;
+        led_interval = LED_ALARM_DURATION;
+        horn_duration = HORN_ALARM_DURATION;
+        horn_interval = HORN_ALARM_INTERVAL;
+        Serial.println("Siamo in ALLARME!!!!");
+
+    }
+
+    else if (fPUMP) {
+        fHORN=true;
+        led_duration = LED_PUMP_DURATION;
+        led_interval = LED_PUMP_DURATION;
+        horn_duration = HORN_DURATION;
+        horn_interval = HORN_INTERVAL;
+    }
+
+    else {
+        fHORN=false;
+        led_duration = LED_DEFAULT_DURATION;
+        led_interval = LED_DEFAULT_INTERVAL;
+
+        int index=phase*4;
+
+        // Active Buzzer
+        buzzer_duration = BEEP[index+2];
+        buzzer_interval = BEEP[index];
+
+
+        // Passive Buzzer
+        buzzerDELAY    = BEEP[index];
+        buzzerFREQ     = BEEP[index+1];
+        DURATION = BEEP[index+2];
+        VOLUME   = BEEP[index+3];
+
+        if (phase==0) {
+            // led_period = LED_DEFAULT_DURATION; // reset LED interval
+            noTone(Buzzer);
+            buzzer_OFF_time=0;
+        }
+    }
+
+
+    buzzer_ON_time = now + (unsigned long) buzzerDELAY*1000;
+    if (fPUMP) {
+        lnprint(fPrint_VERBOSE, "next BEEP, if pump still ON, in: ", buzzerDELAY, " Sec - ");
+        lnprint(fPrint_VERBOSE, "(at: ", buzzer_ON_time, " mS)\n");
+    }
+}
