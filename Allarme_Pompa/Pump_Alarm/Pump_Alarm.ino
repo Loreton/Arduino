@@ -2,9 +2,9 @@
 #define ON  1
 #define OFF 0
 
-#define PHASE_INTERVAL         30000    // number of seconds between Buzzer
-#define PHASE_ALARM_INTERVAL    5000    // number of seconds between Buzzer_sounds during alarm
-#define PHASE_ALARM_THRESHOLD   4000    // number of phases before alarm phase starts
+#define PHASE_INTERVAL            30    // number of seconds between Buzzer
+#define PHASE_ALARM_INTERVAL       5    // number of seconds between Buzzer_sounds during alarm
+#define PHASE_ALARM_THRESHOLD      2    // number of phases before alarm phase starts
 
 
 #define HORN_DURATION           4000          // number of millisecs that Horn is ON
@@ -14,9 +14,9 @@
 unsigned long horn_duration, horn_interval;
 byte fHORN=false;     // Flag per suonare la sirena
 
-#define BUZZER_DURATION         PHASE_INTERVAL/10          // number of millisecs that Buzzer is ON
+#define BUZZER_DURATION         PHASE_INTERVAL*1000/20          // number of millisecs that Buzzer is ON
 #define BUZZER_FREQUENCY        2000                            // frequency sound during pump_on
-#define BUZZER_ALARM_DURATION   PHASE_ALARM_INTERVAL/5    // number of millisecs that Buzzer is ON during alarm
+#define BUZZER_ALARM_DURATION   PHASE_ALARM_INTERVAL*1000/5    // number of millisecs that Buzzer is ON during alarm
 long buzzer_duration, buzzer_frequency, buzzer_volume, buzzer_ON;
 
 
@@ -26,7 +26,9 @@ long buzzer_duration, buzzer_frequency, buzzer_volume, buzzer_ON;
 #define LED_PUMP_INTERVAL        500
 #define LED_ALARM_DURATION       300
 #define LED_ALARM_INTERVAL       100
-long led_duration, led_interval;
+unsigned long led_duration, led_interval;
+// bool isLedTime;
+// byte ledState;
 
 #define SKIP_PRINT_VALUE    999911199
 
@@ -42,7 +44,7 @@ bool fALARM=false;    // siamo in allarme. La pompa è rimasta accesa oltre i te
 byte fPUMP;         // status della pompa
 
 const int pumpState          = 2; // input +5Volt se Pompa accesa
-const int presscontrolPower  = 3; // output comanda il sonoff che spegne/accendere il pressControl.
+const int presscontrolButton  = 3; // output comanda il sonoff che spegne/accendere il pressControl.
 const int Horn               = 4; // output comanda una sirena
 const int ElettroValvola     = 5; // output chiusura acqua a caduta.... da implementare
 
@@ -62,7 +64,7 @@ void setup() {
     Serial.begin(9600);
     pinMode(pumpState          , INPUT_PULLUP);
 
-    pinMode(presscontrolPower  , OUTPUT);
+    pinMode(presscontrolButton  , OUTPUT);
     pinMode(Horn               , OUTPUT);
     pinMode(Buzzer             , OUTPUT);
     pinMode(blinkingLED        , OUTPUT);
@@ -94,10 +96,13 @@ void loop() {
         noTone(Buzzer);
         buzzer_ON=0;
     }
-    if (fALARM) { // comanda il pulsante del sOnOff (tramite un rele) il quale si attiva sul rilascio.
-        digitalWrite(presscontrolPower, LOW);
-        delay(10);
-        digitalWrite(presscontrolPower, HIGH);
+
+    // comanda il pulsante del sOnOff (tramite un rele) il quale si attiva sul rilascio.
+    // Il relè di fatto lavora su fronte negativo.
+    if (fALARM) {
+        digitalWrite(presscontrolButton, LOW);
+        delay(1000);
+        digitalWrite(presscontrolButton, HIGH);
     }
 } // end loop()
 
@@ -144,8 +149,8 @@ bool isBeepTime;
 // ==================================
 void checkLed() {
 bool isLedTime;
-byte ledState = OFF;
-unsigned long previousLedTime;
+static byte ledState;
+static unsigned long previousLedTime;
 
 
     switch(ledState) {
@@ -161,7 +166,7 @@ unsigned long previousLedTime;
             }
             break;
 
-        case OFF:
+        default:
             isLedTime = (now-previousLedTime)>=led_interval;
             if (isLedTime) {
                 previousLedTime += led_interval;
@@ -171,9 +176,9 @@ unsigned long previousLedTime;
     } // end switch
 
     if (isLedTime) {
-        // lnprint(fPrint_LED, "LED Status: ", ledState, " - ");
-        // lnprint(fPrint_LED, "duration: ", led_duration, " - ");
-        // lnprint(fPrint_LED, "interval: ", led_interval);
+        // lnprint(true, "LED Status: ", ledState, " - ");
+        // lnprint(true, "duration: ", led_duration, " - ");
+        // lnprint(true, "interval: ", led_interval);
         digitalWrite(blinkingLED, ledState);
     }
 }
@@ -188,8 +193,8 @@ unsigned long previousLedTime;
 // ==================================
 void checkHorn() {
 bool isHornTime;
-unsigned long previousHornTime;
-byte hornState=OFF;
+static unsigned long previousHornTime;
+static byte hornState;
 
 
     if (fHORN) {
@@ -276,15 +281,14 @@ unsigned long phase_interval;
         buzzer_frequency = BUZZER_FREQUENCY;
         buzzer_volume   = 9;
 
-        // phase_interval   = PHASE_INTERVAL;  // secondi
         phase_interval = PHASE_INTERVAL - (phase*2); // ogni phase diminuiamo l'intervallo tra i suoni
 
     }
 
-    next_beep_time = now + (unsigned long) phase_interval;
+    next_beep_time = now + (unsigned long) phase_interval*1000; // phase_interval è in secondi
     if (fPUMP) {
         lnprint(fPrint_BEEP, "now: ", now, " - ");
-        lnprint(fPrint_BEEP, "in: ", phase_interval/1000, " Sec - ");
+        lnprint(fPrint_BEEP, "in: ", phase_interval, " Sec - ");
         lnprint(fPrint_BEEP, "next_beep_time at: ", next_beep_time, "mS\n");
 
     }

@@ -61,12 +61,12 @@ $EndComp
 $Comp
 L LnConnectors:CONN_02 J?
 U 1 1 5DEBCAE0
-P 9500 1300
-F 0 "J?" V 9503 1628 60  0001 L CNN
-F 1 "220V" V 9400 1400 60  0000 L CNN
-F 2 "" H 9500 1300 60  0000 C CNN
-F 3 "" H 9500 1300 60  0000 C CNN
-	1    9500 1300
+P 7050 1000
+F 0 "J?" V 7053 1328 60  0001 L CNN
+F 1 "220V" V 6950 1100 60  0000 L CNN
+F 2 "" H 7050 1000 60  0000 C CNN
+F 3 "" H 7050 1000 60  0000 C CNN
+	1    7050 1000
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -91,8 +91,6 @@ Wire Notes Line
 	10950 4400 10050 4400
 Text Notes 10250 4600 0    50   ~ 0
 Pump
-Wire Wire Line
-	10450 5400 10450 5150
 Wire Wire Line
 	4150 2950 4150 3400
 Wire Wire Line
@@ -175,55 +173,29 @@ Bianco/Arancio
 Text Notes 6750 3200 0    50   ~ 0
 Verde
 Wire Wire Line
-	10700 1050 10500 1050
-Wire Wire Line
-	9650 1050 9800 1050
-Wire Wire Line
-	9650 1150 9800 1150
+	10700 1050 9950 1050
 $Comp
 L power:GNDA #PWR0104
 U 1 1 5DF0F3FB
-P 10000 5750
-F 0 "#PWR0104" H 10000 5500 50  0001 C CNN
-F 1 "GNDA" H 10005 5577 50  0000 C CNN
-F 2 "" H 10000 5750 50  0001 C CNN
-F 3 "" H 10000 5750 50  0001 C CNN
-	1    10000 5750
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GNDA #PWR0105
-U 1 1 5DF0F410
-P 10650 5450
-F 0 "#PWR0105" H 10650 5200 50  0001 C CNN
-F 1 "GNDA" H 10655 5277 50  0000 C CNN
-F 2 "" H 10650 5450 50  0001 C CNN
-F 3 "" H 10650 5450 50  0001 C CNN
-	1    10650 5450
+P 10000 5850
+F 0 "#PWR0104" H 10000 5600 50  0001 C CNN
+F 1 "GNDA" H 10005 5677 50  0000 C CNN
+F 2 "" H 10000 5850 50  0001 C CNN
+F 3 "" H 10000 5850 50  0001 C CNN
+	1    10000 5850
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	10000 5700 10000 5750
+	10000 5700 10000 5800
 $Comp
 L LnDevice:sOnOff_Basic K?
 U 1 1 5DEED482
-P 10150 1200
-F 0 "K?" H 10150 1642 50  0000 C CNN
-F 1 "sOnOff_Basic" H 10150 1551 50  0000 C CNN
-F 2 "sOnOff" H 10250 975 25  0001 L CNN
-F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 10175 1025 50  0001 C CNN
-	1    10150 1200
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+5VA #PWR0106
-U 1 1 5DF176AA
-P 9500 2450
-F 0 "#PWR0106" H 9500 2300 50  0001 C CNN
-F 1 "+5VA" H 9515 2623 50  0000 C CNN
-F 2 "" H 9500 2450 50  0001 C CNN
-F 3 "" H 9500 2450 50  0001 C CNN
-	1    9500 2450
+P 9600 1200
+F 0 "K?" H 9600 1642 50  0000 C CNN
+F 1 "sOnOff_Basic" H 9600 1551 50  0000 C CNN
+F 2 "sOnOff" H 9700 975 25  0001 L CNN
+F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 9625 1025 50  0001 C CNN
+	1    9600 1200
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -259,12 +231,6 @@ F 3 "~" H 10640 5000 50  0001 C CNN
 	1    10650 5050
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4250 1650 5250 1650
-Wire Wire Line
-	4250 1750 5250 1750
-Wire Wire Line
-	4250 1850 5250 1850
 $Comp
 L power:GND #PWR0108
 U 1 1 5DFBEF66
@@ -280,11 +246,9 @@ Wire Wire Line
 	4150 3400 4450 3400
 Wire Wire Line
 	4450 2700 4450 2650
-Text Label 4300 1550 0    50   ~ 0
-pumpState
-Text Label 4300 1650 0    50   ~ 0
-pressControlPower
-Text Label 4300 1750 0    50   ~ 0
+Text Label 4000 1650 0    50   ~ 0
+pressControlButton
+Text Label 4000 1750 0    50   ~ 0
 Horn
 $Comp
 L Graphic:SYM_Arrow_Normal #SYM?
@@ -351,29 +315,21 @@ Entry Wire Line
 	6600 3800 6700 3700
 Entry Wire Line
 	6600 3600 6700 3500
-Text Label 7700 3300 0    50   ~ 0
-pumpState
 $Comp
 L LnDevice:Alimentatore Al_5Vcc?
 U 1 1 5DF2F833
-P 10100 2700
-F 0 "Al_5Vcc?" H 10250 2500 40  0001 R CNN
-F 1 "Alimentatore" H 10200 2400 40  0001 R CNN
-F 2 "5V pressControl" H 10100 2650 30  0000 C CNN
-F 3 "" H 10100 2675 60  0000 C CNN
-	1    10100 2700
-	-1   0    0    -1  
+P 7800 1300
+F 0 "Al_5Vcc?" H 7950 1100 40  0001 R CNN
+F 1 "Alimentatore" H 7900 1000 40  0001 R CNN
+F 2 "5V pressControl" H 7800 1250 30  0000 C CNN
+F 3 "" H 7800 1275 60  0000 C CNN
+	1    7800 1300
+	1    0    0    -1  
 $EndComp
-Text Label 7700 3100 0    50   ~ 0
-pressControlState
 Text Notes 700  4650 0    50   ~ 0
 ‍pressControlState, porta 5Vcc che accendono direttamente il LED
 Text Notes 700  4750 0    50   ~ 0
 e lo stato viene al contempo rilevato da Arduino.
-Wire Wire Line
-	6700 3000 7500 3000
-Wire Wire Line
-	6700 3100 7500 3100
 $Comp
 L LnConnectors:Mammuth_09a MM?
 U 1 1 5DF5DA63
@@ -383,7 +339,7 @@ F 1 "Mammuth_09a" H 5678 5050 40  0001 L CNN
 F 2 "" H 5575 5300 60  0000 C CNN
 F 3 "" H 5575 5300 60  0000 C CNN
 	1    5550 5050
-	1    0    0    1   
+	1    0    0    -1  
 $EndComp
 Text Notes 6750 3300 0    50   ~ 0
 Bianco/Verde
@@ -411,8 +367,6 @@ Entry Wire Line
 	6600 3500 6700 3400
 Entry Wire Line
 	6600 3300 6700 3200
-Wire Wire Line
-	6700 3200 7500 3200
 Wire Wire Line
 	6700 3400 7500 3400
 Wire Wire Line
@@ -452,70 +406,22 @@ F 3 "~" H 1600 5500 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	1600 5650 1600 5750
-Text Label 9300 1700 0    50   ~ 0
-pc_button
-Text Label 9900 2350 0    50   ~ 0
-pc_GND
-Text Label 7700 3700 0    50   ~ 0
+Text Label 8150 1700 0    50   ~ 0
 pc_button
 Wire Wire Line
-	8900 1700 8900 3700
+	10700 1050 10700 2750
 Wire Wire Line
-	10700 1050 10700 2800
+	10500 1150 10500 2550
 Wire Wire Line
-	10500 1150 10500 2600
+	10400 2550 10500 2550
+Connection ~ 10500 2550
 Wire Wire Line
-	9700 1900 9700 2800
+	10500 2550 10500 3300
 Wire Wire Line
-	9500 2450 9500 2600
+	10400 2750 10700 2750
+Connection ~ 10700 2750
 Wire Wire Line
-	9800 2800 9700 2800
-Connection ~ 9700 2800
-Wire Wire Line
-	9800 2600 9500 2600
-Connection ~ 9500 2600
-Wire Wire Line
-	10400 2600 10500 2600
-Connection ~ 10500 2600
-Wire Wire Line
-	10500 2600 10500 3300
-Wire Wire Line
-	10400 2800 10700 2800
-Connection ~ 10700 2800
-Wire Wire Line
-	10700 2800 10700 3300
-Text Notes 5750 4850 0    50   ~ 0
-Celeste
-Text Notes 5750 4750 0    50   ~ 0
-Bianco/Celeste
-Text Notes 5750 5450 0    50   ~ 0
-Marrone
-Text Notes 5750 5350 0    50   ~ 0
-Bianco/Marrone
-Text Notes 5750 5050 0    50   ~ 0
-Arancio
-Text Notes 5750 4950 0    50   ~ 0
-Bianco/Arancio
-Text Notes 5750 5250 0    50   ~ 0
-Verde
-Wire Wire Line
-	6500 4950 5550 4950
-Wire Wire Line
-	5550 4650 6500 4650
-Wire Wire Line
-	5550 4750 6500 4750
-Text Notes 5750 5150 0    50   ~ 0
-Bianco/Verde
-Wire Wire Line
-	5550 4850 6500 4850
-Wire Wire Line
-	5550 5150 6500 5150
-Wire Wire Line
-	5550 5350 6500 5350
-Wire Wire Line
-	5550 5050 6500 5050
-Wire Wire Line
-	5550 5250 6500 5250
+	10700 2750 10700 3300
 Wire Wire Line
 	1600 5250 1600 5350
 Wire Wire Line
@@ -545,39 +451,6 @@ F 3 "~" V 2025 5650 50  0001 C CNN
 	1    2050 5550
 	-1   0    0    -1  
 $EndComp
-Wire Wire Line
-	10700 3600 10700 4100
-Wire Wire Line
-	10500 3600 10500 3900
-Wire Wire Line
-	10400 3900 10500 3900
-Connection ~ 10500 3900
-Wire Wire Line
-	10500 3900 10500 4400
-Wire Wire Line
-	10400 4100 10700 4100
-Connection ~ 10700 4100
-Wire Wire Line
-	10700 4100 10700 4400
-$Comp
-L LnDevice:Alimentatore Al_5Vcc?
-U 1 1 5E1C2DB3
-P 10100 4000
-F 0 "Al_5Vcc?" H 10250 3800 40  0001 R CNN
-F 1 "Alimentatore" H 10200 3700 40  0001 R CNN
-F 2 "5V Pump" H 10100 3950 30  0000 C CNN
-F 3 "" H 10100 3975 60  0000 C CNN
-	1    10100 4000
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	10350 5050 10450 5050
-Wire Wire Line
-	10350 5400 10450 5400
-Wire Wire Line
-	10350 5300 10650 5300
-Wire Wire Line
-	10650 5300 10650 5450
 $Comp
 L LnDevice:Alimentatore Al_5Vcc?
 U 1 1 5E20E831
@@ -594,74 +467,44 @@ Wire Wire Line
 Wire Wire Line
 	1600 5250 2150 5250
 Text Notes 1000 7650 0    50   ~ 0
-Active Buzzer è messo come emergenza nel caso si dovesse rimuovere Arduino.\nCome pumpState deve arrivare un +5V. \nSuonerebbe in modo continuo ad ogni attacco di pompa.
+Active Buzzer è messo come emergenza nel caso si dovesse rimuovere Arduino.\nCome pump_ON deve arrivare un GND \nSuona in modo continuo quando la pompa è accesa..
 Wire Wire Line
 	2700 5850 2700 6150
 Wire Wire Line
-	7500 3300 6700 3300
-Wire Wire Line
 	7500 3500 6700 3500
-Connection ~ 7500 3600
-Wire Wire Line
-	7500 3600 8150 3600
-Connection ~ 7500 3700
-Wire Wire Line
-	7500 3700 8900 3700
-Text Notes 6850 6250 0    50   ~ 0
-Ard/NoArd indica se è presente o meno Arduino. Se è presente mandiamo un LowLevel\nSe non è presente inviamo i +5V che andranno sul buzzer attivo
 $Comp
 L LnDevice:Pulse SW?
 U 1 1 5E2F9681
-P 9150 1700
-F 0 "SW?" H 9000 1800 70  0001 C CNN
-F 1 "Pulse" H 9150 1600 70  0001 C CNN
-F 2 "" H 9150 1700 60  0000 C CNN
-F 3 "" H 9150 1700 60  0000 C CNN
-	1    9150 1700
+P 9400 1800
+F 0 "SW?" H 9250 1900 70  0001 C CNN
+F 1 "Pulse" H 9400 1700 70  0001 C CNN
+F 2 "" H 9400 1800 60  0000 C CNN
+F 3 "" H 9400 1800 60  0000 C CNN
+	1    9400 1800
 	1    0    0    -1  
 $EndComp
-Text Label 7700 3000 0    50   ~ 0
-GNDA
-Wire Wire Line
-	10050 1550 10050 1700
-Wire Wire Line
-	10250 1550 10250 1900
-Wire Wire Line
-	8900 1700 10050 1700
-Wire Wire Line
-	9700 1900 10250 1900
-Wire Wire Line
-	8150 3600 8150 5550
-Wire Wire Line
-	8150 5550 9650 5550
 $Comp
-L Connector:Conn_01x05_Female J?
+L Connector:Conn_01x06_Female J?
 U 1 1 5E36919D
-P 3450 4000
-F 0 "J?" H 3478 3980 50  0001 L CNN
-F 1 "Conn_01x05_Female" H 3477 3935 50  0001 L CNN
-F 2 "" H 3450 4000 50  0001 C CNN
-F 3 "~" H 3450 4000 50  0001 C CNN
-	1    3450 4000
-	0    1    1    0   
+P 3300 2300
+F 0 "J?" H 3328 2280 50  0001 L CNN
+F 1 "Conn_01x05_Female" H 3327 2235 50  0001 L CNN
+F 2 "" H 3300 2300 50  0001 C CNN
+F 3 "~" H 3300 2300 50  0001 C CNN
+	1    3300 2300
+	0    -1   1    0   
 $EndComp
 $Comp
-L Connector:Conn_01x05_Male J?
+L Connector:Conn_01x06_Male J?
 U 1 1 5E36920E
-P 3450 4050
-F 0 "J?" H 3422 4027 50  0001 R CNN
-F 1 "Conn_01x05_Male" H 3423 3982 50  0001 R CNN
-F 2 "" H 3450 4050 50  0001 C CNN
-F 3 "~" H 3450 4050 50  0001 C CNN
-	1    3450 4050
-	0    1    1    0   
+P 3300 2400
+F 0 "J?" H 3272 2377 50  0001 R CNN
+F 1 "Conn_01x05_Male" H 3273 2332 50  0001 R CNN
+F 2 "" H 3300 2400 50  0001 C CNN
+F 3 "~" H 3300 2400 50  0001 C CNN
+	1    3300 2400
+	0    -1   1    0   
 $EndComp
-Wire Wire Line
-	10350 4850 10000 4850
-Wire Wire Line
-	10000 4850 10000 5100
-Wire Wire Line
-	10350 4850 10350 5050
 Wire Wire Line
 	1600 6150 2400 6150
 Wire Wire Line
@@ -697,27 +540,14 @@ Connection ~ 2400 6150
 $Comp
 L power:GNDA #PWR0110
 U 1 1 5DFBEDEF
-P 9700 3150
-F 0 "#PWR0110" H 9700 2900 50  0001 C CNN
-F 1 "GNDA" H 9705 2977 50  0000 C CNN
-F 2 "" H 9700 3150 50  0001 C CNN
-F 3 "" H 9700 3150 50  0001 C CNN
-	1    9700 3150
+P 9700 1700
+F 0 "#PWR0110" H 9700 1450 50  0001 C CNN
+F 1 "GNDA" H 9705 1527 50  0000 C CNN
+F 2 "" H 9700 1700 50  0001 C CNN
+F 3 "" H 9700 1700 50  0001 C CNN
+	1    9700 1700
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	9700 2800 9700 3000
-Wire Wire Line
-	7500 3100 9500 3100
-Wire Wire Line
-	9500 2600 9500 3100
-Connection ~ 7500 3100
-Wire Wire Line
-	7500 3000 9100 3000
-Connection ~ 7500 3000
-Connection ~ 9700 3000
-Wire Wire Line
-	9700 3000 9700 3150
 $Comp
 L power:GNDA #PWR0111
 U 1 1 5DFCCF19
@@ -737,252 +567,34 @@ Wire Wire Line
 	2450 5250 2450 5550
 Wire Wire Line
 	2450 5550 2950 5550
-$Comp
-L LnDevice:PulsanteNO SW?
-U 1 1 5E0017B1
-P 5450 7200
-F 0 "SW?" V 5300 7250 50  0001 C CNN
-F 1 "PCButton" V 5550 7050 40  0000 C CNN
-F 2 "" H 5450 7200 60  0000 C CNN
-F 3 "" H 5450 7200 60  0000 C CNN
-	1    5450 7200
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:LED_ALT D?
-U 1 1 5E0017B7
-P 4550 7150
-F 0 "D?" V 4588 7032 50  0001 R CNN
-F 1 "PCState" V 4650 7250 50  0000 R CNN
-F 2 "" H 4550 7150 50  0001 C CNN
-F 3 "~" H 4550 7150 50  0001 C CNN
-	1    4550 7150
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:R_US R?
-U 1 1 5E0017BD
-P 4550 6750
-F 0 "R?" H 4618 6796 50  0001 L CNN
-F 1 "470" V 4450 6650 50  0000 L CNN
-F 2 "" V 4590 6740 50  0001 C CNN
-F 3 "~" H 4550 6750 50  0001 C CNN
-	1    4550 6750
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4550 6900 4550 7000
-Wire Wire Line
-	4550 6500 4550 6600
-Wire Wire Line
-	4550 7300 4550 7400
-Wire Wire Line
-	5450 7000 5450 7150
-Wire Wire Line
-	5450 7400 5450 7250
-Wire Wire Line
-	5900 7100 5650 7100
-$Comp
-L Device:Buzzer BZ?
-U 1 1 5E0017C9
-P 5000 7150
-F 0 "BZ?" H 5050 7150 50  0001 C CNN
-F 1 "Active Buzzer" H 4950 7000 50  0000 C CNN
-F 2 "" V 4975 7250 50  0001 C CNN
-F 3 "~" V 4975 7250 50  0001 C CNN
-	1    5000 7150
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	5900 7000 5450 7000
-Wire Wire Line
-	5650 7100 5650 7400
-Wire Wire Line
-	4550 7400 5100 7400
-Text Notes 5150 6800 0    50   ~ 0
-+5Vcc Press_Control
-Wire Wire Line
-	5650 7400 5450 7400
-Connection ~ 5450 7400
-$Comp
-L power:GNDA #PWR0112
-U 1 1 5E0017E5
-P 5450 7500
-F 0 "#PWR0112" H 5450 7250 50  0001 C CNN
-F 1 "GNDA" H 5455 7327 50  0000 C CNN
-F 2 "" H 5450 7500 50  0001 C CNN
-F 3 "" H 5450 7500 50  0001 C CNN
-	1    5450 7500
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5450 7500 5450 7400
-Wire Wire Line
-	5100 6500 5100 6800
-Wire Wire Line
-	5100 6800 5900 6800
-Wire Wire Line
-	5100 7250 5100 7400
-Connection ~ 5100 7400
-Wire Wire Line
-	5100 7400 5450 7400
-Wire Wire Line
-	4550 6500 5100 6500
-Wire Wire Line
-	5100 7050 5100 6900
-Wire Wire Line
-	5100 6900 5900 6900
-Text Notes 5150 6900 0    50   ~ 0
-+5Vcc Pump
 Text Notes 1600 5250 0    50   ~ 0
 +5Vcc Press_Control
 Text Notes 2250 5650 0    50   ~ 0
 GND from Pump
-$Comp
-L Connector:Conn_01x04_Male J?
-U 1 1 5E02082C
-P 6100 7000
-F 0 "J?" H 6072 6977 50  0001 R CNN
-F 1 "Conn_01x05_Male" H 6073 6932 50  0001 R CNN
-F 2 "" H 6100 7000 50  0001 C CNN
-F 3 "~" H 6100 7000 50  0001 C CNN
-	1    6100 7000
-	-1   0    0    1   
-$EndComp
-$Comp
-L Connector:Conn_01x04_Female J?
-U 1 1 5E020839
-P 6150 7000
-F 0 "J?" H 6178 6980 50  0001 L CNN
-F 1 "Conn_01x05_Female" H 6177 6935 50  0001 L CNN
-F 2 "" H 6150 7000 50  0001 C CNN
-F 3 "~" H 6150 7000 50  0001 C CNN
-	1    6150 7000
-	-1   0    0    1   
-$EndComp
-$Comp
-L LnDevice:Relay-Reed K?
-U 1 1 5E02F159
-P 9450 4050
-F 0 "K?" H 9170 4096 50  0000 R CNN
-F 1 "Relay-Reed" H 9650 3950 50  0000 R CNN
-F 2 "" H 9800 4000 50  0001 L CNN
-F 3 "https://standexelectronics.com/wp-content/uploads/datasheet_reed_relay_DIP.pdf" H 9500 4050 50  0001 C CNN
-	1    9450 4050
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	7500 3300 9300 3300
-Wire Wire Line
-	9300 3300 9300 3800
-Connection ~ 7500 3300
-Wire Wire Line
-	9300 4400 9300 4300
-Wire Wire Line
-	9800 3900 9800 3700
-Wire Wire Line
-	9800 3700 9550 3700
-Wire Wire Line
-	9550 3700 9550 3800
-Wire Wire Line
-	9550 4300 9550 4400
-Wire Wire Line
-	9550 4400 9800 4400
-Wire Wire Line
-	9800 4400 9800 4100
-$Comp
-L LnDevice:Jumper3_B SW?
-U 1 1 5E0580D5
-P 9100 4400
-F 0 "SW?" V 9100 4501 50  0001 L CNN
-F 1 "Jumper3_B" V 9145 4501 50  0001 L CNN
-F 2 "" H 9050 4520 60  0000 C CNN
-F 3 "" H 9050 4520 60  0000 C CNN
-	1    9100 4400
-	0    1    -1   0   
-$EndComp
-Wire Wire Line
-	9150 4400 9300 4400
-Wire Wire Line
-	9100 4300 9100 3000
-Connection ~ 9100 3000
-Wire Wire Line
-	9100 3000 9700 3000
-Wire Wire Line
-	7500 3800 8900 3800
-Wire Wire Line
-	8900 3800 8900 4600
-Wire Wire Line
-	8900 4600 9100 4600
-Wire Wire Line
-	9100 4600 9100 4500
-Text Notes 8300 4850 0    25   ~ 0
-Il jumper cambia il riferimento di massa e quindi\ndecide se deve suonare il buzzer dentro il frutto di pressControl\noppure il buzzer dentro il frutto di  Arduino.\nNel primo caso si ha un suono continuo per tutto il tempo in cui la pompa rimane accesa.\nNel secondo caso suonerà come stabilito da Arduino.
 Entry Wire Line
 	6600 3900 6700 3800
 Entry Wire Line
 	6500 5450 6600 5550
 Wire Wire Line
-	5550 5450 6500 5450
-Wire Wire Line
-	6700 3800 7500 3800
-Connection ~ 7500 3800
+	6700 3800 7000 3800
 Text Notes 6750 3800 0    50   ~ 0
 Calza
-Text Notes 5750 4650 0    50   ~ 0
-Calza
-Text Label 4700 4750 0    50   ~ 0
+Text Label 4650 5350 0    50   ~ 0
 pc_button
 Wire Wire Line
-	5550 4650 5300 4650
-Connection ~ 5550 4650
-Wire Wire Line
-	3400 5850 4800 5850
-Wire Wire Line
-	4800 5850 4800 5450
-Connection ~ 5550 5450
-Wire Wire Line
-	4800 5450 5550 5450
+	3400 5850 3900 5850
 Wire Wire Line
 	3400 5550 3550 5550
 Wire Wire Line
-	3550 5550 3550 5350
+	3400 5750 3750 5750
 Wire Wire Line
-	3550 5350 5550 5350
-Connection ~ 5550 5350
+	3600 5250 3600 5650
 Wire Wire Line
-	3400 5750 4650 5750
-Wire Wire Line
-	4650 5750 4650 4750
-Wire Wire Line
-	4650 4750 5550 4750
-Connection ~ 5550 4750
-$Comp
-L LnDevice:Jumper3_B SW?
-U 1 1 5E11CA4D
-P 4100 5150
-F 0 "SW?" V 4100 5251 50  0001 L CNN
-F 1 "Jumper3_B" V 4145 5251 50  0001 L CNN
-F 2 "" H 4050 5270 60  0000 C CNN
-F 3 "" H 4050 5270 60  0000 C CNN
-	1    4100 5150
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	4150 5150 5550 5150
-Connection ~ 5550 5150
-Wire Wire Line
-	4100 5250 4100 5650
-Wire Wire Line
-	4100 5650 3400 5650
-Text Label 4700 5150 0    50   ~ 0
-pumpState
-Text Label 4700 5350 0    50   ~ 0
-pressControlState
-Text Label 7700 3600 0    50   ~ 0
-Horn
-Wire Wire Line
-	4250 1550 5250 1550
+	3600 5650 3400 5650
+Text Label 4650 5250 0    50   ~ 0
+pump_ON
+Text Label 4650 5150 0    50   ~ 0
+pressControl_ON
 $Comp
 L LnDevice:Edge SW?
 U 1 1 5E2F36EA
@@ -994,11 +606,6 @@ F 3 "" H 4800 1550 60  0000 C CNN
 	1    4800 1550
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4100 5050 3350 5050
-Wire Wire Line
-	5550 4850 3700 4850
-Connection ~ 5550 4850
 Wire Notes Line
 	1400 5100 2900 5100
 Wire Notes Line
@@ -1016,6 +623,418 @@ Wire Wire Line
 Wire Wire Line
 	4450 3400 4450 3450
 Connection ~ 4450 3400
+$Comp
+L LnDevice:Relay_5V_LL RL?
+U 1 1 5DFAA8C0
+P 8950 2300
+F 0 "RL?" H 8950 2778 50  0001 C CNN
+F 1 "Relay_5V_LL" H 8950 2000 50  0000 C CNN
+F 2 "" H 8950 2300 50  0001 C CNN
+F 3 "" H 8950 2300 50  0001 C CNN
+	1    8950 2300
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5VA #PWR?
+U 1 1 5DFB7C47
+P 8950 1950
+F 0 "#PWR?" H 8950 1800 50  0001 C CNN
+F 1 "+5VA" H 8965 2123 50  0000 C CNN
+F 2 "" H 8950 1950 50  0001 C CNN
+F 3 "" H 8950 1950 50  0001 C CNN
+	1    8950 1950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8950 1950 8950 2000
+$Comp
+L power:GNDA #PWR?
+U 1 1 5DFBE8DE
+P 8950 2700
+F 0 "#PWR?" H 8950 2450 50  0001 C CNN
+F 1 "GNDA" H 8955 2527 50  0000 C CNN
+F 2 "" H 8950 2700 50  0001 C CNN
+F 3 "" H 8950 2700 50  0001 C CNN
+	1    8950 2700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8950 2600 8950 2650
+Wire Wire Line
+	9500 1550 9500 2200
+Wire Wire Line
+	9500 2200 9300 2200
+Wire Wire Line
+	10500 1150 9950 1150
+Wire Wire Line
+	8950 2650 9450 2650
+Wire Wire Line
+	9450 2650 9450 2300
+Wire Wire Line
+	9450 2300 9300 2300
+Connection ~ 8950 2650
+Wire Wire Line
+	8950 2650 8950 2700
+Wire Wire Line
+	10000 5800 10450 5800
+Wire Wire Line
+	10450 5800 10450 5400
+Wire Wire Line
+	10450 5400 10350 5400
+Connection ~ 10000 5800
+Wire Wire Line
+	10000 5800 10000 5850
+Wire Wire Line
+	10450 5150 10450 5300
+Wire Wire Line
+	10450 5300 10350 5300
+Wire Wire Line
+	10450 5050 10000 5050
+Wire Wire Line
+	10000 5050 10000 5100
+$Comp
+L power:+5VA #PWR?
+U 1 1 5E0633D3
+P 10000 5000
+F 0 "#PWR?" H 10000 4850 50  0001 C CNN
+F 1 "+5VA" H 10015 5173 50  0000 C CNN
+F 2 "" H 10000 5000 50  0001 C CNN
+F 3 "" H 10000 5000 50  0001 C CNN
+	1    10000 5000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10000 5000 10000 5050
+Connection ~ 10000 5050
+$Comp
+L LnDevice:RELAY_2RT K?
+U 1 1 5E0706ED
+P 10250 4000
+F 0 "K?" H 10250 4539 70  0001 C CNN
+F 1 "RELAY_2RT" H 10250 4539 70  0001 C CNN
+F 2 "" H 10250 4020 60  0000 C CNN
+F 3 "" H 10250 4020 60  0000 C CNN
+	1    10250 4000
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	10500 3600 10500 3900
+Wire Wire Line
+	10700 3600 10700 4100
+Wire Wire Line
+	10450 3900 10500 3900
+Connection ~ 10500 3900
+Wire Wire Line
+	10500 3900 10500 4400
+Wire Wire Line
+	10450 4100 10700 4100
+Connection ~ 10700 4100
+Wire Wire Line
+	10700 4100 10700 4400
+$Comp
+L power:GNDA #PWR?
+U 1 1 5E0AB174
+P 7000 4000
+F 0 "#PWR?" H 7000 3750 50  0001 C CNN
+F 1 "GNDA" H 7005 3827 50  0000 C CNN
+F 2 "" H 7000 4000 50  0001 C CNN
+F 3 "" H 7000 4000 50  0001 C CNN
+	1    7000 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E0AB181
+P 7200 4000
+F 0 "#PWR?" H 7200 3750 50  0001 C CNN
+F 1 "GND" H 7205 3827 50  0000 C CNN
+F 2 "" H 7200 4000 50  0001 C CNN
+F 3 "" H 7200 4000 50  0001 C CNN
+	1    7200 4000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7200 4000 7200 3800
+Connection ~ 7200 3800
+Wire Wire Line
+	7200 3800 7500 3800
+Wire Wire Line
+	7000 4000 7000 3800
+Connection ~ 7000 3800
+Wire Wire Line
+	7000 3800 7200 3800
+$Comp
+L power:GNDA #PWR?
+U 1 1 5E0B7431
+P 9700 4350
+F 0 "#PWR?" H 9700 4100 50  0001 C CNN
+F 1 "GNDA" H 9705 4177 50  0000 C CNN
+F 2 "" H 9700 4350 50  0001 C CNN
+F 3 "" H 9700 4350 50  0001 C CNN
+	1    9700 4350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10050 4250 9700 4250
+Wire Wire Line
+	9700 4250 9700 4350
+Wire Wire Line
+	10050 3950 9700 3950
+Wire Wire Line
+	9700 3950 9700 4250
+Connection ~ 9700 4250
+Text Label 4650 4950 0    50   ~ 0
+pressControlButton
+Wire Wire Line
+	3500 2100 3500 1850
+Wire Wire Line
+	3500 1850 5250 1850
+Wire Wire Line
+	3400 2100 3400 1750
+Wire Wire Line
+	3400 1750 5250 1750
+Wire Wire Line
+	3300 2100 3300 1650
+Wire Wire Line
+	3300 1650 5250 1650
+Wire Wire Line
+	3200 2100 3200 1550
+Wire Wire Line
+	3200 1550 5250 1550
+Text Label 4000 1850 0    50   ~ 0
+ElettroValvola
+Wire Wire Line
+	5250 1950 3600 1950
+Wire Wire Line
+	3600 1950 3600 2100
+Wire Wire Line
+	3100 2100 3100 2050
+Wire Wire Line
+	3100 2050 2850 2050
+Wire Wire Line
+	2850 2050 2850 2150
+$Comp
+L power:GND #PWR?
+U 1 1 5E12B0FE
+P 2850 2150
+F 0 "#PWR?" H 2850 1900 50  0001 C CNN
+F 1 "GND" H 2855 1977 50  0000 C CNN
+F 2 "" H 2850 2150 50  0001 C CNN
+F 3 "" H 2850 2150 50  0001 C CNN
+	1    2850 2150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3900 5450 3900 5850
+Wire Wire Line
+	7500 3300 6700 3300
+Wire Wire Line
+	6700 3200 7500 3200
+Wire Wire Line
+	6700 3100 7500 3100
+Wire Wire Line
+	6700 3000 7500 3000
+Text Notes 5750 5250 0    50   ~ 0
+Celeste
+Text Notes 5750 5350 0    50   ~ 0
+Bianco/Celeste
+Text Notes 5750 4650 0    50   ~ 0
+Marrone
+Text Notes 5750 4750 0    50   ~ 0
+Bianco/Marrone
+Text Notes 5750 5050 0    50   ~ 0
+Arancio
+Text Notes 5750 5150 0    50   ~ 0
+Bianco/Arancio
+Text Notes 5750 4850 0    50   ~ 0
+Verde
+Text Notes 5750 4950 0    50   ~ 0
+Bianco/Verde
+Wire Wire Line
+	5550 5050 6500 5050
+Wire Wire Line
+	5550 5250 6500 5250
+Wire Wire Line
+	6500 5150 5550 5150
+Wire Wire Line
+	5550 5450 6000 5450
+Text Notes 5750 5450 0    50   ~ 0
+Calza
+$Comp
+L power:GNDA #PWR?
+U 1 1 5E144712
+P 6000 5650
+F 0 "#PWR?" H 6000 5400 50  0001 C CNN
+F 1 "GNDA" H 6005 5477 50  0000 C CNN
+F 2 "" H 6000 5650 50  0001 C CNN
+F 3 "" H 6000 5650 50  0001 C CNN
+	1    6000 5650
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E144718
+P 6200 5650
+F 0 "#PWR?" H 6200 5400 50  0001 C CNN
+F 1 "GND" H 6205 5477 50  0000 C CNN
+F 2 "" H 6200 5650 50  0001 C CNN
+F 3 "" H 6200 5650 50  0001 C CNN
+	1    6200 5650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6200 5650 6200 5450
+Connection ~ 6200 5450
+Wire Wire Line
+	6200 5450 6500 5450
+Wire Wire Line
+	6000 5650 6000 5450
+Connection ~ 6000 5450
+Wire Wire Line
+	6000 5450 6200 5450
+Wire Wire Line
+	6500 4950 5550 4950
+Wire Wire Line
+	5550 4750 6500 4750
+Wire Wire Line
+	5550 4650 6500 4650
+Wire Wire Line
+	5550 5350 6500 5350
+Wire Wire Line
+	3750 5750 3750 5350
+Wire Wire Line
+	3550 5150 3550 5550
+Wire Wire Line
+	3900 5450 5550 5450
+Connection ~ 5550 5450
+Wire Wire Line
+	3750 5350 5550 5350
+Connection ~ 5550 5350
+Wire Wire Line
+	3600 5250 5550 5250
+Connection ~ 5550 5250
+Wire Wire Line
+	3550 5150 5550 5150
+Connection ~ 5550 5150
+Text Label 4650 5050 0    50   ~ 0
+pump_ON_B
+Text Label 4650 4850 0    50   ~ 0
+Horn
+Text Label 4650 4750 0    50   ~ 0
+ElettroValvola
+Wire Wire Line
+	3500 2600 3500 4750
+Wire Wire Line
+	3500 4750 5550 4750
+Connection ~ 5550 4750
+Wire Wire Line
+	3400 2600 3400 4850
+Wire Wire Line
+	3400 4850 5550 4850
+Connection ~ 5550 4850
+Wire Wire Line
+	5550 4850 6500 4850
+Wire Wire Line
+	3300 2600 3300 4950
+Wire Wire Line
+	3300 4950 5550 4950
+Connection ~ 5550 4950
+Wire Wire Line
+	3200 2600 3200 5050
+Wire Wire Line
+	3200 5050 5550 5050
+Connection ~ 5550 5050
+Wire Wire Line
+	3600 2600 3600 4650
+Wire Wire Line
+	3600 4650 5550 4650
+Connection ~ 5550 4650
+Text Label 4000 1950 0    50   ~ 0
+Spare
+Text Label 4650 4650 0    50   ~ 0
+Spare
+Text Label 4000 1550 0    50   ~ 0
+pump_ON_B
+Text Label 7700 3700 0    50   ~ 0
+pc_button
+Text Label 7700 3600 0    50   ~ 0
+pump_ON
+Text Label 7700 3500 0    50   ~ 0
+pressControl_ON
+Text Label 7700 3300 0    50   ~ 0
+pressControlButton
+Text Label 7700 3400 0    50   ~ 0
+pump_ON_B
+Text Label 7700 3200 0    50   ~ 0
+Horn
+Text Label 7700 3100 0    50   ~ 0
+ElettroValvola
+Text Label 7700 3000 0    50   ~ 0
+Spare
+Wire Wire Line
+	8300 3700 7500 3700
+Connection ~ 7500 3700
+Wire Wire Line
+	7500 3600 8500 3600
+Wire Wire Line
+	8500 3600 8500 4150
+Wire Wire Line
+	8500 4150 10050 4150
+Connection ~ 7500 3600
+Wire Wire Line
+	8600 3850 8600 3400
+Wire Wire Line
+	8600 3400 7500 3400
+Wire Wire Line
+	8600 3850 10050 3850
+Connection ~ 7500 3400
+Connection ~ 7500 3500
+Wire Wire Line
+	7500 3300 8600 3300
+Connection ~ 7500 3300
+Wire Wire Line
+	7500 3200 8900 3200
+Wire Wire Line
+	8900 3200 8900 5550
+Wire Wire Line
+	8900 5550 9650 5550
+Connection ~ 7500 3200
+$Comp
+L LnDevice:RELAY_1RT K?
+U 1 1 5E252A8F
+P 10200 2700
+F 0 "K?" H 10200 3239 70  0001 C CNN
+F 1 "RELAY_2RT" H 10200 3239 70  0001 C CNN
+F 2 "" H 10200 2720 60  0000 C CNN
+F 3 "" H 10200 2720 60  0000 C CNN
+	1    10200 2700
+	-1   0    0    -1  
+$EndComp
+$Comp
+L power:+5VA #PWR?
+U 1 1 5E28488D
+P 9850 2600
+F 0 "#PWR?" H 9850 2450 50  0001 C CNN
+F 1 "+5VA" H 9865 2773 50  0000 C CNN
+F 2 "" H 9850 2600 50  0001 C CNN
+F 3 "" H 9850 2600 50  0001 C CNN
+	1    9850 2600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9850 2600 9850 2650
+Wire Wire Line
+	9850 2650 10000 2650
+Wire Wire Line
+	9700 1550 9700 1700
+Wire Wire Line
+	9850 3500 9850 2750
+Wire Wire Line
+	9850 2750 10000 2750
+Wire Wire Line
+	7500 3500 9850 3500
+Wire Wire Line
+	8600 2450 8600 3300
 Wire Bus Line
 	6600 2850 6600 5750
 $EndSCHEMATC
