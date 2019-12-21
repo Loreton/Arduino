@@ -18,10 +18,10 @@
 *.out
 *.app
 
-# Declare files that will always have CRLF line endings on checkout.
-*.ino text eol=nl
-*.h text eol=nl
-*.cpp text eol=nl
+# Declare files that will always have LF line endings on checkout.
+# *.ino text eol=nl
+# *.h text eol=nl
+# *.cpp text eol=nl
 text eol=lf
 
 
