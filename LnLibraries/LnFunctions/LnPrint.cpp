@@ -1,4 +1,3 @@
-
 #include <LnFunctions.h>
 /*
 void LnPrint(const char *data1, const char *data2, const char *data3) {
@@ -53,8 +52,34 @@ void print6Str(const char *s1, const char *s2, const char *s3, const char *s4, c
 }
 
 
-// void print4Str1I(const char *s1, const char *s2, const char *s3, int value) {
-//     Serial.print(s1);
-//     Serial.print(s2);
-//     Serial.print(s3);
-//     Serial.print(value);
+// ==================================
+// -
+// ==================================
+void LnPrint(bool fPrint,
+                const char *s1,
+                const char *s2,
+                const char *s3,
+                const char *s4,
+                const char *s5,
+                const char *s6,
+                const char *s7,
+                const char *s8,
+                const char *s9,
+                const char *s10,
+                const char *s11,
+                const char *s12) {
+    if (fPrint) {
+        Serial.print(s1);
+        Serial.print(s2);
+        Serial.print(s3);
+        Serial.print(s4);
+        Serial.print(s5);
+        Serial.print(s6);
+        Serial.print(s7);
+        Serial.print(s8);
+        Serial.print(s9);
+        Serial.print(s10);
+        Serial.print(s11);
+        Serial.print(s12);
+    }
+}
