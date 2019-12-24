@@ -97,7 +97,20 @@ bool isBeepTime;
                 break;
             }
 
-            if (isBeepTime || phase==0)  { // phase=0 indica che vogliamo un beep appena accesa la pompa
+            if (phase==0) {
+                int _duration=500;
+                int _frequency=500;
+                for (int i=1;i<=4;i++) {
+                    tone(Buzzer, _frequency*i, _duration);
+                    delay(_duration*1.1);
+                }
+                noTone(Buzzer);
+                setPhase(++phase);
+
+            }
+            
+            // if (isBeepTime || phase==0)  { // phase=0 indica che vogliamo un beep appena accesa la pompa
+            if (isBeepTime )  { // phase=0 indica che vogliamo un beep appena accesa la pompa
                 // emissione BEEP
                 tone(Buzzer, buzzer_frequency, buzzer_duration);
                 buzzer_ON=now + buzzer_duration; // tempo (millsis()) a cui il buzzer si dovrà spegnere
@@ -113,6 +126,7 @@ bool isBeepTime;
 
         default:
             fALARM=false; // allarme rientrato
+            buzzer_ON=0;
             if (phase>0) {
                 setPhase(0);
                 int _duration=500;
@@ -233,7 +247,7 @@ unsigned long phase_interval=0;
     if (phase>PHASE_ALARM_THRESHOLD) fALARM=true;
 
     // - defaults....
-    buzzer_frequency = BUZZER_FREQUENCY;    //mS
+    buzzer_frequency = BUZZER_FREQUENCY;   
     led_duration = LED_DURATION;
     led_interval = LED_INTERVAL;
     buzzer_volume   = 9;
