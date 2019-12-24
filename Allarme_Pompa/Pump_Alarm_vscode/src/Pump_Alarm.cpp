@@ -6,13 +6,13 @@
 bool fALARM=false;    // siamo in allarme. La pompa è rimasta accesa oltre i tempi previsti
 byte fPUMP;         // status della pompa
 
-const int pumpState          = 2; // input +5Volt se Pompa accesa
-const int presscontrolButton = 3; // output comanda il sonoff che spegne/accendere il pressControl.
-const int Horn               = 4; // output comanda una sirena
-const int ElettroValvola     = 5; // output chiusura acqua a caduta.... da implementare
+const int pumpState          = D02; // input +5Volt se Pompa accesa
+const int presscontrolButton = D03; // output comanda il sonoff che spegne/accendere il pressControl.
+const int Horn               = D04; // output comanda una sirena
+const int ElettroValvola     = D05; // output chiusura acqua a caduta.... da implementare
 
-const int Buzzer             = 12;
-const int blinkingLED        = 13;
+const int Buzzer             = D12;
+const int blinkingLED        = D13;
 
 int phase=0;
 unsigned long now, next_beep_time;
@@ -35,8 +35,9 @@ void setup() {
     digitalWrite(blinkingLED, HIGH);        pinMode(blinkingLED        , OUTPUT);
 
     lnprint(true, "Starting...");
-    lnprint(true, "PHASE_ALARM_INTERVAL: ", PHASE_ALARM_INTERVAL);
-    lnprint(true, "PHASE_INTERVAL: ", PHASE_INTERVAL);
+    lnprint(true, "PHASE_INTERVAL       : ", PHASE_INTERVAL);
+    lnprint(true, "PHASE_ALARM_INTERVAL : ", PHASE_ALARM_INTERVAL);
+    lnprint(true, "PHASE_ALARM_THRESHOLD: ", PHASE_ALARM_THRESHOLD);
     lnprint(true, "SKIP_PRINT_VALUE: ", SKIP_PRINT_VALUE+1);
     setPhase(0);
 }
@@ -52,25 +53,33 @@ void loop() {
     checkLed();
     checkHorn();
 
-    if (now%1000==0) {
-        lnprint(true, "now: ", now, "\n");
+    if (fPUMP && now%1000==0) {
+        lnprint(true, "next beep in: ", (next_beep_time-now)/1000, "\n");
         delay(1);
     }
+    
     if (buzzer_ON!=0 && buzzer_ON<now) { // se stiamo suonando, portiamolo a termine
         Serial.println("Beep completato.");
         noTone(Buzzer);
         buzzer_ON=0;
     }
 
-    // comanda il pulsante del sOnOff (tramite un rele) il quale si attiva sul rilascio.
-    // Il relè di fatto lavora su fronte negativo.
-    if (fALARM) {
-        digitalWrite(presscontrolButton, LOW);
-        delay(1000);
-        digitalWrite(presscontrolButton, HIGH);
-    }
+    if (fALARM) 
+        PressControl_powerOFF();
+
 } // end loop()
 
+
+// ==================================
+// - Comanda il pulsante del sOnOff il quale si attiva sul rilascio.
+// - Il comando è intermediato da un relay.
+// ==================================
+void PressControl_powerOFF() {
+    Serial.println("Trying to switch-OFF the Press-Control...");
+    digitalWrite(presscontrolButton, LOW);
+    delay(1000);
+    digitalWrite(presscontrolButton, HIGH);
+}
 
 // ==================================
 // -
@@ -78,8 +87,8 @@ void loop() {
 void checkPumpState() {
 bool isBeepTime;
 
-    fPUMP = !digitalRead(pumpState);  // logica inversa. PumpON->LowLevel
     isBeepTime = now>=next_beep_time;
+    fPUMP = !digitalRead(pumpState);  // logica inversa. PumpON->LowLevel
     switch(fPUMP) {
         case ON:
             if (buzzer_ON!=0) {
@@ -102,7 +111,16 @@ bool isBeepTime;
 
         default:
             fALARM=false; // allarme rientrato
-            if (phase>0) setPhase(0);
+            if (phase>0) {
+                int _duration=500;
+                int _frequency=500;
+                for (int i=3;i>0;i--) {
+                    tone(Buzzer, _frequency*i, _duration);
+                    delay(_duration*1.1);
+                }
+                noTone(Buzzer);
+                setPhase(0);
+            }
             break;
     }
 
@@ -160,12 +178,13 @@ static unsigned long previousLedTime;
 void checkHorn() {
 bool isHornTime;
 static unsigned long previousHornTime;
-static byte hornState;
+// byte hornState;
 
+    byte hornState=digitalRead(Horn);
 
     if (fHORN) {
         switch(hornState) {
-            case ON:
+            case HORN_ON:
                 isHornTime = (now-previousHornTime)>=horn_duration;
                 if (isHornTime) {
                     previousHornTime += horn_duration;
@@ -173,28 +192,30 @@ static byte hornState;
                     //              previousHornTime = now
                     //        which is the style used in the BlinkWithoutDelay example sketch
                     //        Adding on the interval is a better way to ensure that succesive periods are identical
-                    hornState = OFF;
+                    // hornState = HORN_OFF;
+                    digitalWrite(Horn, HORN_OFF);
+                    lnprint(true, "Horn is OFF for ", horn_interval/1000, " Sec.\n" );
+                    // Serial.println("Horn is OFF");
                 }
                 break;
 
-            case OFF:
+            case HORN_OFF:
                 isHornTime = (now-previousHornTime)>=horn_interval;
                 if (isHornTime) {
                     previousHornTime += horn_interval;
-                    hornState = ON;
+                    // hornState = HORN_ON;
+                    digitalWrite(Horn, HORN_ON);
+                    lnprint(true, "Horn is ON for ", horn_duration/1000, " Sec.\n" );
+
                 }
                 break;
         } // end switch
     }
     else {
-        if (digitalRead(Horn))
-            digitalWrite(Horn, OFF);
+        if (hornState==HORN_ON)
+            digitalWrite(Horn, HORN_OFF);
     }
 
-
-    if (isHornTime) {
-        digitalWrite(Horn, hornState);
-    }
 
 }
 
@@ -209,53 +230,48 @@ unsigned long phase_interval;
     phase=count;
 
     if (phase==0) noTone(Buzzer);
-    if (phase>=PHASE_ALARM_THRESHOLD) fALARM=true;
+    if (phase>PHASE_ALARM_THRESHOLD) fALARM=true;
 
+    buzzer_frequency = BUZZER_FREQUENCY;    //mS
     if (fALARM) {
-        phase_interval   = PHASE_ALARM_INTERVAL;  // secondi
-        buzzer_frequency = BUZZER_FREQUENCY;    //mS
-        buzzer_duration  = BUZZER_ALARM_DURATION;    //ms
+        phase_interval = PHASE_ALARM_INTERVAL;  // secondi
+        // horn_interval = HORN_INTERVAL;
         buzzer_volume    = 9;
 
 
         fHORN=true;
         led_duration = LED_ALARM_DURATION;
         led_interval = LED_ALARM_INTERVAL;
-        horn_duration = HORN_ALARM_DURATION;
-        horn_interval = HORN_ALARM_INTERVAL;
         Serial.println("Siamo in ALLARME!!!!");
     }
 
     else if (fPUMP) {
         fHORN=true;
+        phase_interval = PHASE_INTERVAL - (phase*2000); // ogni phase diminuiamo l'intervallo
+        
         led_duration = LED_PUMP_DURATION;
         led_interval = LED_PUMP_INTERVAL;
-        horn_duration = HORN_DURATION;
-        horn_interval = HORN_INTERVAL;
-        buzzer_duration = BUZZER_DURATION;
-        buzzer_frequency = BUZZER_FREQUENCY;
-        phase_interval = PHASE_INTERVAL - (phase*2); // ogni phase diminuiamo l'intervallo
     }
 
     else {
+        phase_interval = PHASE_INTERVAL - (phase*2000); // ogni phase diminuiamo l'intervallo
         fHORN=false;
         led_duration = LED_DURATION;
         led_interval = LED_INTERVAL;
 
-        buzzer_duration = BUZZER_DURATION;
-        buzzer_frequency = BUZZER_FREQUENCY;
         buzzer_volume   = 9;
-
-        phase_interval = PHASE_INTERVAL - (phase*2); // ogni phase diminuiamo l'intervallo
 
     }
 
-    next_beep_time = now + (unsigned long) phase_interval*1000; // phase_interval è in secondi
-    if (fPUMP) {
-        lnprint(fPrint_BEEP, "now: ", now, " - ");
-        lnprint(fPrint_BEEP, "in: ", phase_interval, " Sec - ");
-        lnprint(fPrint_BEEP, "next_beep_time at: ", next_beep_time, "mS\n");
+    horn_duration = horn_interval*.6; // suona per il 60% dell'intervllo
+    buzzer_duration = phase_interval*.20; // beep il 20% dell'intervallo
+    horn_interval = phase_interval;
 
+    if (phase_interval<3000) phase_interval=3000; // controllo di salvaguardia 
+    next_beep_time = now + (unsigned long) phase_interval; 
+    if (fPUMP) {
+        // lnprint(fPrint_BEEP, "now: ", now, " - ");
+        lnprint(fPrint_BEEP, "next_beep_time in: ", phase_interval/1000, " Sec\n");
     }
 }
 

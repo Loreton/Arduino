@@ -45,23 +45,25 @@
 
 #define ON  1
 #define OFF 0
+#define HORN_ON  0
+#define HORN_OFF 1
 
-#define PHASE_INTERVAL            30    // number of seconds between Buzzer
-#define PHASE_ALARM_INTERVAL       5    // number of seconds between Buzzer_sounds during alarm
+
+#define PHASE_INTERVAL          15*1000    // number of mseconds between Buzzer
+#define PHASE_ALARM_INTERVAL    5*1000    // number of mseconds between Buzzer_sounds during alarm
+// #define BUZZER_DURATION         PHASE_INTERVAL*.20  // number of millisecs that Buzzer is ON
+// #define BUZZER_ALARM_DURATION   PHASE_ALARM_INTERVAL*.20    // number of millisecs that Buzzer is ON during alarm
+#define BUZZER_FREQUENCY        2000          // Buzzer frequency
+
+
+// #define HORN_INTERVAL           PHASE_INTERVAL   // number of millisecs between Horn_sound
+// #define HORN_ALARM_INTERVAL     1000    // number of millisecs between Horn_sounds during alarm
+// #define HORN_DURATION           HORN_INTERVAL*.30    // number of millisecs that Horn is ON
+// #define HORN_ALARM_DURATION     HORN_DURATION*2    // number of millisecs that Horn is ON during alarm
+
 // number of phases before alarm phase starts and pump will be forced off.
 // PHASE_INTERVAL * PHASE_ALARM_THRESHOLD ==> 30*6 = (about) 3 minutes
 #define PHASE_ALARM_THRESHOLD      3    
-
-
-#define HORN_DURATION           4000          // number of millisecs that Horn is ON
-#define HORN_INTERVAL           15000    // number of millisecs between Horn_sound
-#define HORN_ALARM_DURATION     6000    // number of millisecs that Horn is ON during alarm
-#define HORN_ALARM_INTERVAL     1000    // number of millisecs between Horn_sounds during alarm
-
-
-#define BUZZER_DURATION         PHASE_INTERVAL*1000/20          // number of millisecs that Buzzer is ON
-#define BUZZER_FREQUENCY        2000                            // frequency sound during pump_on
-#define BUZZER_ALARM_DURATION   PHASE_ALARM_INTERVAL*1000/5    // number of millisecs that Buzzer is ON during alarm
 
 
 
@@ -93,7 +95,7 @@ void setPhase(int);
 void checkPumpState(void);
 void checkLed(void);
 void checkHorn(void);
-
+void PressControl_powerOFF(void);
 
 
 
