@@ -59,14 +59,14 @@ void loop() {
         lnprint(true, "next beep in: ", (next_beep_time-now)/1000, "\n");
         delay(1);
     }
-    
+
     if (buzzer_ON!=0 && buzzer_ON<now) { // se stiamo suonando, portiamolo a termine
         Serial.println("Beep completato.");
         noTone(Buzzer);
         buzzer_ON=0;
     }
 
-    if (fALARM) 
+    if (fALARM)
         PressControl_powerOFF();
 
 } // end loop()
@@ -237,22 +237,18 @@ unsigned long phase_interval=0;
     led_duration = LED_DURATION;
     led_interval = LED_INTERVAL;
     buzzer_volume   = 9;
-    
-    
-    if ((phase*PHASE_STEP_DOWN) > PHASE_INTERVAL) // controllo di salvaguardia 
+
+
+    if ((phase*PHASE_STEP_DOWN) > PHASE_INTERVAL) // controllo di salvaguardia
         phase_interval=PHASE_MIN_INTERVAL;
     else
         phase_interval = PHASE_INTERVAL - (phase*PHASE_STEP_DOWN); // ogni phase diminuiamo l'intervallo
-    // if (phase_interval < PHASE_MIN_INTERVAL) {
-    //     lnprint(true, "phase_interval < PHASE_MIN_INTERVAL -> ", phase_interval);
-    //     phase_interval=PHASE_MIN_INTERVAL;
-    // }
 
     if (fALARM) {
         phase_interval = PHASE_ALARM_INTERVAL;  // secondi
 
-        horn_interval = phase_interval;
-        horn_duration = horn_interval*.5; // suona per il 50% dell'intervllo
+        horn_interval = PHASE_ALARM_THRESHOLD*500*1;
+        horn_duration = PHASE_ALARM_THRESHOLD*1000*2; // suona per il 50% dell'intervllo
 
         led_duration = LED_ALARM_DURATION;
         led_interval = LED_ALARM_INTERVAL;
@@ -264,15 +260,15 @@ unsigned long phase_interval=0;
         led_duration = LED_PUMP_DURATION;
         led_interval = LED_PUMP_INTERVAL;
         horn_interval = phase_interval;
-        horn_duration = horn_interval*.5; // suona per il 50% dell'intervllo
-        
+        horn_duration = (phase+2)*1000;
+
     }
-    
-    buzzer_duration = phase_interval*.20; // beep il 20% dell'intervallo
+
+    buzzer_duration = (phase+1)*1000;
 
 
 
-    next_beep_time = now + (unsigned long) phase_interval; 
+    next_beep_time = now + phase_interval;
     if (fPUMP) {
         lnprint(fPrint_BEEP, "next_beep_time in: ", phase_interval/1000, " Sec\n");
         lnprint(fPrint_BEEP, "      phase_interval  : ", phase_interval, " mSec\n");

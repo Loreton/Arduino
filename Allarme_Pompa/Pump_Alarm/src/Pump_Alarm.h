@@ -50,14 +50,14 @@
 
 
 #define PHASE_INTERVAL          60*1000L    // number of mseconds between Buzzer
-#define PHASE_MIN_INTERVAL      10*1000    // minimo intervallo di Buzzer 
-#define PHASE_STEP_DOWN         2000    // step con cui deve scendere lìintervallo per ogni fase 
+#define PHASE_MIN_INTERVAL      10*1000    // minimo intervallo di Buzzer
+#define PHASE_STEP_DOWN         2000    // step con cui deve scendere lìintervallo per ogni fase
 #define PHASE_ALARM_INTERVAL    8*1000    // number of mseconds between Buzzer_sounds during alarm
 #define BUZZER_FREQUENCY        500          // Buzzer frequency
 
 // number of phases before alarm phase starts and pump will be forced off.
 // PHASE_INTERVAL * PHASE_ALARM_THRESHOLD ==> 30*6 = (about) 3 minutes
-#define PHASE_ALARM_THRESHOLD      10    
+#define PHASE_ALARM_THRESHOLD      10
 
 
 
@@ -80,9 +80,21 @@ const bool fPrint_TONE    = false;
 const bool fPrint_LED     = false;
 const bool fPrint_VERBOSE = false;
 
+// int BEEP[] = { // phase, delaySec, frequency, duration)
+//                    0,       5,         2000,     500,
+//                    1,      10,         2000,    1000,
+//                    2,      10,         2000,    1000,
+//                    3,      10,         2000,    1000,
+//                    4,      10,         2000,    1000,
+//                    5,      10,         2000,    1000,
+//                    6,      10,         2000,    1000,
+//                    7,      10,         2000,    1000,
+//                    8,      10,         2000,    1000,
+//                    9,      10,         2000,    1000,
+//                   10,      10,         2000,    1000,
+//             };
 
-
-
+// ----------- F U N C T I O N S  -------------------
 
 void lnprint(bool fDEBUG, const char *msg, const unsigned long value=SKIP_PRINT_VALUE, const char *s2="\n");
 void setPhase(int);
@@ -91,45 +103,6 @@ void checkLed(void);
 void checkHorn(void);
 void PressControl_powerOFF(void);
 
-
-
-
-// #if not defined(_I_AM_LN_FUNCTIONS_)
-//     #define _I_AM_LN_FUNCTIONS_
-
-//     #define uchar unsigned char
-
-// #endif
-
-
-
-// ----------- F U N C T I O N S  -------------------
-
-
-    // extern unsigned char LnFuncWorkingBuff[]; // 50 bytes
-    // extern char sharedWorkingBuff[]; // 50 bytes
-
-
-    // char *D2X(unsigned int Valore, char size);      // deve essere D2X.cpp
-    // void printHex(const byte data);
-    // void printHex(const char *data,  byte len=0,  const char *suffixData="", const char *sep=" ");
-    // void printHexPDS(const char *prefixStr, const byte data,        const char *suffixStr="\n");
-    // void printDataToHex(const char *data, byte len, const char *sep);
-
-
-    // void printNchar(const char data, byte counter); // print un byte N volte
-
-    // void printDelimitedStr(const char *data, byte len=0, const char *delimiter=NULL);  // print di una stringa visibile
-
-    // char *Utoa(unsigned int i, byte padLen=2, byte fill=' ');
-    // char *joinStr(const char *fmt, ...);
-    // byte stringLen(const char* data);
-    // void setMyID(const char *name, byte myEEpromAddress);
-
-    // void print6Str(const char *s1, const char *s2="", const char *s3="", const char *s4="", const char *s5="", const char *s6="");
-
-
-    // void printPINs(void);
     void LnPrint(const bool fPrint,
                 const char *s1,
                 const char *s2="",
@@ -144,4 +117,3 @@ void PressControl_powerOFF(void);
                 const char *s11="",
                 const char *s12="");
 
-// void LnPrint2(char *nArgs, ...);
