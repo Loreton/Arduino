@@ -47,7 +47,15 @@ void setup() {
 
 
 // ==================================
-// -
+// - per gestire l'overflow di millis()
+// - bisogna operare come segue:
+//      if all your time calculations are done as:
+//      if  ((later_time - earlier_time ) >=duration ) {action}
+//      then the rollover does generally not come into play.
+//      For ease of understanding think in bytes ( 0.. 255 ), instead of unsigned longs.
+//     Example: If your old time was at 250 and now you're at 5, 
+//          you calculate (5 - 250) and interpret the result as an unsigned byte, the result is 11.      
+//          then the rollover does generally not come into play.
 // ==================================
 void loop() {
     now = millis();

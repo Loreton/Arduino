@@ -1263,20 +1263,7 @@ Connection ~ 5550 5000
 Wire Wire Line
 	3500 5000 5550 5000
 Wire Wire Line
-	5400 6450 5600 6450
-Wire Wire Line
 	5400 6350 5600 6350
-$Comp
-L LnConnectors:Mammuth_09_sep MM?
-U 9 1 5E19AC87
-P 5400 6450
-F 0 "MM?" H 5450 6600 40  0001 C CNN
-F 1 "Mammuth_09_sep" H 5450 6550 40  0001 C CNN
-F 2 "" H 5425 6300 60  0000 C CNN
-F 3 "" H 5425 6300 60  0000 C CNN
-	9    5400 6450
-	1    0    0    -1  
-$EndComp
 $Comp
 L LnConnectors:Mammuth_09_sep MM?
 U 8 1 5E19AC5A
@@ -1323,16 +1310,11 @@ $EndComp
 Connection ~ 5400 5300
 Wire Wire Line
 	4050 5300 5400 5300
-Wire Wire Line
-	5600 6350 5600 6450
-Connection ~ 5600 6350
 Connection ~ 5600 6250
 Wire Wire Line
 	5600 6250 5600 6350
 Wire Wire Line
 	3300 5200 5550 5200
-Wire Bus Line
-	6600 2950 6600 6200
 Wire Wire Line
 	5550 4900 6500 4900
 Wire Wire Line
@@ -1349,4 +1331,6 @@ F 3 "" H 5575 4750 60  0000 C CNN
 	1    5550 4900
 	1    0    0    -1  
 $EndComp
+Wire Bus Line
+	6600 2950 6600 6200
 $EndSCHEMATC

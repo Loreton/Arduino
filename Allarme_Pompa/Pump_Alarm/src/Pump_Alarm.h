@@ -40,6 +40,7 @@
 
         #define A06      A06        // pin.25 - A06         - Analog exclusive pins
         #define A07      A07        // pin.26 - A06         - Analog exclusive pins
+        #define RESET             // pin.26 - A06         - Analog exclusive pins
 #endif
 
 
