@@ -50,16 +50,15 @@
 #define HORN_OFF 1
 
 
-#define PHASE_INTERVAL          60*1000L    // number of mseconds between Buzzer
-#define PHASE_MIN_INTERVAL      10*1000    // minimo intervallo di Buzzer
-#define PHASE_STEP_DOWN         2000    // step con cui deve scendere lìintervallo per ogni fase
-#define PHASE_ALARM_INTERVAL    8*1000    // number of mseconds between Buzzer_sounds during alarm
+#define PHASE_INTERVAL          30*1000L    // number of mseconds between Buzzer
+#define PHASE_ALARM_INTERVAL    6*1000L    
+#define PHASE_MIN_INTERVAL      1*1000    // minimo intervallo di Buzzer
+#define PHASE_STEP_DOWN         200    // step con cui deve scendere l'intervallo per ogni fase
 #define BUZZER_FREQUENCY        500          // Buzzer frequency
 
 // number of phases before alarm phase starts and pump will be forced off.
 // PHASE_INTERVAL * PHASE_ALARM_THRESHOLD ==> 30*6 = (about) 3 minutes
-#define PHASE_ALARM_THRESHOLD      10
-
+#define PHASE_ALARM_THRESHOLD      6 // default:10 
 
 
 #define LED_DURATION            2000
@@ -103,6 +102,7 @@ void checkPumpState(void);
 void checkLed(void);
 void checkHorn(void);
 void PressControl_powerOFF(void);
+void printStatus(void);
 
     void LnPrint(const bool fPrint,
                 const char *s1,

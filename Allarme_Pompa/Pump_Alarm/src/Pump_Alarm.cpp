@@ -17,9 +17,12 @@ const int blinkingLED        = D13;
 int phase=0;
 unsigned long now, next_beep_time;
 unsigned long led_duration, led_interval;
-unsigned long buzzer_duration, buzzer_frequency, buzzer_volume, buzzer_ON;
+unsigned long buzzer_duration, buzzer_frequency, buzzer_volume, buzzerOffTime;
+long buzzer_OFF;
+bool buzzer_ON;
 unsigned long horn_duration, horn_interval;
 // byte fHORN=false;     // Flag per suonare la sirena
+unsigned long phase_interval, next_phase_time, phase_start_time;
 
 
 void setup() {
@@ -56,6 +59,7 @@ void setup() {
 //     Example: If your old time was at 250 and now you're at 5, 
 //          you calculate (5 - 250) and interpret the result as an unsigned byte, the result is 11.      
 //          then the rollover does generally not come into play.
+// - vedi anche: https://arduino.stackexchange.com/questions/12587/how-can-i-handle-the-millis-rollover
 // ==================================
 void loop() {
     now = millis();
@@ -64,15 +68,25 @@ void loop() {
     checkHorn();
 
     if (fPUMP && now%1000==0) {
-        lnprint(true, "next beep in: ", (next_beep_time-now)/1000, "\n");
+        // lnprint(true, "next beep in: ", (next_beep_time-now)/1000, "\n");
         delay(1);
     }
 
-    if (buzzer_ON!=0 && buzzer_ON<now) { // se stiamo suonando, portiamolo a termine
-        Serial.println("Beep completato.");
-        noTone(Buzzer);
-        buzzer_ON=0;
+    // if (buzzer_ON!=0 && buzzer_ON<now) { // se stiamo suonando, portiamolo a termine
+    //     Serial.println("Beep completato.");
+    //     noTone(Buzzer);
+    //     buzzer_ON=0;
+    // }
+    if (buzzer_ON) {
+        unsigned long elapsed = now-phase_start_time;  // elapsed: duration
+        if (elapsed>=buzzer_duration) { // se stiamo suonando, portiamolo a termine
+            lnprint(true, "now: ", now, " - ");
+            lnprint(true, "Beep OFF - elapsed: ", elapsed, " mS\n");
+            noTone(Buzzer);
+            buzzer_ON=false;
+        }
     }
+
 
     if (fALARM)
         PressControl_powerOFF();
@@ -87,7 +101,7 @@ void loop() {
 void PressControl_powerOFF() {
     Serial.println("Trying to switch-OFF the Press-Control...");
     digitalWrite(presscontrolButton, LOW);
-    delay(1000);
+    delay(500);
     digitalWrite(presscontrolButton, HIGH);
 }
 
@@ -95,16 +109,11 @@ void PressControl_powerOFF() {
 // -
 // ==================================
 void checkPumpState() {
-bool isBeepTime;
+unsigned long elapsed;
 
-    isBeepTime = now>=next_beep_time;
     fPUMP = !digitalRead(pumpState);  // logica inversa. PumpON->LowLevel
     switch(fPUMP) {
         case ON:
-            if (buzzer_ON!=0) {
-                break;
-            }
-
             if (phase==0) {
                 int _duration=500;
                 int _frequency=500;
@@ -113,28 +122,26 @@ bool isBeepTime;
                     delay(_duration*1.1);
                 }
                 noTone(Buzzer);
-                setPhase(++phase);
-
+                setPhase(1);
             }
             
-            // if (isBeepTime || phase==0)  { // phase=0 indica che vogliamo un beep appena accesa la pompa
-            if (isBeepTime )  { // phase=0 indica che vogliamo un beep appena accesa la pompa
-                // emissione BEEP
-                tone(Buzzer, buzzer_frequency, buzzer_duration);
-                buzzer_ON=now + buzzer_duration; // tempo (millsis()) a cui il buzzer si dovrà spegnere
-                lnprint(fPrint_BEEP, "\nnow: ", now, " - ");
-                lnprint(fPrint_BEEP, "pump Status: ", fPUMP, " - BEEPing - ");
-                lnprint(fPrint_BEEP, "phase: ", phase, " - ");
-                lnprint(fPrint_BEEP, "frequency: ", buzzer_frequency, " - ");
-                lnprint(fPrint_BEEP, "duration: ", buzzer_duration, "\n");
+            elapsed = now-phase_start_time;
+            if (elapsed >= phase_interval)  { 
                 setPhase(++phase);
+                printStatus();
+                // emissione BEEP
+                buzzer_ON=true;
+                lnprint(true, "now: ", now, " - ");
+                lnprint(true, "Beep ON for: ", buzzer_duration, " mS\n");
+                tone(Buzzer, buzzer_frequency, buzzer_duration);
+
             }
             break;
 
 
         default:
             fALARM=false; // allarme rientrato
-            buzzer_ON=0;
+            buzzer_OFF=0;
             if (phase>0) {
                 setPhase(0);
                 int _duration=500;
@@ -156,39 +163,41 @@ bool isBeepTime;
 // -
 // ==================================
 void checkLed() {
-bool isLedTime;
+// bool isLedTime;
 static byte ledState;
 static unsigned long previousLedTime;
+unsigned long elapsedTime;
 
+    // mai comparare due tempi
+    // while (millis() < start + ms) ;  // BUGGY version
+    // and
+    // while (millis() - start < ms) ;  // CORRECT version
 
     switch(ledState) {
         case ON:
-            isLedTime = (now-previousLedTime)>=led_duration;
-            if (isLedTime) {
+            // isLedTime = (now-previousLedTime)>=led_duration;
+            elapsedTime = now-previousLedTime;
+            if (elapsedTime >= led_duration) {
                 previousLedTime += led_duration;
                 // NOTE: The previous line could alternatively be
                 //              previousLedTime = now
                 //        which is the style used in the BlinkWithoutDelay example sketch
                 //        Adding on the interval is a better way to ensure that succesive periods are identical
                 ledState = OFF;
+                digitalWrite(blinkingLED, ledState);
             }
             break;
 
         default:
-            isLedTime = (now-previousLedTime)>=led_interval;
-            if (isLedTime) {
+            elapsedTime = now-previousLedTime;
+            if (elapsedTime >= led_interval) {
                 previousLedTime += led_interval;
                 ledState = ON;
+                digitalWrite(blinkingLED, ledState);
             }
             break;
     } // end switch
 
-    if (isLedTime) {
-        // lnprint(true, "LED Status: ", ledState, " - ");
-        // lnprint(true, "duration: ", led_duration, " - ");
-        // lnprint(true, "interval: ", led_interval);
-        digitalWrite(blinkingLED, ledState);
-    }
 }
 
 
@@ -200,16 +209,16 @@ static unsigned long previousLedTime;
 // -
 // ==================================
 void checkHorn() {
-bool isHornTime;
 static unsigned long previousHornTime;
 byte hornState;
+unsigned long elapsedTime;
 
     hornState=digitalRead(Horn);
     if (fPUMP) {
         switch(hornState) {
             case HORN_ON:
-                isHornTime = (now-previousHornTime)>=horn_duration;
-                if (isHornTime) {
+                elapsedTime = now-previousHornTime;
+                if (elapsedTime >= horn_duration) {
                     previousHornTime += horn_duration;
                     // NOTE: The previous line could alternatively be
                     //              previousHornTime = now
@@ -221,10 +230,9 @@ byte hornState;
                 break;
 
             case HORN_OFF:
-                isHornTime = (now-previousHornTime)>=horn_interval;
-                if (isHornTime) {
+                elapsedTime = now-previousHornTime;
+                if (elapsedTime >= horn_interval) {
                     previousHornTime += horn_interval;
-                    // hornState = HORN_ON;
                     digitalWrite(Horn, HORN_ON);
                     lnprint(true, "Horn is ON for ", horn_duration/1000, " Sec.\n" );
 
@@ -235,7 +243,7 @@ byte hornState;
     else {
         if (hornState==HORN_ON)
             digitalWrite(Horn, HORN_OFF);
-        previousHornTime=0;
+        previousHornTime=now; // ??? ma serve?
     }
 
 
@@ -247,12 +255,15 @@ byte hornState;
 // -
 // ==================================
 void setPhase(int count) {
-unsigned long phase_interval=0;
 
     phase=count;
 
     if (phase==0) noTone(Buzzer);
-    if (phase>PHASE_ALARM_THRESHOLD) fALARM=true;
+    if (phase>PHASE_ALARM_THRESHOLD) {
+        fALARM=true;
+        phase=PHASE_ALARM_THRESHOLD;
+    }
+
 
     // - defaults....
     buzzer_frequency = BUZZER_FREQUENCY;   
@@ -275,7 +286,7 @@ unsigned long phase_interval=0;
         led_duration = LED_ALARM_DURATION;
         led_interval = LED_ALARM_INTERVAL;
 
-        Serial.println("Siamo in ALLARME!!!!");
+        // Serial.println("Siamo in ALLARME!!!!");
     }
 
     else if (fPUMP) {
@@ -286,21 +297,36 @@ unsigned long phase_interval=0;
 
     }
 
+
     buzzer_duration = (phase+1)*1000;
+    if (buzzer_duration>phase_interval) buzzer_duration=phase_interval/3;
 
-
-
-    next_beep_time = now + phase_interval;
+    phase_start_time = now;
     if (fPUMP) {
-        lnprint(fPrint_BEEP, "next_beep_time in: ", phase_interval/1000, " Sec\n");
+        lnprint(fPrint_BEEP, "\n   phase #         : ", phase);
         lnprint(fPrint_BEEP, "      phase_interval  : ", phase_interval, " mSec\n");
         lnprint(fPrint_BEEP, "      buzzer_duration : ", buzzer_duration, " mSec\n");
-        lnprint(fPrint_BEEP, "      horn_duration   : ", horn_duration, " mSec\n");
         lnprint(fPrint_BEEP, "      horn_interval   : ", horn_interval, " mSec\n");
+        lnprint(fPrint_BEEP, "      horn_duration   : ", horn_duration, " mSec\n");
     }
 }
 
 
+
+// ==================================
+// -
+// ==================================
+void printStatus() {
+        lnprint(fPrint_BEEP, "\nnow: ", now, " - ");
+        if (fALARM) {
+            lnprint(fPrint_BEEP, "ALARM - ", SKIP_PRINT_VALUE, " - ");
+        }
+
+        lnprint(fPrint_BEEP, "pump Status: ", fPUMP, " - BEEPing - ");
+        lnprint(fPrint_BEEP, "phase: ", phase, " - ");
+        lnprint(fPrint_BEEP, "frequency: ", buzzer_frequency, " - ");
+        lnprint(fPrint_BEEP, "duration: ", buzzer_duration, "\n");
+}
 
 // ==================================
 // -
