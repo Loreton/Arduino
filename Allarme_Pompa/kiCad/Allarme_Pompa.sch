@@ -104,29 +104,16 @@ Wire Wire Line
 $Comp
 L power:GND #PWR0101
 U 1 1 5DF1F5E5
-P 1950 3900
-F 0 "#PWR0101" H 1950 3650 50  0001 C CNN
-F 1 "GND" H 1955 3727 50  0000 C CNN
-F 2 "" H 1950 3900 50  0001 C CNN
-F 3 "" H 1950 3900 50  0001 C CNN
-	1    1950 3900
+P 1950 1450
+F 0 "#PWR0101" H 1950 1200 50  0001 C CNN
+F 1 "GND" H 1955 1277 50  0000 C CNN
+F 2 "" H 1950 1450 50  0001 C CNN
+F 3 "" H 1950 1450 50  0001 C CNN
+	1    1950 1450
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1850 3700 1950 3700
-Wire Wire Line
-	1950 3700 1950 3900
-$Comp
-L power:GND #PWR0103
-U 1 1 5DF22BEF
-P 3600 4000
-F 0 "#PWR0103" H 3600 3750 50  0001 C CNN
-F 1 "GND" H 3750 3950 50  0000 C CNN
-F 2 "" H 3600 4000 50  0001 C CNN
-F 3 "" H 3600 4000 50  0001 C CNN
-	1    3600 4000
-	1    0    0    -1  
-$EndComp
+	1850 1250 1950 1250
 Wire Wire Line
 	5750 2950 5750 3000
 Wire Wire Line
@@ -139,12 +126,12 @@ Wire Wire Line
 $Comp
 L LnConnectors:CONN_02 J?
 U 1 1 5DF28262
-P 950 3750
-F 0 "J?" H 1006 4237 60  0001 C CNN
-F 1 "220V" V 800 3950 60  0000 C CNN
-F 2 "" H 950 3750 60  0000 C CNN
-F 3 "" H 950 3750 60  0000 C CNN
-	1    950  3750
+P 950 1300
+F 0 "J?" H 1006 1787 60  0001 C CNN
+F 1 "220V" V 800 1500 60  0000 C CNN
+F 2 "" H 950 1300 60  0000 C CNN
+F 3 "" H 950 1300 60  0000 C CNN
+	1    950  1300
 	1    0    0    -1  
 $EndComp
 Text Notes 6750 3600 0    50   ~ 0
@@ -368,13 +355,13 @@ Wire Wire Line
 Wire Wire Line
 	1950 6400 1950 6300
 Wire Wire Line
-	1100 3500 1250 3500
+	1100 1050 1250 1050
 Wire Wire Line
-	1100 3600 1150 3600
+	1100 1150 1150 1150
 Wire Wire Line
-	1150 3600 1150 3700
+	1150 1150 1150 1250
 Wire Wire Line
-	1150 3700 1250 3700
+	1150 1250 1250 1250
 $Comp
 L Device:Buzzer BZ?
 U 1 1 5E1B1006
@@ -389,13 +376,13 @@ $EndComp
 $Comp
 L LnDevice:Alimentatore Al_5Vcc?
 U 1 1 5E20E831
-P 1550 3600
-F 0 "Al_5Vcc?" H 1700 3400 40  0001 R CNN
-F 1 "Alimentatore" H 1650 3300 40  0001 R CNN
-F 2 "5V Arduino" H 1550 3600 30  0000 C CNN
-F 3 "" H 1550 3575 60  0000 C CNN
-	1    1550 3600
-	-1   0    0    -1  
+P 1550 1150
+F 0 "Al_5Vcc?" H 1700 950 40  0001 R CNN
+F 1 "Alimentatore" H 1650 850 40  0001 R CNN
+F 2 "5V Arduino" H 1550 1150 30  0000 C CNN
+F 3 "" H 1550 1125 60  0000 C CNN
+	1    1550 1150
+	1    0    0    -1  
 $EndComp
 Wire Wire Line
 	1000 5100 1600 5100
@@ -849,82 +836,22 @@ Wire Wire Line
 $Comp
 L power:+5V #PWR?
 U 1 1 5E0C7A38
-P 1950 3450
-F 0 "#PWR?" H 1950 3300 50  0001 C CNN
-F 1 "+5V" H 1965 3623 50  0000 C CNN
-F 2 "" H 1950 3450 50  0001 C CNN
-F 3 "" H 1950 3450 50  0001 C CNN
-	1    1950 3450
+P 1950 1000
+F 0 "#PWR?" H 1950 850 50  0001 C CNN
+F 1 "+5V" H 1965 1173 50  0000 C CNN
+F 2 "" H 1950 1000 50  0001 C CNN
+F 3 "" H 1950 1000 50  0001 C CNN
+	1    1950 1000
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1850 3500 1950 3500
-Wire Wire Line
-	1950 3500 1950 3450
-$Comp
-L power:+5V #PWR?
-U 1 1 5E0CE8D4
-P 5600 3950
-F 0 "#PWR?" H 5600 3800 50  0001 C CNN
-F 1 "+5V" H 5615 4123 50  0000 C CNN
-F 2 "" H 5600 3950 50  0001 C CNN
-F 3 "" H 5600 3950 50  0001 C CNN
-	1    5600 3950
-	1    0    0    -1  
-$EndComp
-Text Label 3600 3400 0    50   ~ 0
+	1850 1050 1950 1050
+Text Label 4900 3400 0    50   ~ 0
 GND_Arduino
-Text Label 4950 850  0    50   ~ 0
-+5Vcc_Arduino
-Text Label 4700 4150 0    50   ~ 0
-+5Vcc_Arduino
 Wire Wire Line
 	2600 6400 2600 6200
 Wire Wire Line
 	2600 6200 2950 6200
-Wire Wire Line
-	5600 3950 5600 4150
-Wire Wire Line
-	5600 4150 5600 4250
-Connection ~ 5600 4150
-$Comp
-L LnConnectors:Mammuth_09_sep MM?
-U 2 1 5E19A9F8
-P 5400 4250
-F 0 "MM?" H 5450 4400 40  0001 C CNN
-F 1 "Mammuth_09_sep" H 5450 4350 40  0001 C CNN
-F 2 "" H 5425 4100 60  0000 C CNN
-F 3 "" H 5425 4100 60  0000 C CNN
-	2    5400 4250
-	1    0    0    -1  
-$EndComp
-$Comp
-L LnConnectors:Mammuth_09_sep MM2
-U 1 1 5E19AA28
-P 5400 4150
-F 0 "MM2" H 5300 4250 40  0000 L CNN
-F 1 "Mammuth_09_sep" H 5450 4250 40  0001 C CNN
-F 2 "" H 5425 4000 60  0000 C CNN
-F 3 "" H 5425 4000 60  0000 C CNN
-	1    5400 4150
-	1    0    0    -1  
-$EndComp
-Connection ~ 5400 4150
-Wire Wire Line
-	5400 4150 5600 4150
-Wire Wire Line
-	5400 4250 5600 4250
-$Comp
-L LnConnectors:Mammuth_09_sep MM?
-U 3 1 5E19AB9A
-P 5400 4350
-F 0 "MM?" H 5450 4500 40  0001 C CNN
-F 1 "Mammuth_09_sep" H 5450 4450 40  0001 C CNN
-F 2 "" H 5425 4200 60  0000 C CNN
-F 3 "" H 5425 4200 60  0000 C CNN
-	3    5400 4350
-	1    0    0    -1  
-$EndComp
 Text Notes 4600 6800 0    50   ~ 0
 Il mammuth MM2x va posizionato in parallelo ad MM1\ne porta tutti i fili doppi
 $Comp
@@ -961,8 +888,6 @@ Text Label 4450 5300 0    50   ~ 0
 pressControlButton
 Wire Wire Line
 	3350 6100 4050 6100
-Wire Wire Line
-	3350 6200 4150 6200
 $Comp
 L LnDevice:Pulse SW?
 U 1 1 5E1869F0
@@ -976,11 +901,6 @@ F 3 "" H 5000 5600 60  0000 C CNN
 $EndComp
 Wire Wire Line
 	4450 3400 5750 3400
-Wire Wire Line
-	5400 4350 5600 4350
-Wire Wire Line
-	5600 4350 5600 4250
-Connection ~ 5600 4250
 Wire Notes Line
 	800  5050 2900 5050
 Wire Notes Line
@@ -993,21 +913,8 @@ Wire Notes Line
 	6450 650  2750 650 
 Text Notes 2950 850  0    50   ~ 0
 Frutto contenente Arduino nel Quadro elettrico \ndel Salone
-Wire Wire Line
-	4150 3400 3600 3400
-Wire Wire Line
-	3600 3400 3600 3550
-Connection ~ 4150 3400
-Wire Wire Line
-	5950 850  3100 850 
-Text Label 3100 3350 1    50   ~ 0
-+5Vcc_Arduino
-Wire Wire Line
-	3100 4150 5400 4150
-Wire Wire Line
-	3100 850  3100 3550
 $Comp
-L Connector:Conn_01x06_Male J?
+L Connector:Conn_01x04_Male J?
 U 1 1 5E23680F
 P 3300 3750
 F 0 "J?" H 3272 3727 50  0001 R CNN
@@ -1020,16 +927,16 @@ $EndComp
 $Comp
 L Connector:Conn_01x02_Female J?
 U 1 1 5E236824
-P 2150 3650
-F 0 "J?" H 2178 3630 50  0001 L CNN
-F 1 "Conn_01x05_Female" H 2177 3585 50  0001 L CNN
-F 2 "" H 2150 3650 50  0001 C CNN
-F 3 "~" H 2150 3650 50  0001 C CNN
-	1    2150 3650
+P 2450 1200
+F 0 "J?" H 2478 1180 50  0001 L CNN
+F 1 "Conn_01x05_Female" H 2477 1135 50  0001 L CNN
+F 2 "" H 2450 1200 50  0001 C CNN
+F 3 "~" H 2450 1200 50  0001 C CNN
+	1    2450 1200
 	1    0    0    1   
 $EndComp
 $Comp
-L Connector:Conn_01x06_Female J?
+L Connector:Conn_01x04_Female J?
 U 1 1 5E2368F5
 P 3300 3750
 F 0 "J?" H 3272 3727 50  0001 R CNN
@@ -1040,8 +947,6 @@ F 3 "~" H 3300 3750 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
-	3100 3950 3100 4150
-Wire Wire Line
 	3200 3950 3200 5600
 Wire Wire Line
 	3300 3950 3300 5200
@@ -1050,41 +955,35 @@ Wire Wire Line
 Wire Wire Line
 	3500 3950 3500 5000
 Wire Wire Line
-	3600 3950 3600 4000
-Wire Wire Line
 	4950 1650 5250 1650
 Wire Wire Line
-	1950 3500 1950 3550
-Connection ~ 1950 3500
+	1950 1050 1950 1100
+Connection ~ 1950 1050
 Wire Wire Line
-	1950 3700 1950 3650
-Connection ~ 1950 3700
+	1950 1250 1950 1200
+Connection ~ 1950 1250
 $Comp
 L Connector:Conn_01x02_Male J?
 U 1 1 5E268A05
-P 2150 3650
-F 0 "J?" H 2178 3630 50  0001 L CNN
-F 1 "Conn_01x05_Female" H 2177 3585 50  0001 L CNN
-F 2 "" H 2150 3650 50  0001 C CNN
-F 3 "~" H 2150 3650 50  0001 C CNN
-	1    2150 3650
+P 2450 1200
+F 0 "J?" H 2478 1180 50  0001 L CNN
+F 1 "Conn_01x05_Female" H 2477 1135 50  0001 L CNN
+F 2 "" H 2450 1200 50  0001 C CNN
+F 3 "~" H 2450 1200 50  0001 C CNN
+	1    2450 1200
 	1    0    0    1   
 $EndComp
-Text Label 4800 6150 0    50   ~ 0
-GND_Arduino
 $Comp
 L power:GND #PWR0107
 U 1 1 5E144718
-P 5250 5900
-F 0 "#PWR0107" H 5250 5650 50  0001 C CNN
-F 1 "GND" H 5100 5800 50  0000 C CNN
-F 2 "" H 5250 5900 50  0001 C CNN
-F 3 "" H 5250 5900 50  0001 C CNN
-	1    5250 5900
+P 4900 5900
+F 0 "#PWR0107" H 4900 5650 50  0001 C CNN
+F 1 "GND" H 4750 5800 50  0000 C CNN
+F 2 "" H 4900 5900 50  0001 C CNN
+F 3 "" H 4900 5900 50  0001 C CNN
+	1    4900 5900
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4150 6250 4150 6200
 Wire Wire Line
 	4150 5800 4150 6000
 Wire Wire Line
@@ -1094,43 +993,35 @@ Wire Wire Line
 Wire Wire Line
 	4050 6100 4050 5300
 Wire Wire Line
-	5750 5900 6500 5900
-Wire Wire Line
 	6500 5600 5700 5600
 Wire Wire Line
 	5700 5200 6500 5200
 Wire Wire Line
-	5750 6150 5750 5900
-Wire Wire Line
 	5700 5700 5700 5600
 Wire Wire Line
 	5700 5300 5700 5200
-Connection ~ 5750 5900
 Connection ~ 5700 5600
 Connection ~ 5700 5200
-Wire Wire Line
-	4800 6150 5400 6150
-Connection ~ 5400 6150
 $Comp
 L LnConnectors:Mammuth_09_sep MM?
-U 6 1 5E1BA5CB
-P 5400 6150
-F 0 "MM?" H 5450 6300 40  0001 C CNN
-F 1 "Mammuth_09_sep" H 5450 6250 40  0001 C CNN
-F 2 "" H 5425 6000 60  0000 C CNN
-F 3 "" H 5425 6000 60  0000 C CNN
-	6    5400 6150
+U 3 1 5E1BA5CB
+P 5400 6000
+F 0 "MM?" H 5450 6150 40  0001 C CNN
+F 1 "Mammuth_09_sep" H 5450 6100 40  0001 C CNN
+F 2 "" H 5425 5850 60  0000 C CNN
+F 3 "" H 5425 5850 60  0000 C CNN
+	3    5400 6000
 	1    0    0    -1  
 $EndComp
 $Comp
 L LnConnectors:Mammuth_09_sep MM2
-U 4 1 5E1B1C08
+U 1 1 5E1B1C08
 P 5400 5300
-F 0 "MM2" H 5450 5450 40  0001 C CNN
+F 0 "MM2" H 5200 5250 40  0000 C CNN
 F 1 "Mammuth_09_sep" H 5450 5400 40  0001 C CNN
 F 2 "" H 5425 5150 60  0000 C CNN
 F 3 "" H 5425 5150 60  0000 C CNN
-	4    5400 5300
+	1    5400 5300
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -1140,9 +1031,7 @@ Wire Wire Line
 Wire Wire Line
 	5550 5500 6500 5500
 Wire Wire Line
-	5250 5900 5550 5900
-Wire Wire Line
-	5550 5900 5750 5900
+	4900 5900 5550 5900
 Connection ~ 5550 5900
 $Comp
 L LnConnectors:Mammuth_09_sep MM?
@@ -1210,13 +1099,6 @@ F 3 "" H 5575 5250 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5400 6150 5600 6150
-Wire Wire Line
-	5600 6150 5750 6150
-Connection ~ 5600 6150
-Wire Wire Line
-	5600 6150 5600 6250
-Wire Wire Line
 	5550 5200 5700 5200
 Connection ~ 5550 5200
 $Comp
@@ -1263,56 +1145,24 @@ Connection ~ 5550 5000
 Wire Wire Line
 	3500 5000 5550 5000
 Wire Wire Line
-	5400 6350 5600 6350
-$Comp
-L LnConnectors:Mammuth_09_sep MM?
-U 8 1 5E19AC5A
-P 5400 6350
-F 0 "MM?" H 5450 6500 40  0001 C CNN
-F 1 "Mammuth_09_sep" H 5450 6450 40  0001 C CNN
-F 2 "" H 5425 6200 60  0000 C CNN
-F 3 "" H 5425 6200 60  0000 C CNN
-	8    5400 6350
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5400 6250 4150 6250
-Wire Wire Line
-	5400 6250 5600 6250
-Connection ~ 5400 6250
-$Comp
-L LnConnectors:Mammuth_09_sep MM?
-U 7 1 5E19AC2D
-P 5400 6250
-F 0 "MM?" H 5450 6400 40  0001 C CNN
-F 1 "Mammuth_09_sep" H 5450 6350 40  0001 C CNN
-F 2 "" H 5425 6100 60  0000 C CNN
-F 3 "" H 5425 6100 60  0000 C CNN
-	7    5400 6250
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
 	3950 5700 5400 5700
 Wire Wire Line
 	5400 5700 5700 5700
 Connection ~ 5400 5700
 $Comp
 L LnConnectors:Mammuth_09_sep MM?
-U 5 1 5E19ABC9
+U 2 1 5E19ABC9
 P 5400 5700
 F 0 "MM?" H 5450 5850 40  0001 C CNN
 F 1 "Mammuth_09_sep" H 5450 5800 40  0001 C CNN
 F 2 "" H 5425 5550 60  0000 C CNN
 F 3 "" H 5425 5550 60  0000 C CNN
-	5    5400 5700
+	2    5400 5700
 	1    0    0    -1  
 $EndComp
 Connection ~ 5400 5300
 Wire Wire Line
 	4050 5300 5400 5300
-Connection ~ 5600 6250
-Wire Wire Line
-	5600 6250 5600 6350
 Wire Wire Line
 	3300 5200 5550 5200
 Wire Wire Line
@@ -1331,6 +1181,47 @@ F 3 "" H 5575 4750 60  0000 C CNN
 	1    5550 4900
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	5950 850  4950 850 
+Wire Wire Line
+	5750 3400 6400 3400
+Wire Wire Line
+	6400 3400 6400 750 
+Wire Wire Line
+	6400 750  4800 750 
+Connection ~ 5750 3400
+Wire Wire Line
+	1950 1250 1950 1450
+Wire Wire Line
+	1950 1050 1950 1000
+Wire Wire Line
+	2650 1200 4800 1200
+Wire Wire Line
+	4800 750  4800 1200
+Wire Wire Line
+	4950 850  4950 1100
+Wire Wire Line
+	2650 1100 4950 1100
+Wire Wire Line
+	1950 1200 2250 1200
+Wire Wire Line
+	1950 1100 2250 1100
+Wire Wire Line
+	5550 5900 5700 5900
+Wire Wire Line
+	5400 6000 5700 6000
+Wire Wire Line
+	5700 6000 5700 5900
+Connection ~ 5700 5900
+Wire Wire Line
+	5700 5900 6500 5900
+Wire Wire Line
+	3350 6200 5150 6200
+Wire Wire Line
+	5150 6200 5150 6000
+Wire Wire Line
+	5150 6000 5400 6000
+Connection ~ 5400 6000
 Wire Bus Line
 	6600 2950 6600 6200
 $EndSCHEMATC

@@ -67,20 +67,15 @@ void loop() {
     checkLed();
     checkHorn();
 
-    if (fPUMP && now%1000==0) {
-        // lnprint(true, "next beep in: ", (next_beep_time-now)/1000, "\n");
+/*     if (fPUMP && now%1000==0) {
+        lnprint(true, "next beep in: ", (next_beep_time-now)/1000, "\n");
         delay(1);
     }
-
-    // if (buzzer_ON!=0 && buzzer_ON<now) { // se stiamo suonando, portiamolo a termine
-    //     Serial.println("Beep completato.");
-    //     noTone(Buzzer);
-    //     buzzer_ON=0;
-    // }
+ */
     if (buzzer_ON) {
         unsigned long elapsed = now-phase_start_time;  // elapsed: duration
         if (elapsed>=buzzer_duration) { // se stiamo suonando, portiamolo a termine
-            lnprint(true, "now: ", now, " - ");
+            // lnprint(true, "now: ", now, " - ");
             lnprint(true, "Beep OFF - elapsed: ", elapsed, " mS\n");
             noTone(Buzzer);
             buzzer_ON=false;
@@ -99,10 +94,14 @@ void loop() {
 // - Il comando è intermediato da un relay.
 // ==================================
 void PressControl_powerOFF() {
-    Serial.println("Trying to switch-OFF the Press-Control...");
+    // if (now%100==0) {
+        // delay(1);
+    // }    
     digitalWrite(presscontrolButton, LOW);
+    Serial.println("Pushing Press-Control switch...");
     delay(500);
     digitalWrite(presscontrolButton, HIGH);
+    Serial.println("... released Press-Control switch.");
 }
 
 // ==================================
@@ -131,7 +130,7 @@ unsigned long elapsed;
                 printStatus();
                 // emissione BEEP
                 buzzer_ON=true;
-                lnprint(true, "now: ", now, " - ");
+                // lnprint(true, "now: ", now, " - ");
                 lnprint(true, "Beep ON for: ", buzzer_duration, " mS\n");
                 tone(Buzzer, buzzer_frequency, buzzer_duration);
 
@@ -175,7 +174,6 @@ unsigned long elapsedTime;
 
     switch(ledState) {
         case ON:
-            // isLedTime = (now-previousLedTime)>=led_duration;
             elapsedTime = now-previousLedTime;
             if (elapsedTime >= led_duration) {
                 previousLedTime += led_duration;
@@ -283,15 +281,15 @@ void setPhase(int count) {
         horn_interval = PHASE_ALARM_THRESHOLD*500*1;
         horn_duration = PHASE_ALARM_THRESHOLD*1000*2; // suona per il 50% dell'intervllo
 
-        led_duration = LED_ALARM_DURATION;
-        led_interval = LED_ALARM_INTERVAL;
+        led_duration = LED_DURATION/6;
+        led_interval = LED_INTERVAL/6;
 
         // Serial.println("Siamo in ALLARME!!!!");
     }
 
     else if (fPUMP) {
-        led_duration = LED_PUMP_DURATION;
-        led_interval = LED_PUMP_INTERVAL;
+        led_duration = LED_DURATION/4;
+        led_interval = LED_INTERVAL/4;
         horn_interval = phase_interval;
         horn_duration = (phase+2)*1000;
 
@@ -302,13 +300,7 @@ void setPhase(int count) {
     if (buzzer_duration>phase_interval) buzzer_duration=phase_interval/3;
 
     phase_start_time = now;
-    if (fPUMP) {
-        lnprint(fPrint_BEEP, "\n   phase #         : ", phase);
-        lnprint(fPrint_BEEP, "      phase_interval  : ", phase_interval, " mSec\n");
-        lnprint(fPrint_BEEP, "      buzzer_duration : ", buzzer_duration, " mSec\n");
-        lnprint(fPrint_BEEP, "      horn_interval   : ", horn_interval, " mSec\n");
-        lnprint(fPrint_BEEP, "      horn_duration   : ", horn_duration, " mSec\n");
-    }
+    printStatus();
 }
 
 
@@ -317,15 +309,19 @@ void setPhase(int count) {
 // -
 // ==================================
 void printStatus() {
-        lnprint(fPrint_BEEP, "\nnow: ", now, " - ");
-        if (fALARM) {
-            lnprint(fPrint_BEEP, "ALARM - ", SKIP_PRINT_VALUE, " - ");
-        }
-
-        lnprint(fPrint_BEEP, "pump Status: ", fPUMP, " - BEEPing - ");
-        lnprint(fPrint_BEEP, "phase: ", phase, " - ");
-        lnprint(fPrint_BEEP, "frequency: ", buzzer_frequency, " - ");
-        lnprint(fPrint_BEEP, "duration: ", buzzer_duration, "\n");
+    lnprint(fPrint_BEEP, "\nnow: ", now, " - ");
+    lnprint(fPrint_BEEP, "phase # : ", phase);
+    if (fALARM) {
+        lnprint(fPrint_BEEP, "      ALARM ON");
+    }
+    if (fPUMP) {
+        lnprint(fPrint_BEEP, "      phase_interval  : ", phase_interval, " mSec\n");
+        lnprint(fPrint_BEEP, "      buzzer_duration : ", buzzer_duration, " mSec\n");
+        lnprint(fPrint_BEEP, "      buzzer_frequency: ", buzzer_frequency, " Hz\n");
+        lnprint(fPrint_BEEP, "      horn_interval   : ", horn_interval, " mSec\n");
+        lnprint(fPrint_BEEP, "      horn_duration   : ", horn_duration, " mSec\n\n");
+    }
+    
 }
 
 // ==================================

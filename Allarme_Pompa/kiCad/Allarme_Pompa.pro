@@ -1,4 +1,4 @@
-update=30/12/2019 13:06:28
+update=31/12/2019 17:47:36
 version=1
 last_client=kicad
 [pcbnew]
@@ -31,7 +31,7 @@ LibDir=
 [schematic_editor]
 version=1
 PageLayoutDescrFile=
-PlotDirectoryName=../Pump_Alarm_vscode/
+PlotDirectoryName=../Pump_Alarm/
 SubpartIdSeparator=0
 SubpartFirstId=65
 NetFmtName=

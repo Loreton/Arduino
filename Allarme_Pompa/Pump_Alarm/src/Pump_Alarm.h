@@ -50,23 +50,23 @@
 #define HORN_OFF 1
 
 
-#define PHASE_INTERVAL          30*1000L    // number of mseconds between Buzzer
-#define PHASE_ALARM_INTERVAL    6*1000L    
+#define PHASE_INTERVAL          60*1000L    // number of mseconds between Buzzer
+#define PHASE_ALARM_INTERVAL    PHASE_INTERVAL/5    
 #define PHASE_MIN_INTERVAL      1*1000    // minimo intervallo di Buzzer
-#define PHASE_STEP_DOWN         200    // step con cui deve scendere l'intervallo per ogni fase
-#define BUZZER_FREQUENCY        500          // Buzzer frequency
+#define PHASE_STEP_DOWN         PHASE_INTERVAL/30    // step con cui deve scendere l'intervallo per ogni fase
+#define BUZZER_FREQUENCY        2000          // default: 2000 Buzzer frequency
 
 // number of phases before alarm phase starts and pump will be forced off.
 // PHASE_INTERVAL * PHASE_ALARM_THRESHOLD ==> 30*6 = (about) 3 minutes
-#define PHASE_ALARM_THRESHOLD      6 // default:10 
+#define PHASE_ALARM_THRESHOLD      10 // default:10 
 
 
 #define LED_DURATION            2000
-#define LED_INTERVAL            2000
-#define LED_PUMP_DURATION        500
-#define LED_PUMP_INTERVAL        500
-#define LED_ALARM_DURATION       300
-#define LED_ALARM_INTERVAL       100
+#define LED_INTERVAL            1000
+// #define LED_PUMP_DURATION        500
+// #define LED_PUMP_INTERVAL        300
+// #define LED_ALARM_DURATION       300
+// #define LED_ALARM_INTERVAL       100
 
 
 
