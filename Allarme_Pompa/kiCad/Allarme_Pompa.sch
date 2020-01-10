@@ -315,7 +315,7 @@ L LnDevice:PulsanteNO SW?
 U 1 1 5DFEEB6E
 P 1950 6250
 F 0 "SW?" V 1800 6300 50  0001 C CNN
-F 1 "PCButton" V 2050 6100 40  0000 C CNN
+F 1 "PCButton" V 1950 6100 40  0000 C CNN
 F 2 "" H 1950 6250 60  0000 C CNN
 F 3 "" H 1950 6250 60  0000 C CNN
 	1    1950 6250
@@ -391,45 +391,45 @@ Active Buzzer è messo come emergenza nel caso si dovesse rimuovere Arduino.\nSu
 Wire Wire Line
 	7500 3500 6700 3500
 Wire Wire Line
-	1600 5900 1600 5600
+	1600 5950 1600 5600
 Connection ~ 1600 5100
 Wire Wire Line
 	1600 5100 1950 5100
 $Comp
 L Connector:Conn_01x05_Male J?
 U 1 1 5DF8639E
-P 3150 6000
-F 0 "J?" H 3122 5977 50  0001 R CNN
-F 1 "Conn_01x05_Male" H 3123 5932 50  0001 R CNN
-F 2 "" H 3150 6000 50  0001 C CNN
-F 3 "~" H 3150 6000 50  0001 C CNN
-	1    3150 6000
-	-1   0    0    1   
+P 3250 6000
+F 0 "J?" H 3222 5977 50  0001 R CNN
+F 1 "Conn_01x05_Male" H 3223 5932 50  0001 R CNN
+F 2 "" H 3250 6000 50  0001 C CNN
+F 3 "~" H 3250 6000 50  0001 C CNN
+	1    3250 6000
+	1    0    0    1   
 $EndComp
 $Comp
 L Connector:Conn_01x05_Female J?
 U 1 1 5DF863AD
-P 3150 6000
-F 0 "J?" H 3178 5980 50  0001 L CNN
-F 1 "Conn_01x05_Female" H 3177 5935 50  0001 L CNN
-F 2 "" H 3150 6000 50  0001 C CNN
-F 3 "~" H 3150 6000 50  0001 C CNN
-	1    3150 6000
-	-1   0    0    1   
+P 3250 6000
+F 0 "J?" H 3278 5980 50  0001 L CNN
+F 1 "Conn_01x05_Female" H 3277 5935 50  0001 L CNN
+F 2 "" H 3250 6000 50  0001 C CNN
+F 3 "~" H 3250 6000 50  0001 C CNN
+	1    3250 6000
+	1    0    0    1   
 $EndComp
 Wire Wire Line
 	2450 5100 2450 5800
 Wire Wire Line
-	2450 5800 2950 5800
+	2450 5800 3050 5800
 Entry Wire Line
 	6600 3900 6700 3800
 Entry Wire Line
 	6500 3950 6600 4050
 Text Notes 6750 3800 0    50   ~ 0
 Calza
-Text Label 4100 6200 0    50   ~ 0
+Text Label 4200 6200 0    50   ~ 0
 pump_ON
-Text Label 4100 5900 0    50   ~ 0
+Text Label 4200 5900 0    50   ~ 0
 pressControl_ON
 $Comp
 L LnDevice:Edge SW?
@@ -686,8 +686,6 @@ Connection ~ 7500 3200
 Wire Wire Line
 	9700 3950 9700 4050
 Wire Wire Line
-	1600 5900 1700 5900
-Wire Wire Line
 	7500 3700 9900 3700
 Wire Wire Line
 	9900 3050 9900 3700
@@ -747,7 +745,7 @@ Connection ~ 7550 1050
 Wire Wire Line
 	7550 1050 9250 1050
 Wire Wire Line
-	1950 6100 2950 6100
+	1950 6100 3050 6100
 $Comp
 L Device:R R?
 U 1 1 5DFF217C
@@ -796,7 +794,6 @@ Wire Wire Line
 	1600 5400 1600 5100
 Wire Wire Line
 	1950 5850 1950 5900
-Connection ~ 1950 5900
 Wire Wire Line
 	1950 5900 2950 5900
 Wire Wire Line
@@ -809,18 +806,16 @@ Wire Wire Line
 $Comp
 L LnConnectors:JUMPER JP?
 U 1 1 5E0960EC
-P 1750 5900
-F 0 "JP?" H 1600 5925 60  0001 C CNN
-F 1 "JUMPER" H 1650 5800 40  0001 C CNN
-F 2 "" H 1750 5925 60  0000 C CNN
-F 3 "" H 1750 5925 60  0000 C CNN
-	1    1750 5900
-	1    0    0    -1  
+P 3250 5500
+F 0 "JP?" H 3100 5525 60  0001 C CNN
+F 1 "JUMPER" H 3150 5400 40  0001 C CNN
+F 2 "" H 3250 5525 60  0000 C CNN
+F 3 "" H 3250 5525 60  0000 C CNN
+	1    3250 5500
+	0    1    1    0   
 $EndComp
 Wire Wire Line
-	1800 5900 1950 5900
-Wire Wire Line
-	1000 6000 2950 6000
+	1000 6000 3050 6000
 Wire Wire Line
 	5950 850  5950 950 
 $Comp
@@ -841,9 +836,7 @@ GND_Arduino
 Wire Wire Line
 	2600 6400 2600 6200
 Wire Wire Line
-	2600 6200 2950 6200
-Text Notes 4600 6800 0    50   ~ 0
-Il mammuth MM2x va posizionato in parallelo ad MM1\ne porta tutti i fili doppi
+	2600 6200 3050 6200
 $Comp
 L power:+5VA #PWR?
 U 1 1 5E0916E7
@@ -860,23 +853,12 @@ Wire Wire Line
 Wire Wire Line
 	7700 3000 7700 2850
 Connection ~ 7500 3000
-Text Label 4100 6000 0    50   ~ 0
+Text Label 4200 6000 0    50   ~ 0
 (+5Vcc)
 Text Label 3750 4350 0    50   ~ 0
 pump_ON
-Text Label 4100 6100 0    50   ~ 0
+Text Label 4200 6100 0    50   ~ 0
 pressControlButton
-$Comp
-L LnDevice:Pulse SW?
-U 1 1 5E1869F0
-P 5000 5600
-F 0 "SW?" H 4850 5700 70  0001 C CNN
-F 1 "Pulse" H 5000 5500 70  0001 C CNN
-F 2 "" H 5000 5600 60  0000 C CNN
-F 3 "" H 5000 5600 60  0000 C CNN
-	1    5000 5600
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	4450 3400 5750 3400
 Wire Notes Line
@@ -894,13 +876,13 @@ Frutto contenente Arduino nel Quadro elettrico \ndel Salone
 $Comp
 L Connector:Conn_01x05_Male J?
 U 1 1 5E23680F
-P 4750 4150
-F 0 "J?" H 4722 4127 50  0001 R CNN
-F 1 "Conn_01x05_Male" H 4723 4082 50  0001 R CNN
-F 2 "" H 4750 4150 50  0001 C CNN
-F 3 "~" H 4750 4150 50  0001 C CNN
-	1    4750 4150
-	-1   0    0    -1  
+P 4800 4150
+F 0 "J?" H 4772 4127 50  0001 R CNN
+F 1 "Conn_01x05_Male" H 4773 4082 50  0001 R CNN
+F 2 "" H 4800 4150 50  0001 C CNN
+F 3 "~" H 4800 4150 50  0001 C CNN
+	1    4800 4150
+	1    0    0    -1  
 $EndComp
 $Comp
 L Connector:Conn_01x02_Female J?
@@ -958,20 +940,18 @@ Wire Wire Line
 Wire Wire Line
 	1950 1100 2250 1100
 Wire Wire Line
-	4150 3400 3800 3400
-Wire Wire Line
 	3600 3400 3600 3950
 Connection ~ 4150 3400
 $Comp
 L Connector:Conn_01x05_Female J?
 U 1 1 5E110269
-P 4800 4150
-F 0 "J?" H 4772 4127 50  0001 R CNN
-F 1 "Conn_01x05_Male" H 4773 4082 50  0001 R CNN
-F 2 "" H 4800 4150 50  0001 C CNN
-F 3 "~" H 4800 4150 50  0001 C CNN
-	1    4800 4150
-	-1   0    0    -1  
+P 4750 4150
+F 0 "J?" H 4722 4127 50  0001 R CNN
+F 1 "Conn_01x05_Male" H 4723 4082 50  0001 R CNN
+F 2 "" H 4750 4150 50  0001 C CNN
+F 3 "~" H 4750 4150 50  0001 C CNN
+	1    4750 4150
+	1    0    0    -1  
 $EndComp
 Wire Wire Line
 	3600 3950 4550 3950
@@ -1016,23 +996,7 @@ $EndComp
 Wire Wire Line
 	5250 1950 3800 1950
 Wire Wire Line
-	3800 1950 3800 2200
-$Comp
-L LnDevice:PulsanteNO SW?
-U 1 1 5E2198E8
-P 3800 2250
-F 0 "SW?" V 3650 2300 50  0001 C CNN
-F 1 "TestAlarm" V 3800 2050 40  0000 C CNN
-F 2 "" H 3800 2250 60  0000 C CNN
-F 3 "" H 3800 2250 60  0000 C CNN
-	1    3800 2250
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	3800 2300 3800 3400
-Connection ~ 3800 3400
-Wire Wire Line
-	3800 3400 3600 3400
+	3800 1950 3800 3750
 Wire Wire Line
 	5000 3950 5450 3950
 Wire Wire Line
@@ -1061,47 +1025,45 @@ Connection ~ 5550 4250
 Wire Wire Line
 	5550 4250 6500 4250
 Wire Wire Line
-	3350 5800 3700 5800
+	3450 5800 3800 5800
 Wire Wire Line
-	3700 5800 3700 6000
+	3800 5800 3800 6000
 Wire Wire Line
-	3700 6000 4950 6000
+	3800 6000 4950 6000
 Wire Wire Line
-	3350 5900 3600 5900
+	3450 5900 3700 5900
 Wire Wire Line
-	3600 5900 3600 6200
+	3700 5900 3700 6200
 Wire Wire Line
-	3600 6200 4950 6200
+	3700 6200 4950 6200
 Wire Wire Line
-	3350 6200 3450 6200
+	3450 6200 3550 6200
 Wire Wire Line
-	3450 6200 3450 6300
+	3550 6200 3550 6300
 Wire Wire Line
-	3450 6300 3900 6300
+	3550 6300 4000 6300
 Wire Wire Line
-	3900 6300 3900 5800
+	4000 6300 4000 5800
 Wire Wire Line
-	3900 5800 4950 5800
+	4000 5800 4950 5800
 Wire Wire Line
-	3350 6100 4950 6100
+	3450 6100 4950 6100
 Wire Wire Line
-	3350 6000 3500 6000
+	3450 6000 3600 6000
 Wire Wire Line
-	3500 6000 3500 5850
+	3600 6000 3600 5850
 Wire Wire Line
-	3500 5850 3800 5850
+	3600 5850 3900 5850
 Wire Wire Line
-	3800 5850 3800 5900
+	3900 5850 3900 5900
 Wire Wire Line
-	3800 5900 4950 5900
+	3900 5900 4950 5900
 Wire Wire Line
 	5400 6000 6500 6000
 Wire Wire Line
 	5400 5900 6500 5900
-Text Label 4100 5800 0    50   ~ 0
+Text Label 4200 5800 0    50   ~ 0
 GND
-Wire Bus Line
-	6600 2950 6600 6200
 Text Notes 3200 1550 0    50   ~ 0
 White
 Text Notes 3300 1650 0    50   ~ 0
@@ -1112,4 +1074,71 @@ Text Notes 3500 1850 0    50   ~ 0
 Orange
 Text Notes 3800 1950 0    50   ~ 0
 Red
+Wire Wire Line
+	5700 5700 6500 5700
+Wire Wire Line
+	5700 5800 6500 5800
+$Comp
+L Connector:Conn_01x02_Female J?
+U 1 1 5E19B6D0
+P 3200 5550
+F 0 "J?" H 3172 5527 50  0001 R CNN
+F 1 "Conn_01x05_Male" H 3173 5482 50  0001 R CNN
+F 2 "" H 3200 5550 50  0001 C CNN
+F 3 "~" H 3200 5550 50  0001 C CNN
+	1    3200 5550
+	1    0    0    1   
+$EndComp
+Connection ~ 4950 5800
+Wire Wire Line
+	4950 5800 5050 5800
+Wire Wire Line
+	1600 5950 2600 5950
+Wire Wire Line
+	2600 5950 2600 5450
+Wire Wire Line
+	2600 5450 3000 5450
+Wire Wire Line
+	2950 5900 2950 5550
+Wire Wire Line
+	2950 5550 3000 5550
+Connection ~ 2950 5900
+Wire Wire Line
+	2950 5900 3050 5900
+Text Notes 3350 5550 0    50   ~ 0
+Enable Buzzer
+$Comp
+L LnConnectors:JUMPER JP?
+U 1 1 5E1F9FD1
+P 4800 3700
+F 0 "JP?" H 4650 3725 60  0001 C CNN
+F 1 "JUMPER" H 4700 3600 40  0001 C CNN
+F 2 "" H 4800 3725 60  0000 C CNN
+F 3 "" H 4800 3725 60  0000 C CNN
+	1    4800 3700
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector:Conn_01x02_Female J?
+U 1 1 5E1F9FD7
+P 4750 3750
+F 0 "J?" H 4722 3727 50  0001 R CNN
+F 1 "Conn_01x05_Male" H 4723 3682 50  0001 R CNN
+F 2 "" H 4750 3750 50  0001 C CNN
+F 3 "~" H 4750 3750 50  0001 C CNN
+	1    4750 3750
+	1    0    0    1   
+$EndComp
+Text Notes 4900 3750 0    50   ~ 0
+TEST\nAlarm
+Wire Wire Line
+	3600 3400 4150 3400
+Wire Wire Line
+	4150 3400 4150 3650
+Wire Wire Line
+	4150 3650 4550 3650
+Wire Wire Line
+	3800 3750 4550 3750
+Wire Bus Line
+	6600 2950 6600 6200
 $EndSCHEMATC

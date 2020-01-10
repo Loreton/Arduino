@@ -1098,8 +1098,22 @@ Wire Wire Line
 	5400 6000 6500 6000
 Wire Wire Line
 	5400 5900 6500 5900
-Wire Bus Line
-	6600 2950 6600 6200
 Text Label 4100 5800 0    50   ~ 0
 GND
+Text Notes 3200 1550 0    50   ~ 0
+White
+Text Notes 3300 1650 0    50   ~ 0
+Yellow
+Text Notes 3400 1750 0    50   ~ 0
+Grey
+Text Notes 3500 1850 0    50   ~ 0
+Orange
+Text Notes 3800 1950 0    50   ~ 0
+Red
+Wire Wire Line
+	5700 5700 6500 5700
+Wire Wire Line
+	5700 5800 6500 5800
+Wire Bus Line
+	6600 2950 6600 6200
 $EndSCHEMATC

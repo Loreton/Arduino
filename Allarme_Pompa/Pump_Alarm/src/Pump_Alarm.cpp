@@ -149,7 +149,6 @@ unsigned long elapsed;
                 printStatus();
                 // emissione BEEP
                 buzzer_ON=true;
-                // lnprint(true, "now: ", now, " - ");
                 lnprint(true, "Beep ON for: ", buzzer_duration, " mS\n");
                 tone(Buzzer, buzzer_frequency, buzzer_duration);
 
