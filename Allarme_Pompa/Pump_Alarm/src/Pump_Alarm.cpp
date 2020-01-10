@@ -10,6 +10,7 @@ const int pumpState          = D02; // input +5Volt se Pompa accesa
 const int presscontrolButton = D03; // output comanda il sonoff che spegne/accendere il pressControl.
 const int Horn               = D04; // output comanda una sirena
 const int ElettroValvola     = D05; // output chiusura acqua a caduta.... da implementare
+const int testAlarm          = D06; // input 
 
 const int Buzzer             = D12;
 const int blinkingLED        = D13;
@@ -18,8 +19,9 @@ int phase=0;
 unsigned long now, next_beep_time;
 unsigned long led_duration, led_interval;
 unsigned long buzzer_duration, buzzer_frequency, buzzer_volume, buzzerOffTime;
-long buzzer_OFF;
+// long buzzer_OFF;
 bool buzzer_ON;
+bool fTestAlarm;
 unsigned long horn_duration, horn_interval;
 // byte fHORN=false;     // Flag per suonare la sirena
 unsigned long phase_interval, next_phase_time, phase_start_time;
@@ -28,6 +30,7 @@ unsigned long phase_interval, next_phase_time, phase_start_time;
 void setup() {
     Serial.begin(9600);
     pinMode(pumpState, INPUT_PULLUP);
+    pinMode(testAlarm, INPUT_PULLUP);
 
     // You can use digitalWrite(pin, HIGH) before use pinMode(pin, OUTPUT).
     // Per evitare problemi con risorse esterne al momento dell'accensione
@@ -62,16 +65,35 @@ void setup() {
 // - vedi anche: https://arduino.stackexchange.com/questions/12587/how-can-i-handle-the-millis-rollover
 // ==================================
 void loop() {
+    fTestAlarm = !digitalRead(testAlarm);  // logica inversa.
+    if (fTestAlarm) {
+        int _duration=500;
+        int _frequency=500;
+        for (int i=1;i<=5;i++) {
+            tone(Buzzer, _frequency*i, _duration);
+            delay(_duration*1.1);
+        }
+        for (int i=5;i>0;i--) {
+            tone(Buzzer, _frequency*i, _duration);
+            delay(_duration*1.1);
+        }
+        noTone(Buzzer);
+
+        digitalWrite(Horn, HORN_ON); delay(4000); digitalWrite(Horn, HORN_OFF);
+        delay(4000);
+        digitalWrite(Horn, HORN_ON); delay(4000); digitalWrite(Horn, HORN_OFF);
+        PressControl_Toggle(); // switch press control state
+        delay(2000);
+        PressControl_Toggle(); // reset press control state
+        delay(2000);
+        return;
+    }
     now = millis();
     checkPumpState();
     checkLed();
     checkHorn();
 
-/*     if (fPUMP && now%1000==0) {
-        lnprint(true, "next beep in: ", (next_beep_time-now)/1000, "\n");
-        delay(1);
-    }
- */
+
     if (buzzer_ON) {
         unsigned long elapsed = now-phase_start_time;  // elapsed: duration
         if (elapsed>=buzzer_duration) { // se stiamo suonando, portiamolo a termine
@@ -84,7 +106,7 @@ void loop() {
 
 
     if (fALARM)
-        PressControl_powerOFF();
+        PressControl_Toggle();
 
 } // end loop()
 
@@ -93,10 +115,7 @@ void loop() {
 // - Comanda il pulsante del sOnOff il quale si attiva sul rilascio.
 // - Il comando è intermediato da un relay.
 // ==================================
-void PressControl_powerOFF() {
-    // if (now%100==0) {
-        // delay(1);
-    // }    
+void PressControl_Toggle() {
     digitalWrite(presscontrolButton, LOW);
     Serial.println("Pushing Press-Control switch...");
     delay(500);
@@ -140,7 +159,7 @@ unsigned long elapsed;
 
         default:
             fALARM=false; // allarme rientrato
-            buzzer_OFF=0;
+            // buzzer_OFF=0;
             if (phase>0) {
                 setPhase(0);
                 int _duration=500;
