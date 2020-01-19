@@ -41,11 +41,11 @@ void setup() {
     digitalWrite(blinkingLED, HIGH);        pinMode(blinkingLED        , OUTPUT);
 
     lnprint(true, "Starting...");
-    lnprint(true, "PHASE_INTERVAL           : ", PHASE_INTERVAL);
-    lnprint(true, "PHASE_ALARM_INTERVAL     : ", PHASE_ALARM_INTERVAL);
-    lnprint(true, "PHASE_ALARM_THRESHOLD    : ", PHASE_ALARM_THRESHOLD);
-    lnprint(true, "PHASE_MIN_INTERVAL       : ", PHASE_MIN_INTERVAL);
-    lnprint(true, "PHASE_STEP_DOWN          : ", PHASE_STEP_DOWN);
+    lnprint(true, "PHASE_INTERVAL               : ", PHASE_INTERVAL);
+    lnprint(true, "PHASE_ALARM_INTERVAL         : ", PHASE_ALARM_INTERVAL);
+    lnprint(true, "PHASE_ALARM_THRESHOLD_NUMBER : ", PHASE_ALARM_THRESHOLD_NUMBER);
+    lnprint(true, "PHASE_MIN_INTERVAL           : ", PHASE_MIN_INTERVAL);
+    lnprint(true, "PHASE_STEP_DOWN              : ", PHASE_STEP_DOWN);
     // lnprint(true, "SKIP_PRINT_VALUE         : ", SKIP_PRINT_VALUE+1);
     setPhase(0);
 }
@@ -182,7 +182,7 @@ unsigned long elapsed;
 void checkLed() {
 // bool isLedTime;
 static byte ledState;
-static unsigned long previousLedTime;
+static unsigned long LED_LastChangeTime;
 unsigned long elapsedTime;
 
     // mai comparare due tempi
@@ -190,26 +190,31 @@ unsigned long elapsedTime;
     // and
     // while (millis() - start < ms) ;  // CORRECT version
 
+    elapsedTime = now-LED_LastChangeTime;
     switch(ledState) {
         case ON:
-            elapsedTime = now-previousLedTime;
+            // if the LED is on, we must wait for the duration to expire before turning it off
             if (elapsedTime >= led_duration) {
-                previousLedTime += led_duration;
-                // NOTE: The previous line could alternatively be
-                //              previousLedTime = now
-                //        which is the style used in the BlinkWithoutDelay example sketch
-                //        Adding on the interval is a better way to ensure that succesive periods are identical
+                // change the state to LOW
                 ledState = OFF;
                 digitalWrite(blinkingLED, ledState);
+                // and save the time when we made the change
+                LED_LastChangeTime += led_duration;
+                // NOTE: The previous line could alternatively be
+                //              LED_LastChangeTime = now
+                //        which is the style used in the BlinkWithoutDelay example sketch
+                //        Adding on the interval is a better way to ensure that succesive periods are identical
             }
             break;
 
         default:
-            elapsedTime = now-previousLedTime;
+            // if the LED is off, we must wait for the interval to expire before turning it on
             if (elapsedTime >= led_interval) {
-                previousLedTime += led_interval;
+                // change the state to HIGH
                 ledState = ON;
                 digitalWrite(blinkingLED, ledState);
+                // and save the time when we made the change
+                LED_LastChangeTime += led_interval;
             }
             break;
     } // end switch
@@ -225,32 +230,32 @@ unsigned long elapsedTime;
 // -
 // ==================================
 void checkHorn() {
-static unsigned long previousHornTime;
+static unsigned long HORN_lastChangeTime;
 byte hornState;
 unsigned long elapsedTime;
 
     hornState=digitalRead(Horn);
+    elapsedTime = now-HORN_lastChangeTime;
     if (fPUMP) {
         switch(hornState) {
             case HORN_ON:
-                elapsedTime = now-previousHornTime;
                 if (elapsedTime >= horn_duration) {
-                    previousHornTime += horn_duration;
+                    digitalWrite(Horn, HORN_OFF);
+                    HORN_lastChangeTime += horn_duration;
                     // NOTE: The previous line could alternatively be
-                    //              previousHornTime = now
+                    //              HORN_lastChangeTime = now
                     //        which is the style used in the BlinkWithoutDelay example sketch
                     //        Adding on the interval is a better way to ensure that succesive periods are identical
-                    digitalWrite(Horn, HORN_OFF);
-                    lnprint(true, "Horn is OFF for ", horn_interval/1000, " Sec.\n" );
+                    lnprint(true, "Horn will be OFF for ", horn_interval/1000, " Sec.\n" );
                 }
                 break;
 
             case HORN_OFF:
-                elapsedTime = now-previousHornTime;
+                // elapsedTime = now-HORN_lastChangeTime;
                 if (elapsedTime >= horn_interval) {
-                    previousHornTime += horn_interval;
                     digitalWrite(Horn, HORN_ON);
-                    lnprint(true, "Horn is ON for ", horn_duration/1000, " Sec.\n" );
+                    HORN_lastChangeTime += horn_interval;
+                    lnprint(true, "Horn will be ON for ", horn_duration/1000, " Sec.\n" );
 
                 }
                 break;
@@ -259,7 +264,7 @@ unsigned long elapsedTime;
     else {
         if (hornState==HORN_ON)
             digitalWrite(Horn, HORN_OFF);
-        previousHornTime=now; // ??? ma serve?
+        HORN_lastChangeTime=now; // ??? ma serve?
     }
 
 
@@ -275,9 +280,9 @@ void setPhase(int count) {
     phase=count;
 
     if (phase==0) noTone(Buzzer);
-    if (phase>PHASE_ALARM_THRESHOLD) {
+    if (phase>PHASE_ALARM_THRESHOLD_NUMBER) {
         fALARM=true;
-        phase=PHASE_ALARM_THRESHOLD;
+        phase=PHASE_ALARM_THRESHOLD_NUMBER;
     }
 
 
@@ -296,11 +301,12 @@ void setPhase(int count) {
     if (fALARM) {
         phase_interval = PHASE_ALARM_INTERVAL;  // secondi
 
-        horn_interval = PHASE_ALARM_THRESHOLD*500*1;
-        horn_duration = PHASE_ALARM_THRESHOLD*1000*2; // suona per il 50% dell'intervllo
+        horn_interval = PHASE_ALARM_THRESHOLD_NUMBER*500;
+        // horn_duration = PHASE_ALARM_THRESHOLD_NUMBER*1000*2; // suona per il 50% dell'intervllo
+        horn_duration = horn_interval*4; // suona per il 80% del ciclo
 
         led_duration = LED_DURATION/6;
-        led_interval = LED_INTERVAL/6;
+        led_interval = LED_INTERVAL/4;
 
         // Serial.println("Siamo in ALLARME!!!!");
     }

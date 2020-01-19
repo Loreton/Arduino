@@ -57,8 +57,8 @@
 #define BUZZER_FREQUENCY        2000          // default: 2000 Buzzer frequency
 
 // number of phases before alarm phase starts and pump will be forced off.
-// PHASE_INTERVAL * PHASE_ALARM_THRESHOLD ==> 30*6 = (about) 3 minutes
-#define PHASE_ALARM_THRESHOLD      10 // default:10 
+// PHASE_INTERVAL * PHASE_ALARM_THRESHOLD_NUMBER ==> 30*6 = (about) 3 minutes
+#define PHASE_ALARM_THRESHOLD_NUMBER      10 // default:10 
 
 
 #define LED_DURATION            2000
