@@ -97,7 +97,6 @@ void loop() {
     if (buzzer_ON) {
         unsigned long elapsed = now-phase_start_time;  // elapsed: duration
         if (elapsed>=buzzer_duration) { // se stiamo suonando, portiamolo a termine
-            // lnprint(true, "now: ", now, " - ");
             lnprint(true, "Beep OFF - elapsed: ", elapsed, " mS\n");
             noTone(Buzzer);
             buzzer_ON=false;
@@ -183,18 +182,18 @@ void checkLed() {
 // bool isLedTime;
 static byte ledState;
 static unsigned long LED_LastChangeTime;
-unsigned long elapsedTime;
+unsigned long elapsed;
 
     // mai comparare due tempi
     // while (millis() < start + ms) ;  // BUGGY version
     // and
     // while (millis() - start < ms) ;  // CORRECT version
 
-    elapsedTime = now-LED_LastChangeTime;
+    elapsed = now-LED_LastChangeTime;
     switch(ledState) {
         case ON:
             // if the LED is on, we must wait for the duration to expire before turning it off
-            if (elapsedTime >= led_duration) {
+            if (elapsed >= led_duration) {
                 // change the state to LOW
                 ledState = OFF;
                 digitalWrite(blinkingLED, ledState);
@@ -209,7 +208,7 @@ unsigned long elapsedTime;
 
         default:
             // if the LED is off, we must wait for the interval to expire before turning it on
-            if (elapsedTime >= led_interval) {
+            if (elapsed >= led_interval) {
                 // change the state to HIGH
                 ledState = ON;
                 digitalWrite(blinkingLED, ledState);
@@ -232,14 +231,14 @@ unsigned long elapsedTime;
 void checkHorn() {
 static unsigned long HORN_lastChangeTime;
 byte hornState;
-unsigned long elapsedTime;
+unsigned long elapsed;
 
     hornState=digitalRead(Horn);
-    elapsedTime = now-HORN_lastChangeTime;
+    elapsed = now-HORN_lastChangeTime;
     if (fPUMP) {
         switch(hornState) {
             case HORN_ON:
-                if (elapsedTime >= horn_duration) {
+                if (elapsed >= horn_duration) {
                     digitalWrite(Horn, HORN_OFF);
                     HORN_lastChangeTime += horn_duration;
                     // NOTE: The previous line could alternatively be
@@ -251,8 +250,7 @@ unsigned long elapsedTime;
                 break;
 
             case HORN_OFF:
-                // elapsedTime = now-HORN_lastChangeTime;
-                if (elapsedTime >= horn_interval) {
+                if (elapsed >= horn_interval) {
                     digitalWrite(Horn, HORN_ON);
                     HORN_lastChangeTime += horn_interval;
                     lnprint(true, "Horn will be ON for ", horn_duration/1000, " Sec.\n" );

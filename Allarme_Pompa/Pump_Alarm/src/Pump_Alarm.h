@@ -101,8 +101,9 @@ void setPhase(int);
 void checkPumpState(void);
 void checkLed(void);
 void checkHorn(void);
-void PressControl_powerOFF(void);
+void PressControl_Toggle(void);
 void printStatus(void);
+
 
     void LnPrint(const bool fPrint,
                 const char *s1,
