@@ -36,4 +36,4 @@ text eol=lf
 *.sublime-workspace
 out/*
 DOC/*
-*/kiCad/*.bak
+
