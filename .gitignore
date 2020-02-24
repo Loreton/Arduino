@@ -18,10 +18,17 @@
 *.out
 *.app
 
+# Declare files that will always have LF line endings on checkout.
+# *.ino text eol=nl
+# *.h text eol=nl
+# *.cpp text eol=nl
+text eol=lf
+
 
 # Ln Varie
 */build/*
 */.build/*
+*/.vscode/*
 */debug/*
 */cache/*
 .mplab_ide/*
@@ -29,3 +36,4 @@
 *.sublime-workspace
 out/*
 DOC/*
+
