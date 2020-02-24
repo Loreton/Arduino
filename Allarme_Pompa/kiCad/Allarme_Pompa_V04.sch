@@ -279,7 +279,7 @@ F 3 "" H 8050 1525 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Text Notes 700  4900 0    50   ~ 0
-Il filo Arancio porta i 5Volt verso il relè presente in cisterna. \nProvvede ad alimentare solo la parte logica e non la bobina che sarà\nalimentata localmente come anche la sirena.\n
+Il filo Arancio porta i 5Volt provenienti dalla cisterna. \nL'ho messo in questo modo per rendere indipendente\nil frutto del press control dala presenza di Arduino.
 Text Notes 6750 3300 0    50   ~ 0
 Bianco/Verde
 Wire Wire Line
@@ -334,6 +334,8 @@ F 3 "~" H 1000 5700 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	1000 5450 1000 5550
+Text Label 8600 2800 0    50   ~ 0
+pc_button
 Wire Wire Line
 	10700 1050 10700 3050
 Wire Wire Line
@@ -456,9 +458,11 @@ Connection ~ 4450 3400
 Wire Wire Line
 	9500 1600 9500 2200
 Wire Wire Line
-	9500 2200 8600 2200
+	9500 2200 9300 2200
 Wire Wire Line
 	10500 1150 9950 1150
+Wire Wire Line
+	9700 2300 9300 2300
 Wire Wire Line
 	10450 5400 10350 5400
 Wire Wire Line
@@ -559,6 +563,8 @@ Text Label 7700 3100 0    50   ~ 0
 ElettroValvola
 Wire Wire Line
 	9700 3850 10050 3850
+Wire Wire Line
+	8900 5550 9650 5550
 $Comp
 L LnDevice:RELAY_1RT K?
 U 1 1 5E252A8F
@@ -571,7 +577,7 @@ F 3 "" H 10200 3020 60  0000 C CNN
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	9700 1600 9700 1700
+	9700 1600 9700 2300
 $Comp
 L power:+5VA #PWR0109
 U 1 1 5DFBEA28
@@ -602,16 +608,27 @@ Wire Wire Line
 	8350 1450 8450 1450
 Wire Wire Line
 	8450 1450 8450 1400
+$Comp
+L LnDevice:Relay_5V_LL_Dual RL?
+U 1 1 5DFDEB51
+P 8950 2300
+F 0 "RL?" H 8950 2625 50  0001 C CNN
+F 1 "Relay_5V_LL_Doppio" H 8950 2626 50  0001 C CNN
+F 2 "" H 8950 2300 50  0001 C CNN
+F 3 "" H 8950 2300 50  0001 C CNN
+	1    8950 2300
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
 	10450 4950 10450 5050
 Wire Wire Line
 	10450 5400 10450 5500
 $Comp
-L LnDevice:Relay_5V_LL_Dual_New RL?
+L LnDevice:Relay_5V_LL_Dual RL?
 U 2 1 5DFF5FF9
 P 10000 5400
-F 0 "RL?" H 10150 5300 50  0000 C CNN
-F 1 "Relay_5V_LL_Doppio" H 10500 5000 50  0000 C CNN
+F 0 "RL?" H 10000 5817 50  0000 C CNN
+F 1 "Relay_5V_LL_Doppio" H 10000 5726 50  0000 C CNN
 F 2 "" H 10000 5400 50  0001 C CNN
 F 3 "" H 10000 5400 50  0001 C CNN
 	2    10000 5400
@@ -657,7 +674,7 @@ Wire Wire Line
 Wire Wire Line
 	1950 6400 2600 6400
 Wire Wire Line
-	8600 2200 8600 3300
+	8600 2450 8600 3300
 Wire Wire Line
 	8600 3300 7500 3300
 Connection ~ 7500 3300
@@ -820,8 +837,21 @@ Wire Wire Line
 	2600 6400 2600 6200
 Wire Wire Line
 	2600 6200 3050 6200
+$Comp
+L power:+5VA #PWR0103
+U 1 1 5E0916E7
+P 7700 2850
+F 0 "#PWR0103" H 7700 2700 50  0001 C CNN
+F 1 "+5VA" H 7715 3023 50  0000 C CNN
+F 2 "" H 7700 2850 50  0001 C CNN
+F 3 "" H 7700 2850 50  0001 C CNN
+	1    7700 2850
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
-	7500 3000 9100 3000
+	7500 3000 7700 3000
+Wire Wire Line
+	7700 3000 7700 2850
 Connection ~ 7500 3000
 Text Label 4200 6000 0    50   ~ 0
 (+5Vcc)
@@ -1109,101 +1139,6 @@ Wire Wire Line
 	4150 3650 4550 3650
 Wire Wire Line
 	3800 3750 4550 3750
-$Comp
-L power:GNDA #PWR?
-U 1 1 5E4BEDD8
-P 9700 1700
-F 0 "#PWR?" H 9700 1450 50  0001 C CNN
-F 1 "GNDA" H 9705 1527 50  0000 C CNN
-F 2 "" H 9700 1700 50  0001 C CNN
-F 3 "" H 9700 1700 50  0001 C CNN
-	1    9700 1700
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	8900 5550 9650 5550
-$Comp
-L power:GNDA #PWR?
-U 1 1 5E4F956D
-P 10000 5700
-F 0 "#PWR?" H 10000 5450 50  0001 C CNN
-F 1 "GNDA" H 10005 5527 50  0000 C CNN
-F 2 "" H 10000 5700 50  0001 C CNN
-F 3 "" H 10000 5700 50  0001 C CNN
-	1    10000 5700
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	10000 5100 10000 4950
-Wire Wire Line
-	10000 4950 10450 4950
-Connection ~ 10450 4950
-Wire Wire Line
-	9100 3000 9100 4950
-Wire Wire Line
-	9100 4950 9800 4950
-Wire Wire Line
-	9800 4950 9800 5100
-Wire Wire Line
-	2450 5100 4300 5100
-Connection ~ 2450 5100
-Wire Wire Line
-	4000 5800 4000 5200
-Wire Wire Line
-	4000 5200 4300 5200
-Connection ~ 4000 5800
-$Comp
-L power:+5V #PWR?
-U 1 1 5E536965
-P 4800 4950
-F 0 "#PWR?" H 4800 4800 50  0001 C CNN
-F 1 "+5V" H 4815 5123 50  0000 C CNN
-F 2 "" H 4800 4950 50  0001 C CNN
-F 3 "" H 4800 4950 50  0001 C CNN
-	1    4800 4950
-	1    0    0    -1  
-$EndComp
-$Comp
-L Connector:Conn_01x02_Female J?
-U 1 1 5E54132B
-P 4500 5200
-F 0 "J?" H 4472 5177 50  0001 R CNN
-F 1 "Conn_01x05_Male" H 4473 5132 50  0001 R CNN
-F 2 "" H 4500 5200 50  0001 C CNN
-F 3 "~" H 4500 5200 50  0001 C CNN
-	1    4500 5200
-	1    0    0    1   
-$EndComp
-$Comp
-L Connector:Conn_01x02_Male J?
-U 1 1 5E54136F
-P 4500 5200
-F 0 "J?" H 4528 5180 50  0001 L CNN
-F 1 "Conn_01x05_Female" H 4527 5135 50  0001 L CNN
-F 2 "" H 4500 5200 50  0001 C CNN
-F 3 "~" H 4500 5200 50  0001 C CNN
-	1    4500 5200
-	1    0    0    1   
-$EndComp
-Wire Wire Line
-	4700 5100 4800 5100
-Wire Wire Line
-	4800 5100 4800 4950
-$Comp
-L power:GND #PWR?
-U 1 1 5E54BF0A
-P 4800 5300
-F 0 "#PWR?" H 4800 5050 50  0001 C CNN
-F 1 "GND" H 4805 5127 50  0000 C CNN
-F 2 "" H 4800 5300 50  0001 C CNN
-F 3 "" H 4800 5300 50  0001 C CNN
-	1    4800 5300
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4700 5200 4800 5200
-Wire Wire Line
-	4800 5200 4800 5300
 Wire Bus Line
 	6600 2950 6600 6200
 $EndSCHEMATC

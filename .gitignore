@@ -28,6 +28,7 @@ text eol=lf
 # Ln Varie
 */build/*
 */.build/*
+*/.vscode/*
 */debug/*
 */cache/*
 .mplab_ide/*
@@ -35,3 +36,4 @@ text eol=lf
 *.sublime-workspace
 out/*
 DOC/*
+*/kiCad/*.bak
