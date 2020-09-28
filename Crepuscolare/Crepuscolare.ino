@@ -16,11 +16,17 @@ int LED             = 5;   // select the pin for the LED (13 e' quello incorpora
 int Relay           = 3;
 
 int debounce       = 0;
+int led_state       = 0;
 int idleCounter       = 0;
-#define LOOPTIME   100  // mSecondi
-// #define DEBOUCE     3*(1000/LOOPTIME)
-#define DEBOUNCE_MAX     15
-#define IDLE_COUNTER_MAX     5
+
+boolean isBUIO, isLUCE;
+
+int LED_SPEED;
+#define LED_LOW_SPEED   3  // # of cycles
+#define LED_HIGH_SPEED  0  // # of cycles
+
+#define DEBOUNCE_MAX     15 // tempo (sec) di monitor prima di accendere o spegnere le luc
+
 
 // the setup routine runs once when you press reset:
 void setup() {
@@ -41,47 +47,56 @@ void loop() {
         // - THR diminuisce girando il trimmer in CW
         // ------------------------------------
     THR_Value = readAnalogPin(THR_Pin);
+    lightLED(); // per aumentare un pò il ritmo del led
     LDR_Value = readAnalogPin(LDR_Pin);
+    isBUIO=(LDR_Value <= THR_Value);
+    isLUCE=(not isBUIO);
     // LDR_Value = 1023-LDR_Value;             //lo invertiamo per non invertire i fili del potenziometro.
     // THR_Value = 1023-THR_Value;             //lo invertiamo per non invertire i fili del potenziometro.
-
 
     float LDR_Voltage = LDR_Value * (5.0 / 1023.0);
     float THR_Voltage = THR_Value * (5.0 / 1023.0);
 
-        // *** SOLO per DEBUG
+
     Serial.print("LDR - Value :"); Serial.print(LDR_Value, DEC); Serial.print("  LDR - Volt     :"); Serial.println(LDR_Voltage, 2);
     Serial.print("THR - Value :"); Serial.print(THR_Value, DEC); Serial.print("  THR - Volt     :"); Serial.println(THR_Voltage, 2);
 
-        // print out the value you read:
-    if (LDR_Value < THR_Value) {
-        if (debounce < DEBOUNCE_MAX)
+
+    LED_SPEED = LED_LOW_SPEED; // set del ritmo del led
+    if (isBUIO) {
+
+        if (debounce >= DEBOUNCE_MAX) {
+            Serial.print("  BUIO raggiunto ");
+            debounce = DEBOUNCE_MAX;
+            if (digitalRead(Relay) == LOW) digitalWrite(Relay, HIGH);
+        }
+        // debounce per l'accensione
+        else {
+            Serial.print("  Rilevato BUIO: "); Serial.print("  - debounce:");Serial.println(debounce);
             debounce += 1;
-
-        // Serial.print("  LED: "); Serial.print("ON ");Serial.print("  (debounce:");Serial.println(debounce);
+            LED_SPEED = LED_HIGH_SPEED; // mettiamo al massimo il ritmo del led
+        }
     }
+
     else {
-        if (digitalRead(Relay) == LOW)
-            debounce = 0;
-        if (debounce > 0)
+        if (digitalRead(Relay) == LOW) debounce=0;
+        // debounce per lo spegnimento
+        if (debounce > 0) {
+            Serial.print("  Rilevato LUCE: "); Serial.print("  - debounce:");Serial.println(debounce);
+            LED_SPEED = LED_HIGH_SPEED; // mettiamo al massimo il ritmo del led
             debounce -= 1;
-        // Serial.print("  LED: "); Serial.print("OFF ");Serial.print("  (debounce:");Serial.println(debounce);
+        }
+        else {
+            Serial.print("  LUCE raggiunto ");
+            if (digitalRead(Relay) == HIGH) digitalWrite(Relay, LOW);
+        }
     }
 
 
-    // Serial.print("  LED: "); Serial.print(digitalRead(LED));Serial.print("  (debounce:");Serial.println(debounce);
-    Serial.print("  debounce:");Serial.print(debounce);Serial.print("  idleCounter:");Serial.println(idleCounter);
     Serial.println();
 
-    if (debounce == DEBOUNCE_MAX) {
-        idleCounter = 0;
-        if (digitalRead(LED)   == LOW) digitalWrite(LED, HIGH);
-        if (digitalRead(Relay) == LOW) digitalWrite(Relay, HIGH);
-    }
-    else
-        lightLED();
+    lightLED();
 
-    delay(250); // in mSec
 
 
 
@@ -89,42 +104,28 @@ void loop() {
 
 
 void lightLED() {
-    // int ledStatus = digitalRead(LED);
-    if (debounce > 0) {        // facciamo lampeggiare il LED
-        idleCounter = 0;
-
-        // digitalWrite(LED, digitalRead(LED)^1);       // XOR FUNZIONA ma impegna più bytes di codice
-        // if (ledStatus == HIGH) // read the input pin
-        if (digitalRead(LED) == HIGH) // read the input pin
-            digitalWrite(LED, LOW);
-        else
-            digitalWrite(LED, HIGH);
+    Serial.print("  idleCounter ");Serial.print(idleCounter);
+    Serial.print("  LED_SPEED   ");Serial.print(LED_SPEED);
+    Serial.print("  debounce    ");Serial.print(debounce);
+    Serial.println();
+    if (idleCounter >= LED_SPEED) {
+        togglePIN(LED);
+        idleCounter=0;
     }
-    else {                          // Spegniamo tutto
-        debounce = 0;
-        if (digitalRead(Relay) == HIGH) digitalWrite(Relay, LOW);
-
-            // accensone LED ogni 5 secondi circa
-        if (idleCounter < IDLE_COUNTER_MAX)
-            idleCounter++;
-
-        else {
-            if (digitalRead(LED) == HIGH) {
-            // if (ledStatus == HIGH) {
-                idleCounter = 0;
-                digitalWrite(LED, LOW);
-            }
-            else {
-                idleCounter = IDLE_COUNTER_MAX*0.8;
-                digitalWrite(LED, HIGH);
-            }
-
-        }
+    else {
+        idleCounter+=1;
+        digitalWrite(LED, LOW);
     }
-
 }
 
-
+void togglePIN(int pin) {
+    if (digitalRead(pin) == HIGH) {
+        digitalWrite(pin, LOW);
+    }
+    else {
+        digitalWrite(pin, HIGH);
+    }
+}
 
 // ##################################################
 // #
