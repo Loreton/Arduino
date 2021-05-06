@@ -1,0 +1,10 @@
+(sym_lib_table
+  (lib (name Ln_IC)(type Legacy)(uri K:/Filu/LnDisk/GIT-REPO/HW-Projects/KiCAD/LnLibrary/Ln_IC.lib)(options "")(descr ""))
+  (lib (name Ln_R-C-L)(type Legacy)(uri K:/Filu/LnDisk/GIT-REPO/HW-Projects/KiCAD/LnLibrary/Ln_R-C-L.lib)(options "")(descr ""))
+  (lib (name LnArduino_uno)(type Legacy)(uri K:/Filu/LnDisk/GIT-REPO/HW-Projects/KiCAD/LnLibrary/LnArduino_uno.lib)(options "")(descr ""))
+  (lib (name LnConnectors)(type Legacy)(uri K:/Filu/LnDisk/GIT-REPO/HW-Projects/KiCAD/LnLibrary/LnConnectors.lib)(options "")(descr ""))
+  (lib (name LnDevice)(type Legacy)(uri K:/Filu/LnDisk/GIT-REPO/HW-Projects/KiCAD/LnLibrary/LnDevice.lib)(options "")(descr ""))
+  (lib (name LnDiodiTransistors)(type Legacy)(uri K:/Filu/LnDisk/GIT-REPO/HW-Projects/KiCAD/LnLibrary/LnDiodiTransistors.lib)(options "")(descr ""))
+  (lib (name LnMicroController)(type Legacy)(uri K:/Filu/LnDisk/GIT-REPO/HW-Projects/KiCAD/LnLibrary/LnMicroController.lib)(options "")(descr ""))
+  (lib (name LnRegulators)(type Legacy)(uri K:/Filu/LnDisk/GIT-REPO/HW-Projects/KiCAD/LnLibrary/LnRegulators.lib)(options "")(descr ""))
+)

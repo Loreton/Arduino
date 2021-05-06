@@ -1,4 +1,18 @@
 EESchema Schematic File Version 4
+LIBS:Ln_R-C-L
+LIBS:LnConnectors
+LIBS:LnDevice
+LIBS:LnDiodiTransistors
+LIBS:LnArduino_uno
+LIBS:LnMicroController
+LIBS:LnRegulators
+LIBS:LnSample
+LIBS:power
+LIBS:device
+LIBS:74xx
+LIBS:microcontrollers
+LIBS:audio
+LIBS:interface
 LIBS:Crepuscolare-cache
 EELAYER 26 0
 EELAYER END
@@ -15,7 +29,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L LnMicroController:Arduino_Nano_IC U1
+L ARDUINO_NANO_IC U1
 U 1 1 54CF3065
 P 4450 3050
 F 0 "U1" H 4950 3200 60  0000 C CNN
@@ -26,7 +40,7 @@ F 3 "" H 5150 800 60  0000 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L Ln_R-C-L:RESISTOR R3
+L RESISTOR R3
 U 1 1 54CF30A1
 P 1900 4000
 F 0 "R3" H 2050 4050 60  0000 C CNN
@@ -37,7 +51,7 @@ F 3 "" H 1900 4000 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Ln_R-C-L:Pot TR1
+L POT TR1
 U 1 1 54D463B9
 P 2550 4500
 F 0 "TR1" H 2650 4500 60  0000 C CNN
@@ -48,7 +62,7 @@ F 3 "~" H 2550 4500 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Ln_R-C-L:LDR LDR2
+L LDR LDR2
 U 1 1 54D465C4
 P 1900 4650
 F 0 "LDR2" H 2150 4650 60  0000 C CNN
@@ -63,7 +77,7 @@ Wire Wire Line
 Wire Wire Line
 	1900 3500 1900 3850
 $Comp
-L power1:GND #PWR5
+L GND #PWR5
 U 1 1 54D465F2
 P 1900 5300
 F 0 "#PWR5" H 1900 5300 30  0001 C CNN
@@ -83,7 +97,7 @@ Wire Wire Line
 	2550 4500 2550 3500
 Connection ~ 2550 3500
 $Comp
-L power1:GND #PWR6
+L GND #PWR6
 U 1 1 54D4661A
 P 2550 5300
 F 0 "#PWR6" H 2550 5300 30  0001 C CNN
@@ -96,7 +110,7 @@ $EndComp
 Wire Wire Line
 	2550 4900 2550 5300
 $Comp
-L LnDiodiTransistors:LED DL2
+L LED DL2
 U 1 1 54D467B1
 P 4900 4900
 F 0 "DL2" H 4900 5000 50  0000 C CNN
@@ -107,7 +121,7 @@ F 3 "" H 4900 4900 60  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L LnDevice:RELAY_1RT K1
+L RELAY_1RT K1
 U 1 1 54D467C0
 P 6350 4000
 F 0 "K1" H 6450 4250 40  0000 C CNN
@@ -118,7 +132,7 @@ F 3 "" H 6350 4020 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LnDiodiTransistors:LED DL1
+L LED DL1
 U 1 1 54D467CD
 P 5850 4150
 F 0 "DL1" V 5750 4050 50  0000 C CNN
@@ -129,7 +143,7 @@ F 3 "" H 5850 4150 60  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L LnDiodiTransistors:DIODE D2
+L DIODE D2
 U 1 1 54D467D5
 P 6150 3950
 F 0 "D2" V 6250 4000 40  0000 C CNN
@@ -140,7 +154,7 @@ F 3 "" H 6150 3950 60  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L LnDiodiTransistors:NPN Q1
+L NPN Q1
 U 1 1 54D467E4
 P 5750 4800
 F 0 "Q1" H 5900 4800 40  0000 R CNN
@@ -151,7 +165,7 @@ F 3 "" H 5750 4800 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Ln_R-C-L:RESISTOR R5
+L RESISTOR R5
 U 1 1 54D46805
 P 4900 4400
 F 0 "R5" H 5050 4450 60  0000 C CNN
@@ -162,7 +176,7 @@ F 3 "" H 4900 4400 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Ln_R-C-L:RESISTOR R2
+L RESISTOR R2
 U 1 1 54D4680B
 P 5850 3750
 F 0 "R2" H 5700 3800 60  0000 C CNN
@@ -173,7 +187,7 @@ F 3 "" H 5850 3750 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power1:GND #PWR7
+L GND #PWR7
 U 1 1 54D46825
 P 4900 5300
 F 0 "#PWR7" H 4900 5300 30  0001 C CNN
@@ -184,7 +198,7 @@ F 3 "" H 4900 5300 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power1:GND #PWR8
+L GND #PWR8
 U 1 1 54D4682B
 P 5850 5300
 F 0 "#PWR8" H 5850 5300 30  0001 C CNN
@@ -209,7 +223,7 @@ Wire Wire Line
 Wire Wire Line
 	5300 4800 5550 4800
 $Comp
-L Ln_R-C-L:RESISTOR R4
+L RESISTOR R4
 U 1 1 54D46887
 P 5300 4350
 F 0 "R4" H 5450 4400 60  0000 C CNN
@@ -228,18 +242,18 @@ Wire Wire Line
 Wire Wire Line
 	5850 3900 5850 4000
 $Comp
-L LnDevice:Alimentatore D1
+L ALIMENTATORE D1
 U 1 1 54D468DF
-P 2150 2600
-F 0 "D1" H 1950 2200 40  0000 C CNN
-F 1 "ALIMENTATORE" H 2100 2600 40  0000 C CNN
-F 2 "~" H 2150 2575 60  0000 C CNN
-F 3 "~" H 2150 2575 60  0000 C CNN
-	1    2150 2600
+P 2200 2350
+F 0 "D1" H 2000 1950 40  0000 C CNN
+F 1 "ALIMENTATORE" H 2150 2350 40  0000 C CNN
+F 2 "~" H 2200 2325 60  0000 C CNN
+F 3 "~" H 2200 2325 60  0000 C CNN
+	1    2200 2350
 	1    0    0    -1  
 $EndComp
 $Comp
-L power1:GND #PWR2
+L GND #PWR2
 U 1 1 54D469B8
 P 2650 2800
 F 0 "#PWR2" H 2650 2800 30  0001 C CNN
@@ -250,19 +264,25 @@ F 3 "" H 2650 2800 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2450 2700 2650 2700
+	2450 2600 2650 2600
 Wire Wire Line
-	2650 2200 2650 2700
+	2650 2200 2650 2600
 Wire Wire Line
 	2450 2500 3050 2500
 Wire Wire Line
 	5850 2500 5850 3400
 Wire Wire Line
+	6150 3400 6150 3750
+Wire Wire Line
 	6150 3400 5850 3400
 Connection ~ 5850 3400
+Connection ~ 6150 3750
+Wire Wire Line
+	6150 4100 6150 4150
 Wire Wire Line
 	6150 4400 5850 4400
 Connection ~ 5850 4400
+Connection ~ 6150 4150
 NoConn ~ 4450 3050
 NoConn ~ 4450 3200
 NoConn ~ 4450 3350
@@ -297,7 +317,7 @@ Wire Wire Line
 Wire Wire Line
 	4700 3500 4450 3500
 $Comp
-L power1:GND #PWR3
+L GND #PWR3
 U 1 1 54D46C10
 P 4700 3600
 F 0 "#PWR3" H 4700 3600 30  0001 C CNN
@@ -308,7 +328,7 @@ F 3 "" H 4700 3600 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power1:+9V #PWR1
+L +9V #PWR1
 U 1 1 54D46CEA
 P 3050 2150
 F 0 "#PWR1" H 3050 2120 20  0001 C CNN
@@ -319,7 +339,7 @@ F 3 "" H 3050 2150 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power1:PWR_FLAG #FLG2
+L PWR_FLAG #FLG2
 U 1 1 54D46D52
 P 3300 2200
 F 0 "#FLG2" H 3300 2295 30  0001 C CNN
@@ -332,7 +352,7 @@ $EndComp
 Wire Wire Line
 	3050 3050 3200 3050
 $Comp
-L power1:PWR_FLAG #FLG1
+L PWR_FLAG #FLG1
 U 1 1 54D47080
 P 2650 2200
 F 0 "#FLG1" H 2650 2295 30  0001 C CNN
@@ -342,14 +362,14 @@ F 3 "" H 2650 2200 60  0000 C CNN
 	1    2650 2200
 	1    0    0    -1  
 $EndComp
-Connection ~ 2650 2700
+Connection ~ 2650 2600
 Wire Wire Line
 	3300 2200 3300 2300
 Wire Wire Line
 	3300 2300 3050 2300
 Connection ~ 3050 2300
 $Comp
-L Ln_R-C-L:RESISTOR R6
+L RESISTOR R6
 U 1 1 54D78395
 P 1300 4950
 F 0 "R6" H 1450 5000 60  0000 C CNN
@@ -360,7 +380,7 @@ F 3 "" H 1300 4950 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Ln_R-C-L:LDR LDR1
+L LDR LDR1
 U 1 1 54D7839B
 P 1300 4050
 F 0 "LDR1" H 1550 4100 60  0000 C CNN
@@ -371,7 +391,7 @@ F 3 "" H 1300 4050 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Ln_R-C-L:RESISTOR R1
+L RESISTOR R1
 U 1 1 54D783B5
 P 1300 3700
 F 0 "R1" H 1450 3750 60  0000 C CNN
@@ -392,7 +412,7 @@ Wire Wire Line
 Wire Wire Line
 	1300 4200 1300 4250
 $Comp
-L power1:GND #PWR4
+L GND #PWR4
 U 1 1 54D784A2
 P 1300 5300
 F 0 "#PWR4" H 1300 5300 30  0001 C CNN
@@ -410,13 +430,17 @@ Wire Wire Line
 Wire Wire Line
 	5850 3400 5850 3600
 Wire Wire Line
+	6150 3750 6150 3800
+Wire Wire Line
 	5850 4400 5850 4600
+Wire Wire Line
+	6150 4150 6150 4400
 Wire Wire Line
 	3050 2500 5850 2500
 Wire Wire Line
 	3050 2500 3050 3050
 Wire Wire Line
-	2650 2700 2650 2800
+	2650 2600 2650 2800
 Wire Wire Line
 	3050 2300 3050 2500
 Wire Wire Line
@@ -427,8 +451,4 @@ Wire Wire Line
 	1900 3500 2550 3500
 Wire Wire Line
 	1300 4250 1300 4800
-Wire Wire Line
-	6150 3400 6150 3800
-Wire Wire Line
-	6150 4100 6150 4400
 $EndSCHEMATC

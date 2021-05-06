@@ -1,6 +1,6 @@
-update=23/04/2021 15:11:17
+update=12/05/2019 09:38:37
 version=1
-last_client=kicad
+last_client=eeschema
 [cvpcb]
 version=1
 NetIExt=net
@@ -47,7 +47,7 @@ LibName16=valves
 version=1
 [eeschema]
 version=1
-LibDir=K:\Filu\LnDisk\GIT-REPO\HW-Projects\KiCAD\LnLibrary
+LibDir=../../../HW-Projects/KiCAD/LnLibrary
 NetFmtName=
 RptD_X=0
 RptD_Y=100
@@ -92,4 +92,3 @@ LibName35=opto
 LibName36=atmel
 LibName37=contrib
 LibName38=valves
-
