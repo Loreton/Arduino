@@ -1,4 +1,5 @@
 (sym_lib_table
-  (lib (name LnDevice)(type Legacy)(uri K:/Filu/LnDisk/GIT-REPO/HW-Projects/KiCAD/LnLibrary/LnDevice.lib)(options "")(descr ""))
-  (lib (name LnConnectors)(type Legacy)(uri K:/Filu/LnDisk/GIT-REPO/HW-Projects/KiCAD/LnLibrary/LnConnectors.lib)(options "")(descr ""))
+  (lib (name "LnDevice")(type "KiCad")(uri "/home/loreto/GIT-REPO/KiCAD/LnLibrary/LnDevice.kicad_sym")(options "")(descr ""))
+  (lib (name "LnConnectors")(type "KiCad")(uri "/home/loreto/GIT-REPO/KiCAD/LnLibrary/LnConnectors.kicad_sym")(options "")(descr ""))
+  (lib (name "DiodiTransistor")(type "KiCad")(uri "/home/loreto/GIT-REPO/KiCAD/LnLibrary/LnDiodiTransistors.kicad_sym")(options "")(descr ""))
 )
